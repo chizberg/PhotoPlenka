@@ -13,6 +13,15 @@
 		DF0BDEFB27AACE33002CCF07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF0BDEF927AACE33002CCF07 /* Main.storyboard */; };
 		DF0BDEFD27AACE38002CCF07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF0BDEFC27AACE38002CCF07 /* Assets.xcassets */; };
 		DF0BDF0027AACE38002CCF07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF0BDEFE27AACE38002CCF07 /* LaunchScreen.storyboard */; };
+		DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EEA27AAD5CF00A0D10B /* NetworkPhoto.swift */; };
+		DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EEC27AAD5EA00A0D10B /* Request.swift */; };
+		DFCF0EEF27AAD61600A0D10B /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EEE27AAD61600A0D10B /* NetworkService.swift */; };
+		DFCF0EF127AAD65F00A0D10B /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EF027AAD65F00A0D10B /* NetworkError.swift */; };
+		DFCF0EF327AAD7CD00A0D10B /* NetworkCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EF227AAD7CD00A0D10B /* NetworkCluster.swift */; };
+		DFCF0EF527AAE16600A0D10B /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EF427AAE16600A0D10B /* Photo.swift */; };
+		DFCF0EF827AAE29D00A0D10B /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EF727AAE29D00A0D10B /* Direction.swift */; };
+		DFCF0EFB27AAE59100A0D10B /* Color from year.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EFA27AAE59100A0D10B /* Color from year.swift */; };
+		DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EFC27AAE81C00A0D10B /* Cluster.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +33,15 @@
 		DF0BDEFC27AACE38002CCF07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF0BDEFF27AACE38002CCF07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF0BDF0127AACE38002CCF07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DFCF0EEA27AAD5CF00A0D10B /* NetworkPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPhoto.swift; sourceTree = "<group>"; };
+		DFCF0EEC27AAD5EA00A0D10B /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		DFCF0EEE27AAD61600A0D10B /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		DFCF0EF027AAD65F00A0D10B /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		DFCF0EF227AAD7CD00A0D10B /* NetworkCluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCluster.swift; sourceTree = "<group>"; };
+		DFCF0EF427AAE16600A0D10B /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		DFCF0EF727AAE29D00A0D10B /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
+		DFCF0EFA27AAE59100A0D10B /* Color from year.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color from year.swift"; sourceTree = "<group>"; };
+		DFCF0EFC27AAE81C00A0D10B /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,12 +77,45 @@
 				DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */,
 				DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */,
 				DF0BDEF727AACE33002CCF07 /* ViewController.swift */,
+				DFCF0EF927AAE57800A0D10B /* View */,
+				DFCF0EF627AAE16A00A0D10B /* Model */,
+				DFCF0EE927AAD5C000A0D10B /* Network */,
 				DF0BDEF927AACE33002CCF07 /* Main.storyboard */,
 				DF0BDEFC27AACE38002CCF07 /* Assets.xcassets */,
 				DF0BDEFE27AACE38002CCF07 /* LaunchScreen.storyboard */,
 				DF0BDF0127AACE38002CCF07 /* Info.plist */,
 			);
 			path = PhotoPlenka;
+			sourceTree = "<group>";
+		};
+		DFCF0EE927AAD5C000A0D10B /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				DFCF0EEA27AAD5CF00A0D10B /* NetworkPhoto.swift */,
+				DFCF0EF227AAD7CD00A0D10B /* NetworkCluster.swift */,
+				DFCF0EEC27AAD5EA00A0D10B /* Request.swift */,
+				DFCF0EEE27AAD61600A0D10B /* NetworkService.swift */,
+				DFCF0EF027AAD65F00A0D10B /* NetworkError.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		DFCF0EF627AAE16A00A0D10B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DFCF0EF427AAE16600A0D10B /* Photo.swift */,
+				DFCF0EF727AAE29D00A0D10B /* Direction.swift */,
+				DFCF0EFC27AAE81C00A0D10B /* Cluster.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		DFCF0EF927AAE57800A0D10B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DFCF0EFA27AAE59100A0D10B /* Color from year.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +190,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF0BDEF827AACE33002CCF07 /* ViewController.swift in Sources */,
+				DFCF0EF127AAD65F00A0D10B /* NetworkError.swift in Sources */,
+				DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */,
+				DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */,
+				DFCF0EF827AAE29D00A0D10B /* Direction.swift in Sources */,
+				DFCF0EF527AAE16600A0D10B /* Photo.swift in Sources */,
+				DFCF0EFB27AAE59100A0D10B /* Color from year.swift in Sources */,
+				DFCF0EF327AAD7CD00A0D10B /* NetworkCluster.swift in Sources */,
+				DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */,
 				DF0BDEF427AACE33002CCF07 /* AppDelegate.swift in Sources */,
+				DFCF0EEF27AAD61600A0D10B /* NetworkService.swift in Sources */,
 				DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
