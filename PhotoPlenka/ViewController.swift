@@ -5,16 +5,17 @@
 //  Created by Алексей Шерстнёв on 02.02.2022.
 //
 
-import UIKit
 import MapKit
+import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     private enum Constants {
         static let defaultRegion = MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 56.329707, longitude: 44.009087),
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        )
     }
-    
+
     private let map = MKMapView()
 
     override func viewDidLoad() {
@@ -24,13 +25,10 @@ class ViewController: UIViewController {
         map.delegate = self
         // Do any additional setup after loading the view.
     }
-    
+
     override func viewDidLayoutSubviews() {
         map.frame = view.bounds
     }
-
 }
 
-extension ViewController: MKMapViewDelegate {
-    
-}
+extension ViewController: MKMapViewDelegate {}
