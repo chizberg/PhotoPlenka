@@ -53,8 +53,6 @@ final class NetworkService: NetworkServiceProtocol {
                     let result = json["result"] as! [String: Any]
                     let photos = self.parsePhotos(from: result["photos"] as? [[String: Any]])
                     let clusters = self.parseClusters(from: result["clusters"] as? [[String: Any]])
-                    guard let photos = photos,
-                          let clusters = clusters else { throw NetworkError.parsingError }
                     completion(.success((photos, clusters)))
                 } catch {
                     completion(.failure(.parsingError))
@@ -64,8 +62,8 @@ final class NetworkService: NetworkServiceProtocol {
     }
 
     // TODO: сделать парсинг в теории покрасивее (может, через Codable). Прямо сейчас сделал так, потому что поле dir есть не во всех объектах респонса (то есть вообще поля нет, а не его значения)
-    private func parsePhotos(from json: [[String: Any]]?) -> [NetworkPhoto]? {
-        guard let json = json else { return nil }
+    private func parsePhotos(from json: [[String: Any]]?) -> [NetworkPhoto] {
+        guard let json = json else { return [] }
         let photos: [NetworkPhoto] = json.compactMap { parsePhoto(from: $0) }
         return photos
     }
@@ -89,8 +87,8 @@ final class NetworkService: NetworkServiceProtocol {
         )
     }
 
-    private func parseClusters(from json: [[String: Any]]?) -> [NetworkCluster]? {
-        guard let json = json else { return nil }
+    private func parseClusters(from json: [[String: Any]]?) -> [NetworkCluster] {
+        guard let json = json else { return [] }
         return json.compactMap { (clusterJSON: [String: Any]) -> NetworkCluster? in
             guard let photoJSON = clusterJSON["p"] as? [String: Any] else { return nil }
             guard let photo = parsePhoto(from: photoJSON) else { return nil }
