@@ -18,3 +18,23 @@ final class Cluster: NSObject, MKAnnotation {
         count = nc.c
     }
 }
+
+extension Cluster {
+    override var hash: Int {
+        photo.cid
+    }
+
+    override func isEqual(_ object: Any?) -> Bool {
+        if let other = object as? Cluster {
+            return photo.cid == other.photo.cid && count == other.count && coordinate == other
+                .coordinate
+        }
+        return false
+    }
+}
+
+extension CLLocationCoordinate2D: Equatable {
+    public static func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+    }
+}

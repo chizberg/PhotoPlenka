@@ -33,6 +33,7 @@ extension UIColor {
 fileprivate enum Constants {
     static let lowerBoundYear: Double = 1826
     static let upperBoundYear: Double = 2000
+    // градиент и его значения взял из CSS на pastvu.com
     static let gradientColors: [Double: UIColor] = [
         0: UIColor(red: 0, green: 0, blue: 102 / 255.0, alpha: 1),
         30: UIColor(red: 0, green: 0, blue: 171 / 255.0, alpha: 1),
