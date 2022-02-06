@@ -40,15 +40,15 @@ final class MapController: UIViewController {
             forAnnotationViewWithReuseIdentifier: Constants.clusterReuseID
         )
     }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    
-    let bottomSheetVC = DetailAnnotationViewController()
-    bottomSheetVC.modalPresentationStyle = .custom
-    bottomSheetVC.transitioningDelegate = transitionDelegate
-    present(bottomSheetVC, animated: false)
-  }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let bottomSheetVC = DetailAnnotationViewController()
+        bottomSheetVC.modalPresentationStyle = .custom
+        bottomSheetVC.transitioningDelegate = transitionDelegate
+        present(bottomSheetVC, animated: false)
+    }
 
     override func viewDidLayoutSubviews() {
         map.frame = view.bounds
@@ -56,9 +56,15 @@ final class MapController: UIViewController {
 }
 
 extension MapController: BottomSheetFactory {
-  func makePresentationController(presentedViewController: UIViewController, presenting: UIViewController?) -> UIPresentationController {
-      BottomSheetPresentationController(presentedViewController: presentedViewController, presenting: presenting)
-  }
+    func makePresentationController(
+        presentedViewController: UIViewController,
+        presenting: UIViewController?
+    ) -> UIPresentationController {
+        BottomSheetPresentationController(
+            presentedViewController: presentedViewController,
+            presenting: presenting
+        )
+    }
 }
 
 // TODO: Z stuff

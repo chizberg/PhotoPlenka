@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 final class DetailAnnotationViewController: UIViewController {
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    view.backgroundColor = .white
-  }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+    }
 }
