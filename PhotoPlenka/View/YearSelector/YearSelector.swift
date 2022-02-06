@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol YearSelectorDelegate: AnyObject {
+    func rangeDidChange(newRange: ClosedRange<Int>)
+}
+
 final class YearSelector: UIView {
     private enum Constants {
         static let lineHeight: CGFloat = 7
@@ -31,12 +35,15 @@ final class YearSelector: UIView {
     var yearRange: ClosedRange<Int> {
         let year1 = year(from: thumbs[0].value)
         let year2 = year(from: thumbs[1].value)
+        guard year1 < year2 else { return year2...year1 }
         return year1...year2
     }
 
     var valueRange: ClosedRange<CGFloat> {
         thumbs[0].value...thumbs[1].value
     }
+
+    weak var delegate: YearSelectorDelegate?
 
     // MARK: - views
 
@@ -143,6 +150,11 @@ final class YearSelector: UIView {
         thumb.updateYear(year(from: newValue))
         thumb.x = newX
         thumb.value = newValue
+        rangeDidChange()
+    }
+
+    private func rangeDidChange() {
+        delegate?.rangeDidChange(newRange: yearRange)
         updateShadows()
     }
 

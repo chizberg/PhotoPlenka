@@ -17,14 +17,17 @@ final class MapController: UIViewController {
         static let photoReuseID = String(describing: PhotoAnnotationView.self)
         static let clusterReuseID = String(describing: ClusterAnnotationView.self)
         static let multiPhotoReuseID = String(describing: MultiplePhotosAnnotationView.self)
+        static let initialYearRange: ClosedRange<Int> = 1826...2000
     }
 
     private let networkService: NetworkServiceProtocol = NetworkService()
     private lazy var annotationProvider: AnnotationProviderProtocol =
         AnnotationProvider(networkService: networkService)
-    private let map = MKMapView()
+    private let map = MapWithObservers()
     private var zoom = Zoom(span: Constants.defaultRegion.span)
+    private var yearRange = Constants.initialYearRange
     private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
+    private lazy var nearbyListController = NearbyListController(mapController: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,11 +47,13 @@ final class MapController: UIViewController {
             MultiplePhotosAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: Constants.multiPhotoReuseID
         )
+        map.addObserver(nearbyListController)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let bottomSheetVC = DetailAnnotationViewController()
+
+        let bottomSheetVC = nearbyListController
         bottomSheetVC.modalPresentationStyle = .custom
         bottomSheetVC.transitioningDelegate = transitionDelegate
         present(bottomSheetVC, animated: false)
@@ -76,7 +81,6 @@ extension MapController: BottomSheetFactory {
     }
 }
 
-// TODO: Z stuff
 extension MapController {
     private func clearMapAndProvider() {
         map.removeAnnotations(map.annotations)
@@ -98,8 +102,7 @@ extension MapController {
 }
 
 extension MapController: MKMapViewDelegate {
-    @objc func loadNewAnnotations() {
-        let yearRange = 1826...2000 // should be replaced with yearSelect value
+    @objc private func loadNewAnnotations() {
         annotationProvider
             .loadNewAnnotations(
                 z: z,
@@ -115,6 +118,11 @@ extension MapController: MKMapViewDelegate {
                     print(error.localizedDescription)
                 }
             }
+    }
+
+    @objc private func clearAndLoadNewAnnotations() {
+        clearMapAndProvider()
+        loadNewAnnotations()
     }
 
     // trying to load it with delay, but it would be better done with operations, i guess
@@ -161,13 +169,22 @@ extension MapController: MKMapViewDelegate {
         }
         return nil
     }
+}
 
-    // replace icons with dots
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//        let dot = MKAnnotationView()
-//        dot.backgroundColor = .blue
-//        dot.frame = CGRect(origin: .zero, size: CGSize(width: 4, height: 4))
-//        dot.layer.cornerRadius = 2
-//        return dot
-//    }
+extension MapController: YearSelectorDelegate {
+    func rangeDidChange(newRange: ClosedRange<Int>) {
+        yearRange = newRange
+        NSObject.cancelPreviousPerformRequests(
+            withTarget: self,
+            selector: #selector(clearAndLoadNewAnnotations),
+            object: nil
+        )
+        self.perform(#selector(clearAndLoadNewAnnotations), with: nil, afterDelay: 0.15)
+    }
+}
+
+extension MapController: MapPublisher {
+    func addObserver(_ observer: MapObserver) {
+        map.addObserver(observer)
+    }
 }
