@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C60B4D2427AEA6BF00F2C117 /* DetailAnnotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2327AEA6BF00F2C117 /* DetailAnnotationViewController.swift */; };
+		C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */; };
+		C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */; };
 		DF0BDEF427AACE33002CCF07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */; };
 		DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */; };
 		DF0BDEF827AACE33002CCF07 /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF727AACE33002CCF07 /* MapController.swift */; };
@@ -29,6 +32,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C60B4D2327AEA6BF00F2C117 /* DetailAnnotationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnotationViewController.swift; sourceTree = "<group>"; };
+		C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTransitionDelegate.swift; sourceTree = "<group>"; };
+		C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresentationController.swift; sourceTree = "<group>"; };
 		DF0BDEF027AACE33002CCF07 /* PhotoPlenka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoPlenka.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +99,9 @@
 				DF0BDEFC27AACE38002CCF07 /* Assets.xcassets */,
 				DF0BDEFE27AACE38002CCF07 /* LaunchScreen.storyboard */,
 				DF0BDF0127AACE38002CCF07 /* Info.plist */,
+				C60B4D2327AEA6BF00F2C117 /* DetailAnnotationViewController.swift */,
+				C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */,
+				C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */,
 			);
 			path = PhotoPlenka;
 			sourceTree = "<group>";
@@ -205,6 +214,7 @@
 				DF2A41E927AC78C700E21BDC /* PhotoAnnotationView.swift in Sources */,
 				DF94BCC427ADC697008D3D5C /* Zoom.swift in Sources */,
 				DFCF0EF127AAD65F00A0D10B /* NetworkError.swift in Sources */,
+				C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */,
 				DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */,
 				DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */,
 				DFCF0EF827AAE29D00A0D10B /* Direction.swift in Sources */,
@@ -212,11 +222,13 @@
 				DFCF0EFB27AAE59100A0D10B /* Color from year.swift in Sources */,
 				DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */,
 				DFCF0EF327AAD7CD00A0D10B /* NetworkCluster.swift in Sources */,
+				C60B4D2427AEA6BF00F2C117 /* DetailAnnotationViewController.swift in Sources */,
 				DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */,
 				DF0BDEF427AACE33002CCF07 /* AppDelegate.swift in Sources */,
 				DFCF0EEF27AAD61600A0D10B /* NetworkService.swift in Sources */,
 				DF2A41EB27AC7A9000E21BDC /* ClusterAnnotationView.swift in Sources */,
 				DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */,
+				C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,7 +377,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8DB7C77NK9;
+				DEVELOPMENT_TEAM = 8QYNB4U6BR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoPlenka/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -393,7 +405,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8DB7C77NK9;
+				DEVELOPMENT_TEAM = 8QYNB4U6BR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoPlenka/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
