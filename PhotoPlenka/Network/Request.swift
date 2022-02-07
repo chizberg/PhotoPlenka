@@ -12,19 +12,20 @@ enum Request {
         z: Int,
         coordinates: [[Double]],
         startAt: TimeInterval = Date().timeIntervalSince1970,
-        year: Int = 1826,
-        year2: Int = 2000
+        yearRange: ClosedRange<Int>
     )
 }
 
 extension Request {
     private var queryItems: [URLQueryItem] {
         switch self {
-        case let .byBounds(z, coordinates, startAt, year, year2):
+        case let .byBounds(z, coordinates, startAt, yearRange):
             let isPainting = false
             let localWork = z >= 17
             let params = """
-            {"z":\(z),"geometry":{"type":"Polygon","coordinates":[\(coordinates)]},"startAt":\(startAt),"year":\(year),"year2":\(year2),"isPainting":\(isPainting),"localWork":\(localWork)}
+            {"z":\(z),"geometry":{"type":"Polygon","coordinates":[\(coordinates)]},"startAt":\(startAt),"year":\(yearRange
+                .lowerBound),"year2":\(yearRange
+                .upperBound),"isPainting":\(isPainting),"localWork":\(localWork)}
             """
             return [
                 URLQueryItem(name: "method", value: "photo.getByBounds"),
@@ -47,8 +48,12 @@ extension Request {
 }
 
 extension Request {
-    static func byBounds(z: Int, region: MKCoordinateRegion) -> Request {
-        .byBounds(z: z, coordinates: region.geoJSONDouble)
+    static func byBounds(
+        z: Int,
+        region: MKCoordinateRegion,
+        yearRange: ClosedRange<Int>
+    ) -> Request {
+        .byBounds(z: z, coordinates: region.geoJSONDouble, yearRange: yearRange)
     }
 }
 

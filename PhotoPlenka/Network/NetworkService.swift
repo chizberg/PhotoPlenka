@@ -13,6 +13,7 @@ protocol NetworkServiceProtocol {
     func loadByBounds(
         z: Int,
         region: MKCoordinateRegion,
+        yearRange: ClosedRange<Int>,
         _ completion: @escaping CompletionType
     )
 }
@@ -21,9 +22,10 @@ final class NetworkService: NetworkServiceProtocol {
     func loadByBounds(
         z: Int,
         region: MKCoordinateRegion,
+        yearRange: ClosedRange<Int>,
         _ completion: @escaping CompletionType
     ) {
-        let request = Request.byBounds(z: z, region: region)
+        let request = Request.byBounds(z: z, region: region, yearRange: yearRange)
         loadByBounds(request) { (result: Result<
             (photos: [NetworkPhoto], clusters: [NetworkCluster]),
             NetworkError
