@@ -58,11 +58,13 @@ final class ClusterAnnotationView: MKAnnotationView {
         conficureCountView()
     }
 
-    func fillIn(annotation: Cluster) {
-        setColor(.from(year: annotation.photo.year))
-        imageView.loadImage(from: annotation.photo.imageLink(quality: .preview))
-        countLabel.text = "\(annotation.count)"
-        coordinate = annotation.coordinate
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        guard let cluster = annotation as? Cluster else { return }
+        setColor(.from(year: cluster.photo.year))
+        imageView.loadImage(from: cluster.photo.imageLink(quality: .preview))
+        countLabel.text = "\(cluster.count)"
+        coordinate = cluster.coordinate
         setNeedsLayout()
     }
 
