@@ -16,10 +16,10 @@ protocol BottomSheetFactory {
 }
 
 final class BottomSheetTransitionDelegate: NSObject, UIViewControllerTransitioningDelegate {
-    private let buttomSheetFactory: BottomSheetFactory
+    private let bottomSheetFactory: BottomSheetFactory
 
-    init(buttomSheetFactory: BottomSheetFactory) {
-        self.buttomSheetFactory = buttomSheetFactory
+    init(bottomSheetFactory: BottomSheetFactory) {
+        self.bottomSheetFactory = bottomSheetFactory
     }
 
     func presentationController(
@@ -27,7 +27,7 @@ final class BottomSheetTransitionDelegate: NSObject, UIViewControllerTransitioni
         presenting: UIViewController?,
         source: UIViewController
     ) -> UIPresentationController? {
-        buttomSheetFactory.makePresentationController(
+        bottomSheetFactory.makePresentationController(
             presentedViewController: presented,
             presenting: presenting ?? source
         )
