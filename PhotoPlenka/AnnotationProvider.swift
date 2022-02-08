@@ -13,6 +13,7 @@ protocol AnnotationProviderProtocol {
     func loadNewAnnotations(
         z: Int,
         region: MKCoordinateRegion,
+        yearRange: ClosedRange<Int>,
         _ completion: @escaping CompletionType
     )
     func clear()
@@ -36,27 +37,29 @@ final class AnnotationProvider: AnnotationProviderProtocol {
     func loadNewAnnotations(
         z: Int,
         region: MKCoordinateRegion,
+        yearRange: ClosedRange<Int>,
         _ completion: @escaping CompletionType
     ) {
-        networkService.loadByBounds(z: z, region: region) { [weak self] result in
-            guard let self = self else { return }
-            assert(Thread.isMainThread)
-            switch result {
-            case let .success((networkPhotos, networkClusters)):
-                let photoAnnotations = Set(networkPhotos.map { Photo(from: $0) })
-                let clusterAnnotations = Set(networkClusters.map { Cluster(from: $0) })
+        networkService
+            .loadByBounds(z: z, region: region, yearRange: yearRange) { [weak self] result in
+                guard let self = self else { return }
+                assert(Thread.isMainThread)
+                switch result {
+                case let .success((networkPhotos, networkClusters)):
+                    let photoAnnotations = Set(networkPhotos.map { Photo(from: $0) })
+                    let clusterAnnotations = Set(networkClusters.map { Cluster(from: $0) })
 
-                // new images that will be added to mapView
-                let photoDiff = photoAnnotations.subtracting(self.photos)
-                let clusterDiff = clusterAnnotations.subtracting(self.clusters)
-                completion(.success(self.annotationsFromSets(photoDiff, clusterDiff)))
+                    // new images that will be added to mapView
+                    let photoDiff = photoAnnotations.subtracting(self.photos)
+                    let clusterDiff = clusterAnnotations.subtracting(self.clusters)
+                    completion(.success(self.annotationsFromSets(photoDiff, clusterDiff)))
 
-                self.photos = self.photos.union(photoAnnotations)
-                self.clusters = self.clusters.union(clusterAnnotations)
-            case let .failure(error):
-                completion(.failure(error))
+                    self.photos = self.photos.union(photoAnnotations)
+                    self.clusters = self.clusters.union(clusterAnnotations)
+                case let .failure(error):
+                    completion(.failure(error))
+                }
             }
-        }
     }
 
     private func annotationsFromSets(

@@ -68,8 +68,13 @@ extension MapController {
 
 extension MapController: MKMapViewDelegate {
     @objc func loadNewAnnotations() {
+        let yearRange = 1826...2000 // should be replaced with yearSelect value
         annotationProvider
-            .loadNewAnnotations(z: z, region: map.extendedRegion) { [weak self] result in
+            .loadNewAnnotations(
+                z: z,
+                region: map.extendedRegion,
+                yearRange: yearRange
+            ) { [weak self] result in
                 guard let self = self else { return }
                 assert(Thread.isMainThread)
                 switch result {
