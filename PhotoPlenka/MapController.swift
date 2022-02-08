@@ -23,6 +23,7 @@ final class MapController: UIViewController {
         AnnotationProvider(networkService: networkService)
     private let map = MKMapView()
     private var zoom = Zoom(span: Constants.defaultRegion.span)
+    private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +41,30 @@ final class MapController: UIViewController {
         )
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let bottomSheetVC = DetailAnnotationViewController()
+        bottomSheetVC.modalPresentationStyle = .custom
+        bottomSheetVC.transitioningDelegate = transitionDelegate
+        present(bottomSheetVC, animated: false)
+    }
+
     override func viewDidLayoutSubviews() {
         map.frame = view.bounds
+    }
+}
+
+extension MapController: BottomSheetFactory {
+    func makePresentationController(
+        presentedViewController: UIViewController,
+        presenting: UIViewController?
+    ) -> UIPresentationController {
+        BottomSheetPresentationController(
+            fractions: [0.20, 0.50, 0.60, 0.90],
+            presentedViewController: presentedViewController,
+            presenting: presenting
+        )
     }
 }
 
