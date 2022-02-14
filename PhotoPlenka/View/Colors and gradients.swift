@@ -28,6 +28,33 @@ extension UIColor {
             percent: percent
         )
     }
+
+    // цвет для серых линий в DoubleSlider: разный в зависимости от темы
+    static var yearLineShadowColor: UIColor {
+        UIColor { traits -> UIColor in
+            traits.userInterfaceStyle == .dark ? .secondarySystemBackground : .systemGray3
+        }
+    }
+}
+
+extension CAGradientLayer {
+    static func yearGradient() -> CAGradientLayer {
+        let gradient = CAGradientLayer()
+        gradient.type = .axial
+        gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
+
+        gradient.locations = []
+        gradient.colors = []
+
+        let locationKeys = Constants.gradientColors.keys.sorted()
+        for locationKey in locationKeys {
+            gradient.locations?.append(NSNumber(value: locationKey / 100))
+            gradient.colors?.append(Constants.gradientColors[locationKey]!.cgColor)
+        }
+
+        return gradient
+    }
 }
 
 fileprivate enum Constants {
