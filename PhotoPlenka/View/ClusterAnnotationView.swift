@@ -62,9 +62,21 @@ final class ClusterAnnotationView: MKAnnotationView {
         super.prepareForDisplay()
         guard let cluster = annotation as? Cluster else { return }
         setColor(.from(year: cluster.photo.year))
-        imageView.loadImage(from: cluster.photo.imageLink(quality: .preview))
         countLabel.text = "\(cluster.count)"
         coordinate = cluster.coordinate
+        imageView.image = nil
+        ImageFetcher.shared.fetchHighestQuality(
+            filePath: cluster.photo.file,
+            quality: .preview,
+            completion: { [weak self] result in
+                guard let self = self else { return }
+                assert(Thread.isMainThread)
+                switch result {
+                case let .success(image): self.imageView.image = image
+                case let .failure(error): print(error.localizedDescription)
+                }
+            }
+        )
         setNeedsLayout()
     }
 
@@ -89,20 +101,5 @@ final class ClusterAnnotationView: MKAnnotationView {
             size: labelSize
         )
         countView.layer.cornerRadius = min(labelSize.height, labelSize.width) / 2
-    }
-}
-
-// TODO: - replace with image cache class
-extension UIImageView {
-    func loadImage(from url: URL?) {
-        guard let url = url else { return }
-        URLSession.shared.dataTask(with: url, completionHandler: { [weak self] data, _, error in
-            guard let self = self else { return }
-            guard let data = data, error == nil else { return }
-            DispatchQueue.main.async {
-                assert(Thread.isMainThread)
-                self.image = UIImage(data: data)
-            }
-        }).resume()
     }
 }

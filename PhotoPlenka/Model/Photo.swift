@@ -35,18 +35,6 @@ final class Photo: NSObject, MKAnnotation {
     }
 }
 
-enum ImageQuality: String { // RawValue is used in URL path
-    case high = "a"
-    case medium = "d"
-    case preview = "s"
-}
-
-extension Photo {
-    func imageLink(quality: ImageQuality) -> URL? {
-        URL(string: "https://pastvu.com/_p/\(quality.rawValue)/\(file)")
-    }
-}
-
 extension Photo {
     override var hash: Int {
         cid

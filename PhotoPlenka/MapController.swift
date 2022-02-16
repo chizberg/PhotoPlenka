@@ -48,7 +48,6 @@ final class MapController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
         let bottomSheetVC = DetailAnnotationViewController()
         bottomSheetVC.modalPresentationStyle = .custom
         bottomSheetVC.transitioningDelegate = transitionDelegate
@@ -57,6 +56,10 @@ final class MapController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         map.frame = view.bounds
+    }
+
+    override func didReceiveMemoryWarning() {
+        ImageFetcher.shared.clear()
     }
 }
 
