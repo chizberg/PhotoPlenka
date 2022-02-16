@@ -19,6 +19,10 @@
 		DF0BDF0027AACE38002CCF07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF0BDEFE27AACE38002CCF07 /* LaunchScreen.storyboard */; };
 		DF2A41E927AC78C700E21BDC /* PhotoAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2A41E827AC78C700E21BDC /* PhotoAnnotationView.swift */; };
 		DF2A41EB27AC7A9000E21BDC /* ClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2A41EA27AC7A9000E21BDC /* ClusterAnnotationView.swift */; };
+		DF37377E27BA826000DAB3CC /* PreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37377D27BA826000DAB3CC /* PreviewCell.swift */; };
+		DF37378027BA82F000DAB3CC /* NearbyListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37377F27BA82F000DAB3CC /* NearbyListController.swift */; };
+		DF37378327BA8AB800DAB3CC /* MapObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37378227BA8AB800DAB3CC /* MapObserver.swift */; };
+		DF37378527BA8FBE00DAB3CC /* MapWithObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */; };
 		DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */; };
 		DF94BCC427ADC697008D3D5C /* Zoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF94BCC327ADC697008D3D5C /* Zoom.swift */; };
 		DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53D27B092C80047149F /* YearSelector.swift */; };
@@ -52,6 +56,10 @@
 		DF0BDF0127AACE38002CCF07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF2A41E827AC78C700E21BDC /* PhotoAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAnnotationView.swift; sourceTree = "<group>"; };
 		DF2A41EA27AC7A9000E21BDC /* ClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterAnnotationView.swift; sourceTree = "<group>"; };
+		DF37377D27BA826000DAB3CC /* PreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCell.swift; sourceTree = "<group>"; };
+		DF37377F27BA82F000DAB3CC /* NearbyListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyListController.swift; sourceTree = "<group>"; };
+		DF37378227BA8AB800DAB3CC /* MapObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapObserver.swift; sourceTree = "<group>"; };
+		DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapWithObservers.swift; sourceTree = "<group>"; };
 		DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationProvider.swift; sourceTree = "<group>"; };
 		DF94BCC327ADC697008D3D5C /* Zoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zoom.swift; sourceTree = "<group>"; };
 		DF9AF53D27B092C80047149F /* YearSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelector.swift; sourceTree = "<group>"; };
@@ -102,9 +110,9 @@
 			children = (
 				DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */,
 				DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */,
-				DF0BDEF727AACE33002CCF07 /* MapController.swift */,
 				DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */,
 				DFD7A21B27B86EC20064A0F4 /* Images */,
+				DF37378127BA8A8F00DAB3CC /* Controllers */,
 				DFCF0EF927AAE57800A0D10B /* View */,
 				DFCF0EF627AAE16A00A0D10B /* Model */,
 				DFCF0EE927AAD5C000A0D10B /* Network */,
@@ -117,6 +125,15 @@
 				C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */,
 			);
 			path = PhotoPlenka;
+			sourceTree = "<group>";
+		};
+		DF37378127BA8A8F00DAB3CC /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DF0BDEF727AACE33002CCF07 /* MapController.swift */,
+				DF37377F27BA82F000DAB3CC /* NearbyListController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		DF9AF53C27B090910047149F /* YearSelector */ = {
@@ -147,6 +164,7 @@
 				DFCF0EF727AAE29D00A0D10B /* Direction.swift */,
 				DFCF0EFC27AAE81C00A0D10B /* Cluster.swift */,
 				DF94BCC327ADC697008D3D5C /* Zoom.swift */,
+				DF37378227BA8AB800DAB3CC /* MapObserver.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -159,6 +177,8 @@
 				DF2A41E827AC78C700E21BDC /* PhotoAnnotationView.swift */,
 				DF2A41EA27AC7A9000E21BDC /* ClusterAnnotationView.swift */,
 				DF0B9D3827B1812D005836D8 /* MultiplePhotosAnnotationView.swift */,
+				DF37377D27BA826000DAB3CC /* PreviewCell.swift */,
+				DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -272,6 +292,7 @@
 				C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */,
 				DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */,
 				DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */,
+				DF37378027BA82F000DAB3CC /* NearbyListController.swift in Sources */,
 				DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */,
 				DFCF0EF827AAE29D00A0D10B /* Direction.swift in Sources */,
 				DFCF0EF527AAE16600A0D10B /* Photo.swift in Sources */,
@@ -280,8 +301,11 @@
 				DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */,
 				DFCF0EF327AAD7CD00A0D10B /* NetworkCluster.swift in Sources */,
 				C60B4D2427AEA6BF00F2C117 /* DetailAnnotationViewController.swift in Sources */,
+				DF37377E27BA826000DAB3CC /* PreviewCell.swift in Sources */,
 				DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */,
 				DF9AF54027B092E70047149F /* ThumbView.swift in Sources */,
+				DF37378327BA8AB800DAB3CC /* MapObserver.swift in Sources */,
+				DF37378527BA8FBE00DAB3CC /* MapWithObservers.swift in Sources */,
 				DF0BDEF427AACE33002CCF07 /* AppDelegate.swift in Sources */,
 				DF0B9D3927B1812D005836D8 /* MultiplePhotosAnnotationView.swift in Sources */,
 				DFCF0EEF27AAD61600A0D10B /* NetworkService.swift in Sources */,
