@@ -8,9 +8,14 @@
 import Foundation
 import UIKit
 
+protocol BottomSheetHeightObserver: AnyObject {
+    func heightDidChange(newHeight: CGFloat)
+}
+
 final class BottomSheetPresentationController: UIPresentationController {
     private var initialFrame: CGRect = .zero
     private let fractions: [Double]
+    weak var heightObserver: BottomSheetHeightObserver?
 
     override var shouldPresentInFullscreen: Bool {
         false
@@ -152,5 +157,6 @@ extension BottomSheetPresentationController {
                 self.containerView?.layoutIfNeeded()
             })
         }
+        heightObserver?.heightDidChange(newHeight: containerView?.frame.height ?? 0)
     }
 }

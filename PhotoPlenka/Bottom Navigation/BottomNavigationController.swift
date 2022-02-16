@@ -16,8 +16,14 @@ final class BottomNavigationController: UINavigationController {
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     let coordinatorHelper = BottomTransitionCoordinator()
 
+    weak var observer: NavigationControllerObserver? {
+        get { coordinatorHelper.observer }
+        set { coordinatorHelper.observer = newValue }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        isNavigationBarHidden = true
         view.layer.cornerRadius = Constants.cornerRadius
         view.layer.maskedCorners = Constants.maskedCorners
         view.clipsToBounds = true
@@ -34,8 +40,11 @@ extension BottomNavigationController {
     func setCustomTransitioning() {
         delegate = coordinatorHelper
 
-        //пока что на виртуалке работает как-то так себе
-        let edgeSwipe = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        // пока что на виртуалке работает как-то так себе
+        let edgeSwipe = UIScreenEdgePanGestureRecognizer(
+            target: self,
+            action: #selector(handleSwipe(_:))
+        )
         edgeSwipe.edges = .left
         view.addGestureRecognizer(edgeSwipe)
     }
