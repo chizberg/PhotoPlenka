@@ -16,6 +16,7 @@ final class MapController: UIViewController {
         )
         static let photoReuseID = String(describing: PhotoAnnotationView.self)
         static let clusterReuseID = String(describing: ClusterAnnotationView.self)
+        static let multiPhotoReuseID = String(describing: MultiplePhotosAnnotationView.self)
     }
 
     private let networkService: NetworkServiceProtocol = NetworkService()
@@ -38,6 +39,10 @@ final class MapController: UIViewController {
         map.register(
             ClusterAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: Constants.clusterReuseID
+        )
+        map.register(
+            MultiplePhotosAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: Constants.multiPhotoReuseID
         )
     }
 
@@ -133,21 +138,23 @@ extension MapController: MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if let photoCluster = annotation as? MKClusterAnnotation {
+            return mapView.dequeueReusableAnnotationView(
+                withIdentifier: Constants.multiPhotoReuseID,
+                for: photoCluster
+            ) as? MultiplePhotosAnnotationView
+        }
         if let photoAnnotation = annotation as? Photo {
-            guard let photoView = mapView.dequeueReusableAnnotationView(
+            return mapView.dequeueReusableAnnotationView(
                 withIdentifier: Constants.photoReuseID,
-                for: annotation
-            ) as? PhotoAnnotationView else { return nil }
-            photoView.fillIn(annotation: photoAnnotation)
-            return photoView
+                for: photoAnnotation
+            ) as? PhotoAnnotationView
         }
         if let clusterAnnotation = annotation as? Cluster {
-            guard let clusterView = mapView.dequeueReusableAnnotationView(
+            return mapView.dequeueReusableAnnotationView(
                 withIdentifier: Constants.clusterReuseID,
-                for: annotation
-            ) as? ClusterAnnotationView else { return nil }
-            clusterView.fillIn(annotation: clusterAnnotation)
-            return clusterView
+                for: clusterAnnotation
+            ) as? ClusterAnnotationView
         }
         return nil
     }

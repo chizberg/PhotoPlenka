@@ -10,6 +10,7 @@
 		C60B4D2427AEA6BF00F2C117 /* DetailAnnotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2327AEA6BF00F2C117 /* DetailAnnotationViewController.swift */; };
 		C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */; };
 		C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */; };
+		DF0B9D3927B1812D005836D8 /* MultiplePhotosAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0B9D3827B1812D005836D8 /* MultiplePhotosAnnotationView.swift */; };
 		DF0BDEF427AACE33002CCF07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */; };
 		DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */; };
 		DF0BDEF827AACE33002CCF07 /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF727AACE33002CCF07 /* MapController.swift */; };
@@ -37,6 +38,7 @@
 		C60B4D2327AEA6BF00F2C117 /* DetailAnnotationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnotationViewController.swift; sourceTree = "<group>"; };
 		C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTransitionDelegate.swift; sourceTree = "<group>"; };
 		C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresentationController.swift; sourceTree = "<group>"; };
+		DF0B9D3827B1812D005836D8 /* MultiplePhotosAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplePhotosAnnotationView.swift; sourceTree = "<group>"; };
 		DF0BDEF027AACE33002CCF07 /* PhotoPlenka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoPlenka.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				DFCF0EFA27AAE59100A0D10B /* Colors and gradients.swift */,
 				DF2A41E827AC78C700E21BDC /* PhotoAnnotationView.swift */,
 				DF2A41EA27AC7A9000E21BDC /* ClusterAnnotationView.swift */,
+				DF0B9D3827B1812D005836D8 /* MultiplePhotosAnnotationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 				DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */,
 				DF9AF54027B092E70047149F /* ThumbView.swift in Sources */,
 				DF0BDEF427AACE33002CCF07 /* AppDelegate.swift in Sources */,
+				DF0B9D3927B1812D005836D8 /* MultiplePhotosAnnotationView.swift in Sources */,
 				DFCF0EEF27AAD61600A0D10B /* NetworkService.swift in Sources */,
 				DF2A41EB27AC7A9000E21BDC /* ClusterAnnotationView.swift in Sources */,
 				DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */,
@@ -426,8 +430,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = alexxingplus.PhotoPlenka;
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -454,8 +458,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = alexxingplus.PhotoPlenka;
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

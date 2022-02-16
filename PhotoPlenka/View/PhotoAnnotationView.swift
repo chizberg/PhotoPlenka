@@ -8,24 +8,18 @@
 import MapKit
 
 final class PhotoAnnotationView: MKAnnotationView {
-    lazy var roundLayer: CAShapeLayer = {
-        let layer = CAShapeLayer()
-        layer.path = roundPath.cgPath
-        return layer
-    }()
+    private enum Constants {
+        static let scaleValue: CGFloat = 2
+        static let clusteringIdentifier: String = "photoClusteringID"
+    }
 
-    lazy var directionLayer: CAShapeLayer = {
-        let layer = CAShapeLayer()
-        layer.path = directionPath.cgPath
-        return layer
-    }()
+    lazy var iconLayer = CAShapeLayer()
 
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = .none
-        self.frame = CGRect(origin: .zero, size: CGSize(width: 10, height: 13))
-        self.layer.addSublayer(roundLayer)
-        self.layer.addSublayer(directionLayer)
+        bounds = CGRect(origin: .zero, size: CGSize(width: 10, height: 13))
+        backgroundColor = .none
+        layer.addSublayer(iconLayer)
     }
 
     @available(*, unavailable)
@@ -33,24 +27,34 @@ final class PhotoAnnotationView: MKAnnotationView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func fillIn(annotation: Photo?) {
-        guard let annotation = annotation else { return }
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        guard let photo = annotation as? Photo else { return }
+        setColor(.from(year: photo.year))
+        iconLayer.path = iconPath(direction: photo.dir).cgPath
+    }
 
-        let scale = CGAffineTransform(scaleX: 2, y: 2)
-        setColor(.from(year: annotation.year))
-        if let angle = annotation.dir?.angle {
-            let rotate = CGAffineTransform(rotationAngle: angle)
-            transform = rotate.concatenating(scale)
-            directionLayer.isHidden = false
-        } else {
-            transform = scale
-            directionLayer.isHidden = true
+    override var annotation: MKAnnotation? {
+        willSet {
+            clusteringIdentifier = Constants.clusteringIdentifier
+            displayPriority = .required
         }
     }
 
     private func setColor(_ color: UIColor) {
-        roundLayer.fillColor = color.cgColor
-        directionLayer.fillColor = color.cgColor
+        iconLayer.fillColor = color.cgColor
+    }
+
+    // эта функция берёт bezierPath, при необходимости добавляет направление и применяет transform
+    private func iconPath(direction: Direction?) -> UIBezierPath {
+        let icon = UIBezierPath()
+        icon.append(roundPath)
+        if let angle = direction?.angle {
+            icon.append(directionPath)
+            icon.apply(CGAffineTransform(rotationAngle: angle))
+        }
+        icon.apply(CGAffineTransform(scaleX: Constants.scaleValue, y: Constants.scaleValue))
+        return icon
     }
 }
 
@@ -83,6 +87,5 @@ fileprivate let directionPath: UIBezierPath = {
     )
     bezierPath.addLine(to: CGPoint(x: 4.13, y: 0.5))
     bezierPath.close()
-
     return bezierPath
 }()
