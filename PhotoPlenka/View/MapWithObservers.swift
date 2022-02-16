@@ -12,7 +12,6 @@ final class MapWithObservers: MKMapView, MapPublisher {
         static let annotationAnimationDuration: TimeInterval = 0.2
         static let superSmallTransform = CGAffineTransform(scaleX: 0.01, y: 0.01)
     }
-
     // храним множество слабых ссылок
     private(set) var observers = NSHashTable<MapObserver>.weakObjects()
 
