@@ -190,13 +190,8 @@ extension MapController: MKMapViewDelegate {
         }
         return nil
     }
-<<<<<<< HEAD
 
     func mapView(_: MKMapView, didAdd views: [MKAnnotationView]) {
-=======
-    
-    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
->>>>>>> 3e666fd (basic annimations)
         showWithAnimation(views)
     }
 }
@@ -219,17 +214,10 @@ extension MapController: MapPublisher {
     }
 }
 
-<<<<<<< HEAD
 // animating annotations
 extension MapController {
     // у меня пока что не получается закинуть анимацию появления в MKMapView override куда-нибудь
     // на тот момент ещё нет view(for: annotation)
-=======
-//animating annotations
-extension MapController {
-    //у меня пока что не получается закинуть анимацию появления в MKMapView override куда-нибудь
-    //на тот момент ещё нет view(for: annotation)
->>>>>>> 3e666fd (basic annimations)
     private func showWithAnimation(_ views: [MKAnnotationView]) {
         for view in views {
             let initialTransform = view.transform

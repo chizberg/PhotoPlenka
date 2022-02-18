@@ -8,7 +8,7 @@
 import UIKit
 
 final class BottomTransitionCoordinator: NSObject, UINavigationControllerDelegate {
-    var interactionController: UIPercentDrivenInteractiveTransition? //меняем его в BottomNavigationController
+    var interactionController: UIPercentDrivenInteractiveTransition? // меняем его в BottomNavigationController
 
     func navigationController(
         _: UINavigationController,

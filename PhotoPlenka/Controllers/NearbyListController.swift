@@ -135,7 +135,9 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let annotation = visibleAnnotations[indexPath.row]
         let photoData: Photo
-        if let photo = annotation as? Photo { photoData = photo } else if let cluster = annotation as? Cluster { photoData = cluster.photo } else { fatalError("invalid annotation type") }
+        if let photo = annotation as? Photo { photoData = photo }
+        else if let cluster = annotation as? Cluster { photoData = cluster.photo }
+        else { fatalError("invalid annotation type") }
         let singleController = SinglePhotoController(
             cid: photoData.cid,
             detailsProvider: detailsProvider

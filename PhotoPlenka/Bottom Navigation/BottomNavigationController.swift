@@ -34,8 +34,11 @@ extension BottomNavigationController {
     func setCustomTransitioning() {
         delegate = coordinatorHelper
 
-        //пока что на виртуалке работает как-то так себе
-        let edgeSwipe = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        // пока что на виртуалке работает как-то так себе
+        let edgeSwipe = UIScreenEdgePanGestureRecognizer(
+            target: self,
+            action: #selector(handleSwipe(_:))
+        )
         edgeSwipe.edges = .left
         view.addGestureRecognizer(edgeSwipe)
     }
