@@ -59,7 +59,16 @@ extension Request {
 
 extension CLLocationCoordinate2D {
     var doubleValue: [Double] {
-        [self.longitude, self.latitude]
+        // нужно корректировать широту, потому что по каким-то причинам MKMapView.region может выдавать значения больше 90 по модулю
+        // API при такой странной широте ничего не возвращает и всё падает
+        // поэтому широта не должна быть больше 90
+        let adjustedLatitude: Double
+        switch latitude {
+        case 90...: adjustedLatitude = 90
+        case ...(-90): adjustedLatitude = -90
+        default: adjustedLatitude = latitude
+        }
+        return [self.longitude, adjustedLatitude]
     }
 }
 
