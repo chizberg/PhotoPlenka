@@ -24,6 +24,10 @@
 		DF37378327BA8AB800DAB3CC /* MapObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37378227BA8AB800DAB3CC /* MapObserver.swift */; };
 		DF37378527BA8FBE00DAB3CC /* MapWithObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */; };
 		DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */; };
+		DF6A4F5027C3FBC700BBFE69 /* DetailedPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A4F4F27C3FBC700BBFE69 /* DetailedPhoto.swift */; };
+		DF6A4F5227C4469600BBFE69 /* PhotoSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A4F5127C4469600BBFE69 /* PhotoSource.swift */; };
+		DF6A4F5427C446B100BBFE69 /* NetworkDetailedPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A4F5327C446B100BBFE69 /* NetworkDetailedPhoto.swift */; };
+		DF6A4F5727C52F1200BBFE69 /* PhotoDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A4F5627C52F1200BBFE69 /* PhotoDetailsProvider.swift */; };
 		DF94BCC427ADC697008D3D5C /* Zoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF94BCC327ADC697008D3D5C /* Zoom.swift */; };
 		DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53D27B092C80047149F /* YearSelector.swift */; };
 		DF9AF54027B092E70047149F /* ThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53F27B092E70047149F /* ThumbView.swift */; };
@@ -61,6 +65,10 @@
 		DF37378227BA8AB800DAB3CC /* MapObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapObserver.swift; sourceTree = "<group>"; };
 		DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapWithObservers.swift; sourceTree = "<group>"; };
 		DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationProvider.swift; sourceTree = "<group>"; };
+		DF6A4F4F27C3FBC700BBFE69 /* DetailedPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedPhoto.swift; sourceTree = "<group>"; };
+		DF6A4F5127C4469600BBFE69 /* PhotoSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSource.swift; sourceTree = "<group>"; };
+		DF6A4F5327C446B100BBFE69 /* NetworkDetailedPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDetailedPhoto.swift; sourceTree = "<group>"; };
+		DF6A4F5627C52F1200BBFE69 /* PhotoDetailsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsProvider.swift; sourceTree = "<group>"; };
 		DF94BCC327ADC697008D3D5C /* Zoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zoom.swift; sourceTree = "<group>"; };
 		DF9AF53D27B092C80047149F /* YearSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelector.swift; sourceTree = "<group>"; };
 		DF9AF53F27B092E70047149F /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
@@ -110,7 +118,7 @@
 			children = (
 				DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */,
 				DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */,
-				DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */,
+				DF6A4F5527C52EF200BBFE69 /* Data Providers */,
 				DFD7A21B27B86EC20064A0F4 /* Images */,
 				DF37378127BA8A8F00DAB3CC /* Controllers */,
 				DFCF0EF927AAE57800A0D10B /* View */,
@@ -136,6 +144,15 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		DF6A4F5527C52EF200BBFE69 /* Data Providers */ = {
+			isa = PBXGroup;
+			children = (
+				DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */,
+				DF6A4F5627C52F1200BBFE69 /* PhotoDetailsProvider.swift */,
+			);
+			path = "Data Providers";
+			sourceTree = "<group>";
+		};
 		DF9AF53C27B090910047149F /* YearSelector */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +170,7 @@
 				DFCF0EEC27AAD5EA00A0D10B /* Request.swift */,
 				DFCF0EEE27AAD61600A0D10B /* NetworkService.swift */,
 				DFCF0EF027AAD65F00A0D10B /* NetworkError.swift */,
+				DF6A4F5327C446B100BBFE69 /* NetworkDetailedPhoto.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -161,6 +179,8 @@
 			isa = PBXGroup;
 			children = (
 				DFCF0EF427AAE16600A0D10B /* Photo.swift */,
+				DF6A4F4F27C3FBC700BBFE69 /* DetailedPhoto.swift */,
+				DF6A4F5127C4469600BBFE69 /* PhotoSource.swift */,
 				DFCF0EF727AAE29D00A0D10B /* Direction.swift */,
 				DFCF0EFC27AAE81C00A0D10B /* Cluster.swift */,
 				DF94BCC327ADC697008D3D5C /* Zoom.swift */,
@@ -290,10 +310,13 @@
 				DF94BCC427ADC697008D3D5C /* Zoom.swift in Sources */,
 				DFCF0EF127AAD65F00A0D10B /* NetworkError.swift in Sources */,
 				C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */,
+				DF6A4F5427C446B100BBFE69 /* NetworkDetailedPhoto.swift in Sources */,
 				DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */,
 				DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */,
 				DF37378027BA82F000DAB3CC /* NearbyListController.swift in Sources */,
+				DF6A4F5027C3FBC700BBFE69 /* DetailedPhoto.swift in Sources */,
 				DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */,
+				DF6A4F5727C52F1200BBFE69 /* PhotoDetailsProvider.swift in Sources */,
 				DFCF0EF827AAE29D00A0D10B /* Direction.swift in Sources */,
 				DFCF0EF527AAE16600A0D10B /* Photo.swift in Sources */,
 				DFCF0EFB27AAE59100A0D10B /* Colors and gradients.swift in Sources */,
@@ -301,6 +324,7 @@
 				DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */,
 				DFCF0EF327AAD7CD00A0D10B /* NetworkCluster.swift in Sources */,
 				C60B4D2427AEA6BF00F2C117 /* DetailAnnotationViewController.swift in Sources */,
+				DF6A4F5227C4469600BBFE69 /* PhotoSource.swift in Sources */,
 				DF37377E27BA826000DAB3CC /* PreviewCell.swift in Sources */,
 				DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */,
 				DF9AF54027B092E70047149F /* ThumbView.swift in Sources */,

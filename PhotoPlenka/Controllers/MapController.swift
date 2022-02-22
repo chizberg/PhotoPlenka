@@ -23,6 +23,8 @@ final class MapController: UIViewController {
     }
 
     private let networkService: NetworkServiceProtocol = NetworkService()
+    private lazy var photoDetailsProvider: PhotoDetailsProviderProtocol =
+        PhotoDetailsProvider(networkService: networkService)
     private lazy var annotationProvider: AnnotationProviderProtocol =
         AnnotationProvider(networkService: networkService)
     private let map = MapWithObservers()
@@ -67,6 +69,18 @@ final class MapController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         ImageFetcher.shared.clear()
+    }
+
+    func showSinglePhotoDetails(photo: Photo) {
+        // пока что просто печатаем, будем выводить потом
+        photoDetailsProvider.loadDetails(cid: photo.cid) { result in
+            switch result {
+            case let .success(detailedPhoto):
+                print(detailedPhoto)
+            case let .failure(error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 
@@ -147,6 +161,9 @@ extension MapController: MKMapViewDelegate {
             guard let coordinate = cluster.coordinate else { return }
             let newRegion = MKCoordinateRegion(center: coordinate, span: zoom.span)
             mapView.setRegion(newRegion, animated: true)
+        }
+        if let photo = view.annotation as? Photo {
+            showSinglePhotoDetails(photo: photo)
         }
     }
 
