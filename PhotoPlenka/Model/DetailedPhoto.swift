@@ -16,7 +16,7 @@ struct DetailedPhoto {
     let file: String
     let geo: [Double]
 
-    let description: String?
+    let description: NSAttributedString?
     let source: PhotoSource?
     let address: String?
     let author: String?
@@ -30,7 +30,9 @@ struct DetailedPhoto {
         self.year2 = ndp.year2
         self.file = ndp.file
         self.geo = ndp.geo
-        self.description = ndp.desc
+        if let desc = ndp.desc {
+            self.description = NSAttributedString(string: desc)
+        } else {self.description = nil}
         self.source = PhotoSource(from: ndp.source)
         self.address = ndp.address
         self.author = ndp.author

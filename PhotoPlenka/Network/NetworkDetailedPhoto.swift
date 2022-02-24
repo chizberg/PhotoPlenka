@@ -18,7 +18,7 @@ struct NetworkDetailedPhoto {
     let year2: Int // upper time boundary
 
     let desc: String? // description of photo
-    let source: String // can contain url
+    let source: String? // can contain url
     let address: String?
     let author: String?
 

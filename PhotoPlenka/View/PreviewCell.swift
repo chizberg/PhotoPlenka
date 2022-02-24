@@ -59,7 +59,6 @@ final class PreviewCell: UITableViewCell {
         card.addSubview(previewImage)
         card.addSubview(titleLabel)
         card.addSubview(subtitleLabel)
-
         contentView.addSubview(card)
         setConstraints()
     }

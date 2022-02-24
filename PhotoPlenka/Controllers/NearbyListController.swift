@@ -30,9 +30,6 @@ final class NearbyListController: UIViewController {
         return tableView
     }()
 
-    private let backgroundBlur =
-        UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-
     // data
     private var visibleAnnotations = [MKAnnotation]()
 
@@ -48,19 +45,11 @@ final class NearbyListController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(backgroundBlur)
         view.addSubview(yearSelect)
         nearbyList.dataSource = self
         nearbyList.register(PreviewCell.self, forCellReuseIdentifier: Constants.cellID)
         view.addSubview(nearbyList)
         applyConstraints()
-    }
-
-    override func viewDidLayoutSubviews() {
-        view.layer.cornerRadius = Constants.controllerCornerRadius
-        view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        view.clipsToBounds = true
-        backgroundBlur.frame = view.bounds
     }
 
     private func applyConstraints() {

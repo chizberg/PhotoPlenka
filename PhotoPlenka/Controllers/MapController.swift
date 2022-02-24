@@ -32,6 +32,7 @@ final class MapController: UIViewController {
     private var yearRange = Constants.initialYearRange
     private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
     private lazy var nearbyListController = NearbyListController(mapController: self)
+    private lazy var bottomNavigation = BottomNavigationController(rootViewController: nearbyListController)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +58,8 @@ final class MapController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        let bottomSheetVC = nearbyListController
+        let bottomSheetVC = bottomNavigation
+        bottomNavigation.isToolbarHidden = true
         bottomSheetVC.modalPresentationStyle = .custom
         bottomSheetVC.transitioningDelegate = transitionDelegate
         present(bottomSheetVC, animated: false)
@@ -73,10 +75,12 @@ final class MapController: UIViewController {
 
     func showSinglePhotoDetails(photo: Photo) {
         // пока что просто печатаем, будем выводить потом
-        photoDetailsProvider.loadDetails(cid: photo.cid) { result in
+        photoDetailsProvider.loadDetails(cid: photo.cid) { [weak self] result in
             switch result {
             case let .success(detailedPhoto):
-                print(detailedPhoto)
+                let singleController = SinglePhotoController(photo: detailedPhoto)
+                singleController.modalTransitionStyle = .coverVertical
+                self?.bottomNavigation.pushViewController(singleController, animated: true)
             case let .failure(error):
                 print(error.localizedDescription)
             }

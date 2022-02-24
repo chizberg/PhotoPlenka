@@ -85,7 +85,6 @@ final class NetworkService: NetworkServiceProtocol {
             guard let self = self else { return }
             switch result {
             case let .success(data):
-                print(String(decoding: data, as: UTF8.self))
                 do {
                     let json = try JSONSerialization
                         .jsonObject(with: data, options: []) as! [String: Any]
@@ -166,9 +165,7 @@ final class NetworkService: NetworkServiceProtocol {
         guard let year2 = json["year2"] as? Int else { return nil }
         let dir: String? = json["dir"] as? String
 
-//        guard let source = json["source"] as? String else { return nil }
-//        guard let address = json["address"] as? String else { return nil }
-        let source = json["source"] as! String
+        let source = json["source"] as? String
         let address = json["address"] as? String
         let author = json["author"] as? String
         let desc: String? = json["desc"] as? String

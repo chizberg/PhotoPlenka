@@ -18,7 +18,8 @@ fileprivate enum Constants {
 struct PhotoSource {
     private let value: String
 
-    init(from value: String) {
+    init?(from value: String?) {
+        guard let value = value else { return nil }
         self.value = value
     }
 }
