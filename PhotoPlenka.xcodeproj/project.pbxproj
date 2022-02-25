@@ -38,6 +38,8 @@
 		DF94BCC427ADC697008D3D5C /* Zoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF94BCC327ADC697008D3D5C /* Zoom.swift */; };
 		DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53D27B092C80047149F /* YearSelector.swift */; };
 		DF9AF54027B092E70047149F /* ThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53F27B092E70047149F /* ThumbView.swift */; };
+		DFA21CE127C854C800BA14E8 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA21CE027C854C700BA14E8 /* ActionButton.swift */; };
+		DFA21CE427C8631B00BA14E8 /* LoadingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA21CE327C8631B00BA14E8 /* LoadingImageView.swift */; };
 		DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EEA27AAD5CF00A0D10B /* NetworkPhoto.swift */; };
 		DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EEC27AAD5EA00A0D10B /* Request.swift */; };
 		DFCF0EEF27AAD61600A0D10B /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EEE27AAD61600A0D10B /* NetworkService.swift */; };
@@ -86,6 +88,8 @@
 		DF94BCC327ADC697008D3D5C /* Zoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zoom.swift; sourceTree = "<group>"; };
 		DF9AF53D27B092C80047149F /* YearSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelector.swift; sourceTree = "<group>"; };
 		DF9AF53F27B092E70047149F /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
+		DFA21CE027C854C700BA14E8 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		DFA21CE327C8631B00BA14E8 /* LoadingImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingImageView.swift; sourceTree = "<group>"; };
 		DFCF0EEA27AAD5CF00A0D10B /* NetworkPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPhoto.swift; sourceTree = "<group>"; };
 		DFCF0EEC27AAD5EA00A0D10B /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		DFCF0EEE27AAD61600A0D10B /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				DF6A4F5827C5970300BBFE69 /* SquishyButton.swift */,
+				DFA21CE027C854C700BA14E8 /* ActionButton.swift */,
 				DF6A4F5A27C5972C00BBFE69 /* LikeButton.swift */,
 			);
 			path = Buttons;
@@ -243,6 +248,7 @@
 				DFCF0EFA27AAE59100A0D10B /* Colors and gradients.swift */,
 				DF37377D27BA826000DAB3CC /* PreviewCell.swift */,
 				DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */,
+				DFA21CE327C8631B00BA14E8 /* LoadingImageView.swift */,
 				DF6A4F5E27C5979400BBFE69 /* SinglePhotoFactory.swift */,
 			);
 			path = View;
@@ -355,6 +361,7 @@
 				DF94BCC427ADC697008D3D5C /* Zoom.swift in Sources */,
 				DFCF0EF127AAD65F00A0D10B /* NetworkError.swift in Sources */,
 				C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */,
+				DFA21CE427C8631B00BA14E8 /* LoadingImageView.swift in Sources */,
 				DF6A4F5427C446B100BBFE69 /* NetworkDetailedPhoto.swift in Sources */,
 				DF6A4F5927C5970300BBFE69 /* SquishyButton.swift in Sources */,
 				DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */,
@@ -383,6 +390,7 @@
 				DF0B9D3927B1812D005836D8 /* MultiplePhotosAnnotationView.swift in Sources */,
 				DF6A4F6127C597D400BBFE69 /* SinglePhotoController.swift in Sources */,
 				DFCF0EEF27AAD61600A0D10B /* NetworkService.swift in Sources */,
+				DFA21CE127C854C800BA14E8 /* ActionButton.swift in Sources */,
 				DF2A41EB27AC7A9000E21BDC /* ClusterAnnotationView.swift in Sources */,
 				DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */,
 				DFD7A21F27B94E4C0064A0F4 /* ImageFetchingOperation.swift in Sources */,

@@ -31,8 +31,12 @@ final class MapController: UIViewController {
     private var zoom = Zoom(span: Constants.defaultRegion.span)
     private var yearRange = Constants.initialYearRange
     private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
-    private lazy var nearbyListController = NearbyListController(mapController: self)
-    private lazy var bottomNavigation = BottomNavigationController(rootViewController: nearbyListController)
+    private lazy var nearbyListController = NearbyListController(
+        mapController: self,
+        detailsProvider: photoDetailsProvider
+    )
+    private lazy var bottomNavigation =
+        BottomNavigationController(rootViewController: nearbyListController)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +63,7 @@ final class MapController: UIViewController {
         super.viewDidAppear(animated)
 
         let bottomSheetVC = bottomNavigation
-        bottomNavigation.isToolbarHidden = true
+        bottomNavigation.isNavigationBarHidden = true
         bottomSheetVC.modalPresentationStyle = .custom
         bottomSheetVC.transitioningDelegate = transitionDelegate
         present(bottomSheetVC, animated: false)
@@ -74,17 +78,11 @@ final class MapController: UIViewController {
     }
 
     func showSinglePhotoDetails(photo: Photo) {
-        // пока что просто печатаем, будем выводить потом
-        photoDetailsProvider.loadDetails(cid: photo.cid) { [weak self] result in
-            switch result {
-            case let .success(detailedPhoto):
-                let singleController = SinglePhotoController(photo: detailedPhoto)
-                singleController.modalTransitionStyle = .coverVertical
-                self?.bottomNavigation.pushViewController(singleController, animated: true)
-            case let .failure(error):
-                print(error.localizedDescription)
-            }
-        }
+        let singleController = SinglePhotoController(
+            cid: photo.cid,
+            detailsProvider: photoDetailsProvider
+        )
+        self.bottomNavigation.pushViewController(singleController, animated: true)
     }
 }
 

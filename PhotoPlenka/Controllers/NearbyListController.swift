@@ -10,12 +10,12 @@ import UIKit
 
 final class NearbyListController: UIViewController {
     private enum Constants {
-        static var sideInset: CGFloat = 16
-        static var controllerCornerRadius: CGFloat = 29
-        static var listCornerRadius: CGFloat = 13
-        static var cellID = String(describing: PreviewCell.self)
-        static var listTitle = "Интересное рядом"
-        static var countLimit: Int = 10
+        static let sideInset: CGFloat = 16
+        static let controllerCornerRadius: CGFloat = 29
+        static let listCornerRadius: CGFloat = 13
+        static let cellID = String(describing: PreviewCell.self)
+        static let listTitle = "Интересное рядом"
+        static let countLimit: Int = 10
     }
 
     // views
@@ -32,8 +32,14 @@ final class NearbyListController: UIViewController {
 
     // data
     private var visibleAnnotations = [MKAnnotation]()
+    private let detailsProvider: PhotoDetailsProviderProtocol
 
-    init(mapController: YearSelectorDelegate) {
+    init
+        (
+            mapController: YearSelectorDelegate,
+            detailsProvider: PhotoDetailsProviderProtocol
+        ) {
+        self.detailsProvider = detailsProvider
         super.init(nibName: nil, bundle: nil)
         yearSelect.delegate = mapController
     }
@@ -46,6 +52,7 @@ final class NearbyListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(yearSelect)
+        nearbyList.delegate = self
         nearbyList.dataSource = self
         nearbyList.register(PreviewCell.self, forCellReuseIdentifier: Constants.cellID)
         view.addSubview(nearbyList)
@@ -122,5 +129,17 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_: UITableView, estimatedHeightForRowAt _: IndexPath) -> CGFloat {
         UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let annotation = visibleAnnotations[indexPath.row]
+        let photoData: Photo
+        if let photo = annotation as? Photo { photoData = photo } else if let cluster = annotation as? Cluster { photoData = cluster.photo } else { fatalError("invalid annotation type") }
+        let singleController = SinglePhotoController(
+            cid: photoData.cid,
+            detailsProvider: detailsProvider
+        )
+        navigationController?.pushViewController(singleController, animated: true)
     }
 }

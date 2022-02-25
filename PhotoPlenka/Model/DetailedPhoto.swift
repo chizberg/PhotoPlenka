@@ -32,7 +32,7 @@ struct DetailedPhoto {
         self.geo = ndp.geo
         if let desc = ndp.desc {
             self.description = NSAttributedString(string: desc)
-        } else {self.description = nil}
+        } else { self.description = nil }
         self.source = PhotoSource(from: ndp.source)
         self.address = ndp.address
         self.author = ndp.author

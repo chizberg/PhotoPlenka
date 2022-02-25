@@ -7,31 +7,32 @@
 
 import UIKit
 
-final class LikeButton: SquishyButton {
+final class LikeButton: ActionButton {
     private enum Constants {
-        static let activeIcon: UIImage = UIImage(systemName: "heart.fill")!
-        static let passiveIcon: UIImage = UIImage(systemName: "heart")!
+        static let activeIcon: UIImage = .init(systemName: "heart.fill")!
+        static let passiveIcon: UIImage = .init(systemName: "heart")!
         static let title: String = "Избранное"
         static let color: UIColor = .systemRed
     }
-    
+
     var isLiked: Bool {
         didSet {
             updateImage(isActive: isLiked)
         }
     }
-    
-    init(isLiked: Bool = false){
+
+    init(isLiked: Bool = false) {
         self.isLiked = isLiked
         super.init(icon: Constants.passiveIcon, title: Constants.title, color: Constants.color)
         updateImage(isActive: isLiked)
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private func updateImage(isActive: Bool){
+
+    private func updateImage(isActive: Bool) {
         let newIcon = isActive ? Constants.activeIcon : Constants.passiveIcon
         updateContent(newIcon: newIcon)
     }

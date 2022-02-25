@@ -9,19 +9,23 @@ import UIKit
 
 final class SinglePhotoFactory {
     private enum Style {
-        static let buttonHorizontalSpacing: CGFloat = 10
         static let buttonVerticalSpacing: CGFloat = 10
+        static let buttonHorizontalSpacing: CGFloat = buttonVerticalSpacing
         static let buttonRowHeight: CGFloat = 50
-        
+
         static let detailsSpacing: CGFloat = 5
         static let propertyVerticalSpacing: CGFloat = 0
         static let propertyHorizontalSpacing: CGFloat = 5
         static let captionColor: UIColor = .secondaryLabel
-        
+
         static let detailsPadding: UIEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
         static let detailsBackground: UIColor = .systemBackground
         static let detailsCornerRadius: CGFloat = 13
+
+        static let contentStackSpacing: CGFloat = buttonVerticalSpacing
+        static let scrollRadiusMask: CACornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
+
     enum FontType {
         case titleLabel
         case yearLabel
@@ -29,21 +33,23 @@ final class SinglePhotoFactory {
         case description
         case caption
     }
+
     enum HorizontalPropertyType {
         case author
         case uploadedBy
     }
-    
+
     func stackFromButtons(buttons: [UIButton], rowCapacity: Int = 2) -> UIStackView {
         let verticalStack = makeButtonStack(axis: .vertical)
-        let groups = stride(from: 0, to: buttons.count, by: rowCapacity).map { (i: Int) -> [UIButton] in
-            var output = [UIButton]()
-            output.reserveCapacity(rowCapacity)
-            for j in i ..< i + rowCapacity {
-                if j < buttons.count { output.append(buttons[j]) }
+        let groups = stride(from: 0, to: buttons.count, by: rowCapacity)
+            .map { (i: Int) -> [UIButton] in
+                var output = [UIButton]()
+                output.reserveCapacity(rowCapacity)
+                for j in i..<i + rowCapacity {
+                    if j < buttons.count { output.append(buttons[j]) }
+                }
+                return output
             }
-            return output
-        }
         for group in groups {
             let horizontalStack = makeButtonStack(axis: .horizontal)
             for button in group {
@@ -53,7 +59,7 @@ final class SinglePhotoFactory {
         }
         return verticalStack
     }
-    
+
     private func makeButtonStack(axis: NSLayoutConstraint.Axis) -> UIStackView {
         let stack = UIStackView()
         stack.axis = axis
@@ -71,7 +77,7 @@ final class SinglePhotoFactory {
         }
         return stack
     }
-    
+
     func makeLabel(fontType: FontType) -> UILabel {
         let label = UILabel()
         label.font = fontType.font
@@ -79,7 +85,7 @@ final class SinglePhotoFactory {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
-    
+
     func makeDetailsStack() -> UIStackView {
         let stack = UIStackView()
         stack.spacing = Style.detailsSpacing
@@ -93,7 +99,7 @@ final class SinglePhotoFactory {
         stack.isLayoutMarginsRelativeArrangement = true
         return stack
     }
-    
+
     func makePropertyStack(type: HorizontalPropertyType) -> UIStackView {
         let stack = UIStackView()
         stack.spacing = Style.propertyVerticalSpacing
@@ -107,7 +113,7 @@ final class SinglePhotoFactory {
         stack.addArrangedSubview(captionLabel)
         return stack
     }
-    
+
     func makeHorizontalPropertiesStack() -> UIStackView {
         let stack = UIStackView()
         stack.spacing = Style.propertyHorizontalSpacing
@@ -116,6 +122,34 @@ final class SinglePhotoFactory {
         stack.distribution = .fillEqually
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
+    }
+
+    func makeContentStack() -> UIStackView {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.spacing = Style.contentStackSpacing
+        stack.alignment = .fill
+        stack.distribution = .equalSpacing
+        return stack
+    }
+
+    func makeScrollView() -> UIScrollView {
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.layer.cornerRadius = Style.detailsCornerRadius
+        scroll.layer.maskedCorners = Style.scrollRadiusMask
+        scroll.clipsToBounds = true
+        scroll.delaysContentTouches = false
+        scroll.showsVerticalScrollIndicator = false
+        return scroll
+    }
+
+    func makeImageView() -> UIImageView {
+        let imageView = LoadingImageView()
+        imageView.layer.cornerRadius = Style.detailsCornerRadius
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }
 }
 
