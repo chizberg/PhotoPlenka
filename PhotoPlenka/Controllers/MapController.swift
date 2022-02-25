@@ -18,6 +18,8 @@ final class MapController: UIViewController {
         static let clusterReuseID = String(describing: ClusterAnnotationView.self)
         static let multiPhotoReuseID = String(describing: MultiplePhotosAnnotationView.self)
         static let initialYearRange: ClosedRange<Int> = 1826...2000
+        static let annotationAnimationDuration: TimeInterval = 0.2
+        static let superSmallTransform = CGAffineTransform(scaleX: 0, y: 0)
     }
 
     private let networkService: NetworkServiceProtocol = NetworkService()
@@ -169,6 +171,10 @@ extension MapController: MKMapViewDelegate {
         }
         return nil
     }
+
+    func mapView(_: MKMapView, didAdd views: [MKAnnotationView]) {
+        showWithAnimation(views)
+    }
 }
 
 extension MapController: YearSelectorDelegate {
@@ -186,5 +192,20 @@ extension MapController: YearSelectorDelegate {
 extension MapController: MapPublisher {
     func addObserver(_ observer: MapObserver) {
         map.addObserver(observer)
+    }
+}
+
+// animating annotations
+extension MapController {
+    // у меня пока что не получается закинуть анимацию появления в MKMapView override куда-нибудь
+    // на тот момент ещё нет view(for: annotation)
+    private func showWithAnimation(_ views: [MKAnnotationView]) {
+        for view in views {
+            let initialTransform = view.transform
+            view.transform = Constants.superSmallTransform
+            UIView.animate(withDuration: Constants.annotationAnimationDuration, animations: {
+                view.transform = initialTransform
+            })
+        }
     }
 }
