@@ -14,6 +14,9 @@ enum Request {
         startAt: TimeInterval = Date().timeIntervalSince1970,
         yearRange: ClosedRange<Int>
     )
+    case photoDetails(
+        cid: Int
+    )
 }
 
 extension Request {
@@ -31,6 +34,14 @@ extension Request {
                 URLQueryItem(name: "method", value: "photo.getByBounds"),
                 URLQueryItem(name: "params", value: params),
             ]
+        case let .photoDetails(cid):
+            let params = """
+            {"cid": \(cid)}
+            """
+            return [
+                URLQueryItem(name: "method", value: "photo.giveForPage"),
+                URLQueryItem(name: "params", value: params),
+            ]
         }
     }
 
@@ -39,10 +50,7 @@ extension Request {
         components.scheme = "https"
         components.host = "pastvu.com"
         components.path = "/api2"
-        switch self {
-        case .byBounds:
-            components.queryItems = self.queryItems
-        }
+        components.queryItems = self.queryItems
         return components.url
     }
 }

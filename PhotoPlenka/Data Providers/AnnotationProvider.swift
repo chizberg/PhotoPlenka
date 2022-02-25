@@ -24,7 +24,7 @@ final class AnnotationProvider: AnnotationProviderProtocol {
     private var photos: Set<Photo>
     private var clusters: Set<Cluster>
 
-    private var networkService: NetworkServiceProtocol
+    private let networkService: NetworkServiceProtocol
 
     init(
         networkService: NetworkServiceProtocol

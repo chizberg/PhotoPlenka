@@ -15,7 +15,6 @@ final class Photo: NSObject, MKAnnotation {
     let year: Int
     let year2: Int
     let file: String
-    private var image: UIImage?
 
     init(from np: NetworkPhoto) {
         self.cid = np.cid
@@ -42,6 +41,9 @@ extension Photo {
 
     override func isEqual(_ object: Any?) -> Bool {
         if let other = object as? Photo {
+            return cid == other.cid
+        }
+        if let other = object as? DetailedPhoto {
             return cid == other.cid
         }
         return false

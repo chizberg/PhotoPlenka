@@ -11,13 +11,16 @@ final class PhotoAnnotationView: MKAnnotationView {
     private enum Constants {
         static let scaleValue: CGFloat = 2
         static let clusteringIdentifier: String = "photoClusteringID"
+        static let size = CGSize( // 13 - исходная высота svg иконки
+            width: 13 * scaleValue,
+            height: 13 * scaleValue
+        )
     }
 
     lazy var iconLayer = CAShapeLayer()
 
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        bounds = CGRect(origin: .zero, size: CGSize(width: 10, height: 13))
         backgroundColor = .none
         layer.addSublayer(iconLayer)
     }
@@ -32,6 +35,12 @@ final class PhotoAnnotationView: MKAnnotationView {
         guard let photo = annotation as? Photo else { return }
         setColor(.from(year: photo.year))
         iconLayer.path = iconPath(direction: photo.dir).cgPath
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        frame = CGRect(origin: .zero, size: Constants.size)
+        iconLayer.frame = bounds
     }
 
     override var annotation: MKAnnotation? {
@@ -50,10 +59,16 @@ final class PhotoAnnotationView: MKAnnotationView {
         let icon = UIBezierPath()
         icon.append(roundPath)
         if let angle = direction?.angle {
+            // применяем направление
             icon.append(directionPath)
             icon.apply(CGAffineTransform(rotationAngle: angle))
+
+            // при вращении может произойти смещение, поэтому возвращаем в исходую позицию
+            let shiftedOrigin = icon.cgPath.boundingBoxOfPath.origin
+            icon.apply(CGAffineTransform(translationX: -shiftedOrigin.x, y: -shiftedOrigin.y))
         }
         icon.apply(CGAffineTransform(scaleX: Constants.scaleValue, y: Constants.scaleValue))
+        icon.move(to: CGPoint(x: Constants.size.width / 2, y: Constants.size.height / 2))
         return icon
     }
 }

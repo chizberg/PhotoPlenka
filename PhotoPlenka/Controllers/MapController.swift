@@ -23,13 +23,20 @@ final class MapController: UIViewController {
     }
 
     private let networkService: NetworkServiceProtocol = NetworkService()
+    private lazy var photoDetailsProvider: PhotoDetailsProviderProtocol =
+        PhotoDetailsProvider(networkService: networkService)
     private lazy var annotationProvider: AnnotationProviderProtocol =
         AnnotationProvider(networkService: networkService)
     private let map = MapWithObservers()
     private var zoom = Zoom(span: Constants.defaultRegion.span)
     private var yearRange = Constants.initialYearRange
     private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
-    private lazy var nearbyListController = NearbyListController(mapController: self)
+    private lazy var nearbyListController = NearbyListController(
+        mapController: self,
+        detailsProvider: photoDetailsProvider
+    )
+    private lazy var bottomNavigation =
+        BottomNavigationController(rootViewController: nearbyListController)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +62,8 @@ final class MapController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        let bottomSheetVC = nearbyListController
+        let bottomSheetVC = bottomNavigation
+        bottomNavigation.isNavigationBarHidden = true
         bottomSheetVC.modalPresentationStyle = .custom
         bottomSheetVC.transitioningDelegate = transitionDelegate
         present(bottomSheetVC, animated: false)
@@ -67,6 +75,14 @@ final class MapController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         ImageFetcher.shared.clear()
+    }
+
+    func showSinglePhotoDetails(photo: Photo) {
+        let singleController = SinglePhotoController(
+            cid: photo.cid,
+            detailsProvider: photoDetailsProvider
+        )
+        self.bottomNavigation.pushViewController(singleController, animated: true)
     }
 }
 
@@ -147,6 +163,9 @@ extension MapController: MKMapViewDelegate {
             guard let coordinate = cluster.coordinate else { return }
             let newRegion = MKCoordinateRegion(center: coordinate, span: zoom.span)
             mapView.setRegion(newRegion, animated: true)
+        }
+        if let photo = view.annotation as? Photo {
+            showSinglePhotoDetails(photo: photo)
         }
     }
 
