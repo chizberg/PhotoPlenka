@@ -61,14 +61,14 @@ final class PhotoAnnotationView: MKAnnotationView {
         if let angle = direction?.angle {
             // применяем направление
             icon.append(directionPath)
-            icon.apply(CGAffineTransform(rotationAngle: angle))
+//            icon.apply(CGAffineTransform(rotationAngle: angle))
 
             // при вращении может произойти смещение, поэтому возвращаем в исходую позицию
-            let shiftedOrigin = icon.cgPath.boundingBoxOfPath.origin
-            icon.apply(CGAffineTransform(translationX: -shiftedOrigin.x, y: -shiftedOrigin.y))
+//            let shiftedOrigin = icon.cgPath.boundingBoxOfPath.origin
+//            icon.apply(CGAffineTransform(translationX: -shiftedOrigin.x, y: -shiftedOrigin.y))
         }
-        icon.apply(CGAffineTransform(scaleX: Constants.scaleValue, y: Constants.scaleValue))
-        icon.move(to: CGPoint(x: Constants.size.width / 2, y: Constants.size.height / 2))
+//        icon.apply(CGAffineTransform(scaleX: Constants.scaleValue, y: Constants.scaleValue))
+//        icon.move(to: CGPoint(x: Constants.size.width / 2, y: Constants.size.height / 2))
         return icon
     }
 }

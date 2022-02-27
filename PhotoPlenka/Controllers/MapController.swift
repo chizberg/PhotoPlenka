@@ -12,7 +12,7 @@ final class MapController: UIViewController {
     private enum Constants {
         static let defaultRegion = MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 56.329707, longitude: 44.009087),
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
         )
         static let photoReuseID = String(describing: PhotoAnnotationView.self)
         static let clusterReuseID = String(describing: ClusterAnnotationView.self)
