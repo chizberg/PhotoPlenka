@@ -18,6 +18,7 @@ final class BottomNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        isNavigationBarHidden = true
         view.layer.cornerRadius = Constants.cornerRadius
         view.layer.maskedCorners = Constants.maskedCorners
         view.clipsToBounds = true

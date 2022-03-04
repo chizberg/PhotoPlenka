@@ -20,6 +20,8 @@ final class MapController: UIViewController {
         static let initialYearRange: ClosedRange<Int> = 1826...2000
         static let annotationAnimationDuration: TimeInterval = 0.2
         static let superSmallTransform = CGAffineTransform(scaleX: 0, y: 0)
+        static let selectedTransform = CGAffineTransform(scaleX: 2, y: 2)
+        static let biggestTransfrorm = CGAffineTransform(scaleX: 3, y: 3)
     }
 
     private let networkService: NetworkServiceProtocol = NetworkService()
@@ -75,14 +77,6 @@ final class MapController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         ImageFetcher.shared.clear()
-    }
-
-    func showSinglePhotoDetails(photo: Photo) {
-        let singleController = SinglePhotoController(
-            cid: photo.cid,
-            detailsProvider: photoDetailsProvider
-        )
-        self.bottomNavigation.pushViewController(singleController, animated: true)
     }
 }
 
@@ -166,6 +160,11 @@ extension MapController: MKMapViewDelegate {
         }
         if let photo = view.annotation as? Photo {
             showSinglePhotoDetails(photo: photo)
+            for selectedAnn in map.selectedAnnotations {
+                guard let selectedPhoto = selectedAnn as? Photo else { continue }
+                guard selectedPhoto.cid != photo.cid else { continue }
+                map.deselectAnnotation(selectedAnn, animated: true)
+            }
         }
     }
 
@@ -226,5 +225,33 @@ extension MapController {
                 view.transform = initialTransform
             })
         }
+    }
+
+    private func animateSelection(
+        _ view: MKAnnotationView,
+        isSelected: Bool,
+        animated: Bool = true
+    ) {
+        let transform = isSelected ? Constants.selectedTransform : Constants.biggestTransfrorm
+        guard animated else {
+            view.transform = transform
+            return
+        }
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: Constants.annotationAnimationDuration) {
+                view.transform = transform
+            }
+        }
+    }
+
+    func showSinglePhotoDetails(photo: Photo) {
+        let singleController = SinglePhotoController(
+            cid: photo.cid,
+            detailsProvider: photoDetailsProvider
+        )
+        if bottomNavigation.viewControllers.count > 1 {
+            bottomNavigation.popToRootViewController(animated: true)
+        }
+        self.bottomNavigation.pushViewController(singleController, animated: true)
     }
 }
