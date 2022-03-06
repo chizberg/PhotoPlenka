@@ -92,7 +92,7 @@ extension MapController: BottomSheetFactory {
         presenting: UIViewController?
     ) -> UIPresentationController {
         BottomSheetPresentationController(
-            fractions: [0.20, 0.50, 0.60, 0.90],
+            fractions: [0.20, 0.50, 0.90],
             presentedViewController: presentedViewController,
             presenting: presenting
         )
