@@ -14,6 +14,7 @@ final class SinglePhotoController: UIViewController {
         static let loadingAnimationDuration: TimeInterval = 0.5
         static let imageAnimationDuration: TimeInterval = 0.3
         static let loadingImageAspectRatio: CGFloat = 21 / 9
+        static let closeButtonSize: CGSize = .init(width: 40, height: 40)
     }
 
     private let factory = SinglePhotoFactory()
@@ -22,11 +23,6 @@ final class SinglePhotoController: UIViewController {
     private let detailsProvider: PhotoDetailsProviderProtocol
 
     private let likeButton = LikeButton()
-    private let backButton = ActionButton(
-        iconSystemName: "chevron.left",
-        title: "Назад",
-        color: .link
-    )
     private let downloadButton = ActionButton(
         iconSystemName: "arrow.down.to.line",
         title: "Загрузить",
@@ -42,10 +38,11 @@ final class SinglePhotoController: UIViewController {
         title: "Сравнить",
         color: .systemPurple
     )
-    private lazy var topButtonStack = factory.stackFromButtons(buttons: [backButton, likeButton])
-    private lazy var bottomButtonStack = factory
-        .stackFromButtons(buttons: [downloadButton, sourceButton, compareButton])
 
+    private lazy var bottomButtonStack = factory
+        .stackFromButtons(buttons: [likeButton, downloadButton, sourceButton, compareButton])
+
+    private lazy var closeButton = factory.makeCloseButton()
     private lazy var titleLabel = factory.makeLabel(fontType: .titleLabel)
     private lazy var yearLabel = factory.makeLabel(fontType: .yearLabel)
     private lazy var descriptionLabel = factory.makeLabel(fontType: .description)
@@ -59,8 +56,13 @@ final class SinglePhotoController: UIViewController {
     private lazy var scrollView = factory.makeScrollView()
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
     private lazy var imageView = factory.makeImageView()
-    private lazy var imageAspectRatioConstraint = imageView.widthAnchor.constraint(
-        equalTo: imageView.heightAnchor,
+    private let imageContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    private lazy var imageAspectRatioConstraint = imageContainer.widthAnchor.constraint(
+        equalTo: imageContainer.heightAnchor,
         multiplier: Style.loadingImageAspectRatio
     )
 
@@ -107,33 +109,62 @@ final class SinglePhotoController: UIViewController {
         properties.addArrangedSubview(uploadedByStack)
         if photoData?.author != nil { properties.addArrangedSubview(authorStack) }
         details.addArrangedSubview(properties)
-        contentStack.addArrangedSubview(topButtonStack)
-        contentStack.addArrangedSubview(imageView)
         contentStack.addArrangedSubview(details)
         contentStack.addArrangedSubview(bottomButtonStack)
+        scrollView.addSubview(imageContainer)
+        scrollView.addSubview(imageView)
         scrollView.addSubview(contentStack)
         view.addSubview(scrollView)
         view.addSubview(loadingIndicator)
+        view.addSubview(closeButton)
     }
 
     private func activateConstraints() {
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: Style.sideInset
-            ),
-            scrollView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -Style.sideInset
-            ),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: Style.sideInset),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            closeButton.widthAnchor.constraint(equalToConstant: Style.closeButtonSize.width),
+            closeButton.heightAnchor.constraint(equalToConstant: Style.closeButtonSize.height),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Style.sideInset),
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: Style.sideInset)
         ])
 
         NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            scrollView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            scrollView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
+        let topConstraint = imageView.topAnchor.constraint(equalTo: view.topAnchor)
+        topConstraint.priority = .defaultHigh
+
+        let heightConstraint = imageView.heightAnchor.constraint(greaterThanOrEqualTo: imageContainer.heightAnchor)
+        heightConstraint.priority = .required
+
+        let positionConstraint = imageView.topAnchor.constraint(equalTo: imageContainer.topAnchor)
+        positionConstraint.priority = .defaultLow
+
+        NSLayoutConstraint.activate([
+            topConstraint, heightConstraint, positionConstraint,
+            imageView.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor)
+        ])
+
+        NSLayoutConstraint.activate([
+            imageContainer.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            imageContainer.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            imageContainer.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            imageContainer.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+
+        NSLayoutConstraint.activate([
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: Style.sideInset),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -Style.sideInset),
+            contentStack.topAnchor.constraint(equalTo: imageContainer.bottomAnchor, constant: Style.sideInset),
             contentStack.bottomAnchor.constraint(
                 equalTo: scrollView.bottomAnchor,
                 constant: -Style.bottomScrollPadding
@@ -164,8 +195,8 @@ final class SinglePhotoController: UIViewController {
     private func newAspectRatio(from image: UIImage) {
         let aspectRatio = image.size.width / image.size.height
         imageAspectRatioConstraint.isActive = false
-        imageAspectRatioConstraint = imageView.widthAnchor.constraint(
-            equalTo: imageView.heightAnchor,
+        imageAspectRatioConstraint = imageContainer.widthAnchor.constraint(
+            equalTo: imageContainer.heightAnchor,
             multiplier: aspectRatio
         )
         imageAspectRatioConstraint.isActive = true
@@ -175,7 +206,7 @@ final class SinglePhotoController: UIViewController {
     }
 
     private func addButtonTargets() {
-        backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         likeButton.addTarget(self, action: #selector(like), for: .touchUpInside)
     }
 
