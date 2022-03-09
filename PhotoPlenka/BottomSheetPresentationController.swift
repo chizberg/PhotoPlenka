@@ -28,6 +28,7 @@ final class BottomSheetPresentationController: UIPresentationController,
     private var scrollPanGesture: UIPanGestureRecognizer!
     private var headerPanGesture: UIPanGestureRecognizer!
     private var scrollViewOffset: CGFloat = 0
+    private unowned let contentViewController: UIViewController
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -59,12 +60,14 @@ final class BottomSheetPresentationController: UIPresentationController,
     init(
         fractions: [Double],
         presentedViewController: UIViewController,
-        presenting presentingViewController: UIViewController?
+        presenting presentingViewController: UIViewController?,
+        contentViewController: UIViewController
     ) {
         guard !fractions.isEmpty else {
             fatalError("Must have at leat one element")
         }
         self.fractions = fractions.sorted(by: <)
+        self.contentViewController = contentViewController
         super.init(
             presentedViewController: presentedViewController,
             presenting: presentingViewController
@@ -105,18 +108,6 @@ extension BottomSheetPresentationController {
 // MARK: - Helpers
 
 extension BottomSheetPresentationController {
-    private func findMostCloseFraction(_ value: Double) -> Double {
-        var minDistance = 1.0
-        var closestFractionIndex = 0
-        for (index, fraction) in fractions.enumerated() {
-            if abs(fraction - value) < minDistance {
-                minDistance = abs(fraction - value)
-                closestFractionIndex = index
-            }
-        }
-        return fractions[closestFractionIndex]
-    }
-
     private func calculateYAxis(fraction: Double) -> Double {
         let presentingBounds = self.presentingViewController.view.bounds
         return presentingBounds.height - presentingBounds.height * fraction
@@ -132,8 +123,7 @@ extension BottomSheetPresentationController {
 extension BottomSheetPresentationController {
     override func presentationTransitionWillBegin() {
         super.presentationTransitionWillBegin()
-        if let navigationController = presentedViewController as? UINavigationController,
-           let scrollable = navigationController.topViewController as? ScrollableViewController {
+        if let scrollable = contentViewController as? ScrollableViewController {
             scrollView = scrollable.scrollView
             headerView = scrollable.header
             scrollView?.delegate = self
@@ -168,9 +158,7 @@ extension BottomSheetPresentationController {
     @objc
     func scrollGestureHandler(_ gesture: UIPanGestureRecognizer) {
         guard scrollView!.contentOffset.y <= 0 || mode == .collapsed else { return }
-        guard let containerFrame = containerView?.frame else {
-            return
-        }
+        guard let containerFrame = containerView?.frame else { return }
 
         if gesture.state == .began {
             initialFrame = containerFrame
@@ -195,28 +183,20 @@ extension BottomSheetPresentationController {
     }
 
     private func panEndedHandler(_ gesture: UIPanGestureRecognizer) {
-        let progressLocation = 1 -
+        // Calculate how much spaces container view takes
+        let progressValue = 1 -
         (containerView!.frame.minY / presentingViewController.view.bounds.height)
-        var closestFraction = self.findMostCloseFraction(progressLocation)
+        var closestFraction = findClosestValue(progressValue, from: fractions)
 
-        let indexWhere = fractions.firstIndex(of: closestFraction)!
-        if gesture.velocity(in: presentedView).y <= -Self.verticalVelocityThreashold {
-            let indexAfter = fractions.index(after: indexWhere)
-            if indexAfter < fractions.count {
-                closestFraction = fractions[indexAfter]
-            }
-        } else if gesture.velocity(in: presentedView).y >= Self.verticalVelocityThreashold {
-            let indexBefore = fractions.index(before: indexWhere)
-            if indexBefore >= 0 {
-                closestFraction = fractions[indexBefore]
-            }
-        }
+        updateClosestFractionIfNeeded(velocityByY: gesture.velocity(in: presentedView).y,
+                                      closestValue: &closestFraction,
+                                      fractions: fractions)
+        updateModeIfNeeded(currentFraction: closestFraction, fractions: fractions)
+        enableScrollIfNeeded(mode: mode)
 
-        scrollView?.isScrollEnabled = closestFraction == fractions.last!
-        mode = closestFraction == fractions.last! ? .opened : .collapsed
-        let presentingBounds = self.presentingViewController.view.bounds
-        let targetY = self.calculateYAxis(fraction: closestFraction)
-        let targetHeight = self.calculateHeightBy(yAxisValue: targetY)
+        let presentingBounds = presentingViewController.view.bounds
+        let targetY = calculateYAxis(fraction: closestFraction)
+        let targetHeight = calculateHeightBy(yAxisValue: targetY)
 
         UIView.animate(withDuration: 0.2, animations: {
             self.containerView?.frame = CGRect(
@@ -229,5 +209,48 @@ extension BottomSheetPresentationController {
         })
     }
 
+    private func updateModeIfNeeded(currentFraction: CGFloat, fractions: [Double]) {
+        mode = currentFraction == fractions.last! ? .opened : .collapsed
+    }
+
+    private func enableScrollIfNeeded(mode: Mode) {
+        scrollView?.isScrollEnabled = mode == .opened
+    }
+
+    // If velocity value is too high,
+    // the distanse between first and last touches doesn't matter
+    // we can just skip to the next mode
+    private func updateClosestFractionIfNeeded(velocityByY value: CGFloat,
+                                               closestValue: inout Double,
+                                               fractions: [Double]) {
+        guard let indexWhere = fractions.firstIndex(of: closestValue) else {
+            fatalError("Incorrect fractions")
+        }
+
+        if value <= -Self.verticalVelocityThreashold {
+            let indexAfter = fractions.index(after: indexWhere)
+            if indexAfter < fractions.count {
+                closestValue = fractions[indexAfter]
+            }
+        } else if value >= Self.verticalVelocityThreashold {
+            let indexBefore = fractions.index(before: indexWhere)
+            if indexBefore >= 0 {
+                closestValue = fractions[indexBefore]
+            }
+        }
+    }
+
     static let verticalVelocityThreashold: CGFloat = 1000
+}
+
+fileprivate func findClosestValue(_ value: Double, from values: [Double]) -> Double {
+    var minDistance = 1.0
+    var closestFractionIndex = 0
+    for (index, fraction) in values.enumerated() {
+        if abs(fraction - value) < minDistance {
+            minDistance = abs(fraction - value)
+            closestFractionIndex = index
+        }
+    }
+    return values[closestFractionIndex]
 }
