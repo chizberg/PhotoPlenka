@@ -152,8 +152,8 @@ final class SinglePhotoFactory {
         return imageView
     }
 
-    func makeCloseButton() -> CloseButton {
-        let button = CloseButton()
+    func makeCloseButton() -> RoundButton {
+        let button = RoundButton(type: .close)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }

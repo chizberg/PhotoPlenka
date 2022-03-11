@@ -1,5 +1,5 @@
 //
-//  SinglePhotoController.swift
+//  PhotoDetailsController.swift
 //  PhotoPlenka
 //
 //  Created by Алексей Шерстнёв on 23.02.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SinglePhotoController: UIViewController {
+final class PhotoDetailsController: UIViewController {
     private enum Style {
         static let sideInset: CGFloat = 16
         static let bottomScrollPadding: CGFloat = 50
@@ -61,6 +61,7 @@ final class SinglePhotoController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
     private lazy var imageAspectRatioConstraint = imageContainer.widthAnchor.constraint(
         equalTo: imageContainer.heightAnchor,
         multiplier: Style.loadingImageAspectRatio
@@ -123,8 +124,11 @@ final class SinglePhotoController: UIViewController {
         NSLayoutConstraint.activate([
             closeButton.widthAnchor.constraint(equalToConstant: Style.closeButtonSize.width),
             closeButton.heightAnchor.constraint(equalToConstant: Style.closeButtonSize.height),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Style.sideInset),
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: Style.sideInset)
+            closeButton.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Style.sideInset
+            ),
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: Style.sideInset),
         ])
 
         NSLayoutConstraint.activate([
@@ -141,7 +145,8 @@ final class SinglePhotoController: UIViewController {
         let topConstraint = imageView.topAnchor.constraint(equalTo: view.topAnchor)
         topConstraint.priority = .defaultHigh
 
-        let heightConstraint = imageView.heightAnchor.constraint(greaterThanOrEqualTo: imageContainer.heightAnchor)
+        let heightConstraint = imageView.heightAnchor
+            .constraint(greaterThanOrEqualTo: imageContainer.heightAnchor)
         heightConstraint.priority = .required
 
         let positionConstraint = imageView.topAnchor.constraint(equalTo: imageContainer.topAnchor)
@@ -151,20 +156,29 @@ final class SinglePhotoController: UIViewController {
             topConstraint, heightConstraint, positionConstraint,
             imageView.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor)
+            imageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
         ])
 
         NSLayoutConstraint.activate([
             imageContainer.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             imageContainer.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             imageContainer.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            imageContainer.widthAnchor.constraint(equalTo: view.widthAnchor)
+            imageContainer.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
 
         NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: Style.sideInset),
-            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -Style.sideInset),
-            contentStack.topAnchor.constraint(equalTo: imageContainer.bottomAnchor, constant: Style.sideInset),
+            contentStack.leadingAnchor.constraint(
+                equalTo: scrollView.leadingAnchor,
+                constant: Style.sideInset
+            ),
+            contentStack.trailingAnchor.constraint(
+                equalTo: scrollView.trailingAnchor,
+                constant: -Style.sideInset
+            ),
+            contentStack.topAnchor.constraint(
+                equalTo: imageContainer.bottomAnchor,
+                constant: Style.sideInset
+            ),
             contentStack.bottomAnchor.constraint(
                 equalTo: scrollView.bottomAnchor,
                 constant: -Style.bottomScrollPadding
@@ -186,10 +200,25 @@ final class SinglePhotoController: UIViewController {
                 case let .success(image):
                     self.imageView.image = image
                     self.newAspectRatio(from: image)
+                    self.makeImageClickable()
                 case let .failure(error):
                     print(error.localizedDescription)
                 }
             }
+    }
+
+    private func makeImageClickable() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageClicked(_:)))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func imageClicked(_: UITapGestureRecognizer) {
+        guard let image = imageView.image else { return }
+        let focusController = PhotoZoomController(image: image)
+        focusController.modalTransitionStyle = .coverVertical
+        focusController.modalPresentationStyle = .fullScreen
+        self.present(focusController, animated: true, completion: nil)
     }
 
     private func newAspectRatio(from image: UIImage) {

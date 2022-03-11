@@ -168,7 +168,7 @@ final class PreviewCell: UITableViewCell {
         subtitleLabel.textColor = UIColor.from(year: year1)
     }
 
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated _: Bool) {
         switch highlighted {
         case true: card.backgroundColor = Style.highlightedBackground
         case false: card.backgroundColor = Style.backgroundColor

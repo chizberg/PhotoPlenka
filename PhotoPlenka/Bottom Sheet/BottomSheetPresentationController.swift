@@ -22,12 +22,13 @@ protocol ScrollableViewController {
 }
 
 final class BottomSheetPresentationController: UIPresentationController,
-                                               UIGestureRecognizerDelegate,
-                                               UIScrollViewDelegate {
+    UIGestureRecognizerDelegate,
+    UIScrollViewDelegate {
     enum Mode {
         case opened
         case collapsed
     }
+
     private var initialFrame: CGRect = .zero
     private let fractions: [Double]
     weak var heightObserver: BottomSheetHeightObserver?
@@ -39,9 +40,11 @@ final class BottomSheetPresentationController: UIPresentationController,
     private var scrollViewOffset: CGFloat = 0
     private unowned let contentViewController: UIViewController
 
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+    func gestureRecognizer(
+        _: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
+    ) -> Bool {
+        true
     }
 
     override var shouldPresentInFullscreen: Bool {
@@ -51,9 +54,9 @@ final class BottomSheetPresentationController: UIPresentationController,
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerViewBounds = presentingViewController.view?.bounds,
               let firstFraction = fractions.first else {
-                  assertionFailure("Presenting view must exist")
-                  return .zero
-              }
+            assertionFailure("Presenting view must exist")
+            return .zero
+        }
 
         let y = calculateYAxis(fraction: firstFraction)
         let height = calculateHeightBy(yAxisValue: y)
@@ -97,9 +100,15 @@ extension BottomSheetPresentationController: BottomSheetDelegate {
 
 extension BottomSheetPresentationController {
     private func configurePanGesture() {
-        scrollPanGesture = UIPanGestureRecognizer(target: self, action: #selector(scrollGestureHandler(_:)))
+        scrollPanGesture = UIPanGestureRecognizer(
+            target: self,
+            action: #selector(scrollGestureHandler(_:))
+        )
         scrollPanGesture.delegate = self
-        headerPanGesture = UIPanGestureRecognizer(target: self, action: #selector(headerGestureHandler))
+        headerPanGesture = UIPanGestureRecognizer(
+            target: self,
+            action: #selector(headerGestureHandler)
+        )
         headerView?.addGestureRecognizer(headerPanGesture)
         scrollView?.addGestureRecognizer(scrollPanGesture)
     }
@@ -114,9 +123,11 @@ extension BottomSheetPresentationController {
             scrollView?.setContentOffset(.init(x: 0, y: scrollViewOffset), animated: false)
 
             let transition = gesture.translation(in: presentedView).y
-            panChangedHandler(offset: transition,
-                              view: containerView!,
-                              initialFrame: initialFrame)
+            panChangedHandler(
+                offset: transition,
+                view: containerView!,
+                initialFrame: initialFrame
+            )
         } else if gesture.state == .ended || gesture.state == .cancelled {
             panEndedHandler(gesture)
         }
@@ -183,9 +194,11 @@ extension BottomSheetPresentationController {
         } else if gesture.state == .changed {
             scrollView?.isScrollEnabled = false
             let transition = gesture.translation(in: presentedView).y
-            panChangedHandler(offset: transition,
-                              view: containerView!,
-                              initialFrame: initialFrame)
+            panChangedHandler(
+                offset: transition,
+                view: containerView!,
+                initialFrame: initialFrame
+            )
         } else if gesture.state == .ended || gesture.state == .cancelled {
             panEndedHandler(gesture)
         }
@@ -204,12 +217,14 @@ extension BottomSheetPresentationController {
     private func panEndedHandler(_ gesture: UIPanGestureRecognizer) {
         // Calculate how much spaces container view takes
         let progressValue = 1 -
-        (containerView!.frame.minY / presentingViewController.view.bounds.height)
+            (containerView!.frame.minY / presentingViewController.view.bounds.height)
         var closestFraction = findClosestValue(progressValue, from: fractions)
 
-        updateClosestFractionIfNeeded(velocityByY: gesture.velocity(in: presentedView).y,
-                                      closestValue: &closestFraction,
-                                      fractions: fractions)
+        updateClosestFractionIfNeeded(
+            velocityByY: gesture.velocity(in: presentedView).y,
+            closestValue: &closestFraction,
+            fractions: fractions
+        )
         updateModeIfNeeded(currentFraction: closestFraction, fractions: fractions)
         enableScrollIfNeeded(mode: mode)
         animateView(toFraction: closestFraction, duration: 0.2)
@@ -243,9 +258,11 @@ extension BottomSheetPresentationController {
     // If velocity value is too high,
     // the distanse between first and last touches doesn't matter
     // we can just skip to the next mode
-    private func updateClosestFractionIfNeeded(velocityByY value: CGFloat,
-                                               closestValue: inout Double,
-                                               fractions: [Double]) {
+    private func updateClosestFractionIfNeeded(
+        velocityByY value: CGFloat,
+        closestValue: inout Double,
+        fractions: [Double]
+    ) {
         guard let indexWhere = fractions.firstIndex(of: closestValue) else {
             fatalError("Incorrect fractions")
         }
@@ -282,7 +299,10 @@ extension UIScrollView {
     private static var transitionKey: UInt8 = 0
 
     public var multicastingDelegate: UIControlMulticastDelegate {
-        if let object = objc_getAssociatedObject(self, &Self.transitionKey) as? UIControlMulticastDelegate {
+        if let object = objc_getAssociatedObject(
+            self,
+            &Self.transitionKey
+        ) as? UIControlMulticastDelegate {
             return object
         }
 
@@ -291,7 +311,12 @@ extension UIScrollView {
             delegateGetter: #selector(getter: delegate),
             delegateSetter: #selector(setter: delegate)
         )
-        objc_setAssociatedObject(self, &Self.transitionKey, object, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(
+            self,
+            &Self.transitionKey,
+            object,
+            .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+        )
         return object
     }
 }
