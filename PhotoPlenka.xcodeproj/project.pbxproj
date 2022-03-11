@@ -17,7 +17,7 @@
 		DF0BDEFB27AACE33002CCF07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF0BDEF927AACE33002CCF07 /* Main.storyboard */; };
 		DF0BDEFD27AACE38002CCF07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF0BDEFC27AACE38002CCF07 /* Assets.xcassets */; };
 		DF0BDF0027AACE38002CCF07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF0BDEFE27AACE38002CCF07 /* LaunchScreen.storyboard */; };
-		DF1C971B27D5782A00B79C72 /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1C971A27D5782A00B79C72 /* CloseButton.swift */; };
+		DF1C971B27D5782A00B79C72 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1C971A27D5782A00B79C72 /* RoundButton.swift */; };
 		DF2A41E927AC78C700E21BDC /* PhotoAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2A41E827AC78C700E21BDC /* PhotoAnnotationView.swift */; };
 		DF2A41EB27AC7A9000E21BDC /* ClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2A41EA27AC7A9000E21BDC /* ClusterAnnotationView.swift */; };
 		DF37377E27BA826000DAB3CC /* PreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37377D27BA826000DAB3CC /* PreviewCell.swift */; };
@@ -36,6 +36,8 @@
 		DF6A4F5B27C5972C00BBFE69 /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A4F5A27C5972C00BBFE69 /* LikeButton.swift */; };
 		DF6A4F5F27C5979400BBFE69 /* SinglePhotoFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A4F5E27C5979400BBFE69 /* SinglePhotoFactory.swift */; };
 		DF6A4F6127C597D400BBFE69 /* SinglePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A4F6027C597D400BBFE69 /* SinglePhotoController.swift */; };
+		DF7C3F4F27DBFEFD00345074 /* PhotoFocusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7C3F4E27DBFEFD00345074 /* PhotoFocusController.swift */; };
+		DF7C3F5327DC07A700345074 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7C3F5227DC07A700345074 /* ZoomableImageView.swift */; };
 		DF94BCC427ADC697008D3D5C /* Zoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF94BCC327ADC697008D3D5C /* Zoom.swift */; };
 		DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53D27B092C80047149F /* YearSelector.swift */; };
 		DF9AF54027B092E70047149F /* ThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53F27B092E70047149F /* ThumbView.swift */; };
@@ -68,7 +70,7 @@
 		DF0BDEFC27AACE38002CCF07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF0BDEFF27AACE38002CCF07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF0BDF0127AACE38002CCF07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DF1C971A27D5782A00B79C72 /* CloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
+		DF1C971A27D5782A00B79C72 /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		DF2A41E827AC78C700E21BDC /* PhotoAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAnnotationView.swift; sourceTree = "<group>"; };
 		DF2A41EA27AC7A9000E21BDC /* ClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterAnnotationView.swift; sourceTree = "<group>"; };
 		DF37377D27BA826000DAB3CC /* PreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCell.swift; sourceTree = "<group>"; };
@@ -87,6 +89,8 @@
 		DF6A4F5A27C5972C00BBFE69 /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
 		DF6A4F5E27C5979400BBFE69 /* SinglePhotoFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePhotoFactory.swift; sourceTree = "<group>"; };
 		DF6A4F6027C597D400BBFE69 /* SinglePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePhotoController.swift; sourceTree = "<group>"; };
+		DF7C3F4E27DBFEFD00345074 /* PhotoFocusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFocusController.swift; sourceTree = "<group>"; };
+		DF7C3F5227DC07A700345074 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		DF94BCC327ADC697008D3D5C /* Zoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zoom.swift; sourceTree = "<group>"; };
 		DF9AF53D27B092C80047149F /* YearSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelector.swift; sourceTree = "<group>"; };
 		DF9AF53F27B092E70047149F /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
@@ -162,6 +166,7 @@
 				DF0BDEF727AACE33002CCF07 /* MapController.swift */,
 				DF37377F27BA82F000DAB3CC /* NearbyListController.swift */,
 				DF6A4F6027C597D400BBFE69 /* SinglePhotoController.swift */,
+				DF7C3F4E27DBFEFD00345074 /* PhotoFocusController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -201,7 +206,7 @@
 				DF6A4F5827C5970300BBFE69 /* SquishyButton.swift */,
 				DFA21CE027C854C700BA14E8 /* ActionButton.swift */,
 				DF6A4F5A27C5972C00BBFE69 /* LikeButton.swift */,
-				DF1C971A27D5782A00B79C72 /* CloseButton.swift */,
+				DF1C971A27D5782A00B79C72 /* RoundButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 				DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */,
 				DFA21CE327C8631B00BA14E8 /* LoadingImageView.swift */,
 				DF6A4F5E27C5979400BBFE69 /* SinglePhotoFactory.swift */,
+				DF7C3F5227DC07A700345074 /* ZoomableImageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -366,11 +372,12 @@
 				C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */,
 				DFA21CE427C8631B00BA14E8 /* LoadingImageView.swift in Sources */,
 				DF6A4F5427C446B100BBFE69 /* NetworkDetailedPhoto.swift in Sources */,
-				DF1C971B27D5782A00B79C72 /* CloseButton.swift in Sources */,
+				DF1C971B27D5782A00B79C72 /* RoundButton.swift in Sources */,
 				DF6A4F5927C5970300BBFE69 /* SquishyButton.swift in Sources */,
 				DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */,
 				DF58EC9E27C767FB00793CAE /* BottomTransitionCoordinator.swift in Sources */,
 				DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */,
+				DF7C3F4F27DBFEFD00345074 /* PhotoFocusController.swift in Sources */,
 				DF37378027BA82F000DAB3CC /* NearbyListController.swift in Sources */,
 				DF6A4F5027C3FBC700BBFE69 /* DetailedPhoto.swift in Sources */,
 				DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */,
@@ -387,6 +394,7 @@
 				DF37377E27BA826000DAB3CC /* PreviewCell.swift in Sources */,
 				DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */,
 				DF9AF54027B092E70047149F /* ThumbView.swift in Sources */,
+				DF7C3F5327DC07A700345074 /* ZoomableImageView.swift in Sources */,
 				DF37378327BA8AB800DAB3CC /* MapObserver.swift in Sources */,
 				DF58EC9827C6DEC600793CAE /* BottomNavigationController.swift in Sources */,
 				DF37378527BA8FBE00DAB3CC /* MapWithObservers.swift in Sources */,

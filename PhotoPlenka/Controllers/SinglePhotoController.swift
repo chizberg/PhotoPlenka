@@ -180,16 +180,31 @@ final class SinglePhotoController: UIViewController {
 
     private func loadImage(file: String) {
         ImageFetcher.shared
-            .fetchHighestQuality(filePath: file, quality: .medium) { [weak self] result in
+            .fetchHighestQuality(filePath: file, quality: .high) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case let .success(image):
                     self.imageView.image = image
                     self.newAspectRatio(from: image)
+                    self.makeImageClickable()
                 case let .failure(error):
                     print(error.localizedDescription)
                 }
             }
+    }
+
+    private func makeImageClickable(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageClicked(_ :)))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func imageClicked(_ sender: UITapGestureRecognizer){
+        guard let image = imageView.image else { return }
+        let focusController = PhotoFocusController(image: image)
+        focusController.modalTransitionStyle = .coverVertical
+        focusController.modalPresentationStyle = .fullScreen
+        self.present(focusController, animated: true, completion: nil)
     }
 
     private func newAspectRatio(from image: UIImage) {

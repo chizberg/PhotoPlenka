@@ -7,21 +7,26 @@
 
 import UIKit
 
-final class CloseButton: SquishyButton {
+final class RoundButton: SquishyButton {
+    enum RoundButtonType {
+        case close
+        case share
+    }
+
     private enum Constants {
         static let tintColor: UIColor = .label
-        static let blurStyle: UIBlurEffect.Style = .systemThinMaterial
+        static let blurStyle: UIBlurEffect.Style = .systemUltraThinMaterial
         static let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
         static let icon: UIImage = UIImage(systemName: "xmark", withConfiguration: config)!
     }
 
     let blur = UIVisualEffectView(effect: UIBlurEffect(style: Constants.blurStyle))
 
-    init() {
+    init(type: RoundButtonType) {
         super.init(frame: .zero)
         setTitle(nil, for: .normal)
         backgroundColor = .clear
-        setImage(Constants.icon, for: .normal)
+        setImage(type.icon, for: .normal)
         tintColor = Constants.tintColor
         blur.isUserInteractionEnabled = false
         blur.layer.masksToBounds = true
@@ -40,5 +45,17 @@ final class CloseButton: SquishyButton {
         super.layoutSubviews()
         blur.frame = bounds
         blur.layer.cornerRadius = blur.frame.width / 2
+    }
+}
+
+extension RoundButton.RoundButtonType {
+    var icon: UIImage {
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+        switch self {
+        case .close:
+            return UIImage(systemName: "xmark", withConfiguration: config)!
+        case .share:
+            return UIImage(systemName: "square.and.arrow.up", withConfiguration: config)!
+        }
     }
 }
