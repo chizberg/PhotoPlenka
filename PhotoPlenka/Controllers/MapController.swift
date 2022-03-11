@@ -22,17 +22,31 @@ final class MapController: UIViewController {
         static let superSmallTransform = CGAffineTransform(scaleX: 0, y: 0)
         static let selectedTransform = CGAffineTransform(scaleX: 2, y: 2)
         static let biggestTransfrorm = CGAffineTransform(scaleX: 3, y: 3)
+
+        static let sideInset: CGFloat = 16
+        static let buttonSize: CGSize = .init(width: 40, height: 40)
     }
 
+    //data
     private let networkService: NetworkServiceProtocol = NetworkService()
     private lazy var photoDetailsProvider: PhotoDetailsProviderProtocol =
         PhotoDetailsProvider(networkService: networkService)
     private lazy var annotationProvider: AnnotationProviderProtocol =
         AnnotationProvider(networkService: networkService)
+    private let locationProvider = LocationProvider()
+
+    //views
     private let map = MapWithObservers()
     private var zoom = Zoom(span: Constants.defaultRegion.span)
     private var yearRange = Constants.initialYearRange
     private weak var bottomSheetDelegate: BottomSheetDelegate?
+    private let locationButton: RoundButton = {
+        let button = RoundButton(type: .location)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    //bottom stuff
     private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
     private lazy var nearbyListController = NearbyListController(
         mapController: self,
@@ -41,12 +55,20 @@ final class MapController: UIViewController {
     private lazy var bottomNavigation =
         BottomNavigationController(rootViewController: nearbyListController)
 
+
+    //other
+    private var zoom = Zoom(span: Constants.defaultRegion.span)
+    private var yearRange = Constants.initialYearRange
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(map)
+        view.addSubview(locationButton)
+        configureButtons()
         map.setRegion(Constants.defaultRegion, animated: false)
         map.delegate = self
         map.isRotateEnabled = false
+        map.showsUserLocation = true
         map.register(
             PhotoAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: Constants.photoReuseID
@@ -60,11 +82,14 @@ final class MapController: UIViewController {
             forAnnotationViewWithReuseIdentifier: Constants.multiPhotoReuseID
         )
         map.addObserver(nearbyListController)
+        locationProvider.start { [weak self] in
+            guard let self = self else { return }
+            self.centerUserLocation(animated: false)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
         bottomNavigation.isNavigationBarHidden = true
         bottomNavigation.observer = self
         let bottomSheetVC = bottomNavigation
@@ -82,6 +107,59 @@ final class MapController: UIViewController {
     }
 }
 
+//MARK: - free funcs
+extension MapController {
+    private func clearMapAndProvider() {
+        let annotationsToRemove = map.annotations.filter {!($0 is MKUserLocation)}
+        map.removeAnnotations(annotationsToRemove)
+        annotationProvider.clear()
+    }
+
+    var z: Int {
+        get {
+            let oldValue = zoom.z
+            zoom.span = map.region.span
+            if zoom.z != oldValue { clearMapAndProvider() }
+            return zoom.z
+        }
+        set {
+            if newValue != zoom.z { clearMapAndProvider() }
+            zoom.z = newValue
+        }
+    }
+
+    func showSinglePhotoDetails(photo: Photo) {
+        let singleController = PhotoDetailsController(
+            cid: photo.cid,
+            detailsProvider: photoDetailsProvider
+        )
+        if bottomNavigation.viewControllers.count > 1,
+           bottomNavigation.viewControllers.last as? PhotoDetailsController != nil {
+            bottomNavigation.popToRootViewController(animated: true)
+        }
+        self.bottomNavigation.pushViewController(singleController, animated: true)
+    }
+
+    @objc func centerUserLocation(animated: Bool = true){
+        guard let coordinate = map.userLocation.location?.coordinate else { return }
+        map.setAdjustedCenter(coordinate, animated: animated)
+    }
+}
+
+//MARK: - view config funcs
+extension MapController {
+    func configureButtons(){
+        NSLayoutConstraint.activate([
+            locationButton.heightAnchor.constraint(equalToConstant: Constants.buttonSize.height),
+            locationButton.widthAnchor.constraint(equalToConstant: Constants.buttonSize.width),
+            locationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.sideInset),
+            locationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.sideInset)
+        ])
+        locationButton.addTarget(self, action: #selector(centerUserLocation), for: .touchUpInside)
+    }
+}
+
+//MARK: - BottomSheetFactory
 extension MapController: BottomSheetFactory {
     func makePresentationController(
         presentedViewController: UIViewController,
@@ -103,6 +181,7 @@ extension MapController: BottomSheetFactory {
     }
 }
 
+//MARK: - Bottom sheet height
 extension MapController: BottomSheetHeightObserver {
     func heightDidChange(newHeight: CGFloat) {
         let safeHeight = view.bounds.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom
@@ -120,32 +199,14 @@ extension MapController: BottomSheetHeightObserver {
     }
 }
 
+//MARK: - Nav controller observer
 extension MapController: NavigationControllerObserver {
     func didLeaveSinglePhoto() {
         map.selectedAnnotations.forEach { map.deselectAnnotation($0, animated: true) }
     }
 }
 
-extension MapController {
-    private func clearMapAndProvider() {
-        map.removeAnnotations(map.annotations)
-        annotationProvider.clear()
-    }
-
-    var z: Int {
-        get {
-            let oldValue = zoom.z
-            zoom.span = map.region.span
-            if zoom.z != oldValue { clearMapAndProvider() }
-            return zoom.z
-        }
-        set {
-            if newValue != zoom.z { clearMapAndProvider() }
-            zoom.z = newValue
-        }
-    }
-}
-
+//MARK: MKMapView delegate
 extension MapController: MKMapViewDelegate {
     @objc private func loadNewAnnotations() {
         annotationProvider
@@ -229,6 +290,7 @@ extension MapController: MKMapViewDelegate {
     }
 }
 
+//MARK: yearSelection
 extension MapController: YearSelectorDelegate {
     func rangeDidChange(newRange: ClosedRange<Int>) {
         yearRange = newRange
@@ -241,13 +303,14 @@ extension MapController: YearSelectorDelegate {
     }
 }
 
+//MARK: MapPublisher
 extension MapController: MapPublisher {
     func addObserver(_ observer: MapObserver) {
         map.addObserver(observer)
     }
 }
 
-// animating annotations
+// MARK: - animating annotations
 extension MapController {
     // у меня пока что не получается закинуть анимацию появления в MKMapView override куда-нибудь
     // на тот момент ещё нет view(for: annotation)
@@ -277,7 +340,7 @@ extension MapController {
             }
         }
     }
-
+    
     func showSinglePhotoDetails(photo: Photo) {
         let singleController = PhotoDetailsController(
             cid: photo.cid,

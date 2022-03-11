@@ -11,6 +11,7 @@ final class RoundButton: SquishyButton {
     enum RoundButtonType {
         case close
         case share
+        case location
     }
 
     private enum Constants {
@@ -56,6 +57,8 @@ extension RoundButton.RoundButtonType {
             return UIImage(systemName: "xmark", withConfiguration: config)!
         case .share:
             return UIImage(systemName: "square.and.arrow.up", withConfiguration: config)!
+        case .location:
+            return UIImage(systemName: "location", withConfiguration: config)!
         }
     }
 }

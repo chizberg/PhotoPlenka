@@ -55,6 +55,7 @@
 		DFD7A21A27B86AE80064A0F4 /* ImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7A21927B86AE80064A0F4 /* ImageFetcher.swift */; };
 		DFD7A21D27B86ED30064A0F4 /* ImageQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7A21C27B86ED30064A0F4 /* ImageQuality.swift */; };
 		DFD7A21F27B94E4C0064A0F4 /* ImageFetchingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7A21E27B94E4C0064A0F4 /* ImageFetchingOperation.swift */; };
+		DFE4A5A027DD602C007918F1 /* LocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE4A59F27DD602C007918F1 /* LocationProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +111,7 @@
 		DFD7A21927B86AE80064A0F4 /* ImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcher.swift; sourceTree = "<group>"; };
 		DFD7A21C27B86ED30064A0F4 /* ImageQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQuality.swift; sourceTree = "<group>"; };
 		DFD7A21E27B94E4C0064A0F4 /* ImageFetchingOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetchingOperation.swift; sourceTree = "<group>"; };
+		DFE4A59F27DD602C007918F1 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +199,7 @@
 			children = (
 				DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */,
 				DF6A4F5627C52F1200BBFE69 /* PhotoDetailsProvider.swift */,
+				DFE4A59F27DD602C007918F1 /* LocationProvider.swift */,
 			);
 			path = "Data Providers";
 			sourceTree = "<group>";
@@ -425,6 +428,7 @@
 				DFA21CE127C854C800BA14E8 /* ActionButton.swift in Sources */,
 				DF2A41EB27AC7A9000E21BDC /* ClusterAnnotationView.swift in Sources */,
 				DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */,
+				DFE4A5A027DD602C007918F1 /* LocationProvider.swift in Sources */,
 				DFD7A21F27B94E4C0064A0F4 /* ImageFetchingOperation.swift in Sources */,
 				C6813B6E27DE404B00E876A9 /* UIControlMulticastDelegate.m in Sources */,
 				C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */,
