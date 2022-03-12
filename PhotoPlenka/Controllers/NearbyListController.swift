@@ -104,6 +104,7 @@ final class NearbyListController: UIViewController, ScrollableViewController {
 
 extension NearbyListController: MapObserver {
     func annotationsDidChange(annotations _: [MKAnnotation], visible: [MKAnnotation]) {
+        nearbyList.isHidden = visible.isEmpty
         guard visible.count > Constants.countLimit else {
             visibleAnnotations = visible
             nearbyList.reloadData()
@@ -122,11 +123,18 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellID, for: indexPath)
         guard let previewCell = cell as? PreviewCell else { return cell }
-        if let photo = visibleAnnotations[indexPath.row] as? Photo {
+        let annotation = visibleAnnotations[indexPath.row]
+        switch annotation {
+        case let photo as Photo:
             previewCell.fillIn(photo)
-        }
-        if let cluster = visibleAnnotations[indexPath.row] as? Cluster {
+        case let cluster as Cluster:
             previewCell.fillIn(cluster.photo)
+        case let localCluster as MKClusterAnnotation:
+            guard let photo = localCluster.memberAnnotations.first as? Photo else { fallthrough }
+            previewCell.fillIn(photo)
+        default:
+            fatalError("invalid annotation type")
+            break
         }
         return cell
     }
@@ -143,7 +151,18 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let annotation = visibleAnnotations[indexPath.row]
         let photoData: Photo
-        if let photo = annotation as? Photo { photoData = photo } else if let cluster = annotation as? Cluster { photoData = cluster.photo } else { fatalError("invalid annotation type") }
+        switch annotation {
+        case let photo as Photo:
+            photoData = photo
+        case let cluster as Cluster:
+            photoData = cluster.photo
+        case let localCluster as MKClusterAnnotation:
+            guard let photo = localCluster.memberAnnotations.first as? Photo else { fallthrough }
+            photoData = photo
+        default:
+            fatalError("invalid annotation type")
+            break
+        }
         let singleController = SinglePhotoController(
             cid: photoData.cid,
             detailsProvider: detailsProvider

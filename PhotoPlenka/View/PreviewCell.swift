@@ -9,8 +9,9 @@ import UIKit
 
 final class PreviewCell: UITableViewCell {
     private enum Style {
-        static var backgroundColor: UIColor = .secondarySystemBackground
+        static var backgroundColor: UIColor = .systemBackground
         static var imageBackground: UIColor = .systemBackground
+        static var highlightedBackground: UIColor = .secondarySystemBackground
         static var cornerRadius: CGFloat = 13
         static var titleFont: UIFont = UIFont.systemFont(ofSize: 20, weight: .regular)
         static var subtitleFont: UIFont = UIFont.systemFont(ofSize: 17, weight: .bold)
@@ -18,7 +19,10 @@ final class PreviewCell: UITableViewCell {
 
         static var textInsets = UIEdgeInsets(top: 7, left: 10, bottom: -10, right: -10)
         static var cardMarginInsets = UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0)
+        static let selectionTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
     }
+
+    private var animator = UIViewPropertyAnimator(duration: 3, dampingRatio: 10, animations: nil)
 
     private var card = UIView()
     private var titleLabel: UILabel = {
@@ -52,6 +56,7 @@ final class PreviewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
+        selectionStyle = .none
         card.translatesAutoresizingMaskIntoConstraints = false
         card.clipsToBounds = true
         card.layer.cornerRadius = Style.cornerRadius
@@ -161,5 +166,12 @@ final class PreviewCell: UITableViewCell {
             subtitleLabel.text = "\(year1) г."
         } else { subtitleLabel.text = "\(year1)-\(year2) гг." }
         subtitleLabel.textColor = UIColor.from(year: year1)
+    }
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        switch highlighted {
+        case true: card.backgroundColor = Style.highlightedBackground
+        case false: card.backgroundColor = Style.backgroundColor
+        }
     }
 }

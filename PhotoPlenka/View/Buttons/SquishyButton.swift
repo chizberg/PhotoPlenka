@@ -16,7 +16,7 @@ internal class SquishyButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        activateAnimation()
+        addTargets()
     }
 
     @available(*, unavailable)
@@ -24,10 +24,11 @@ internal class SquishyButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func activateAnimation() {
+    private func addTargets() {
         addTarget(self, action: #selector(touchDown), for: .touchDown)
         addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         addTarget(self, action: #selector(touchUp), for: .touchUpOutside)
+        addTarget(self, action: #selector(touchUp), for: .touchCancel)
     }
 
     func updateLayout(isSelected _: Bool) {}

@@ -149,7 +149,7 @@ final class SinglePhotoController: UIViewController {
 
     private func loadImage(file: String) {
         ImageFetcher.shared
-            .fetchHighestQuality(filePath: file, quality: .medium) { [weak self] result in
+            .fetchHighestQuality(filePath: file, quality: .high) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case let .success(image):
@@ -189,13 +189,19 @@ final class SinglePhotoController: UIViewController {
 
     private func fillIn(photo: DetailedPhoto) {
         self.photoData = photo
-        yearLabel.textColor = UIColor.from(year: photo.year)
+        fillYear(year1: photo.year, year2: photo.year2)
         titleLabel.text = photo.name
-        yearLabel.text = "\(photo.year)"
         descriptionLabel.attributedText = photo.description
         authorLabel.text = photo.author
         uploadedByLabel.text = photo.username
         loadImage(file: photo.file)
+    }
+
+    private func fillYear(year1: Int, year2: Int) {
+        if year1 == year2 {
+            yearLabel.text = "\(year1) г."
+        } else { yearLabel.text = "\(year1)-\(year2) гг." }
+        yearLabel.textColor = UIColor.from(year: year1)
     }
 
     @objc private func back() {
