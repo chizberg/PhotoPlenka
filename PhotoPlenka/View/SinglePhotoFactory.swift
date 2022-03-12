@@ -137,7 +137,6 @@ final class SinglePhotoFactory {
     func makeScrollView() -> UIScrollView {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.layer.cornerRadius = Style.detailsCornerRadius
         scroll.layer.maskedCorners = Style.scrollRadiusMask
         scroll.clipsToBounds = true
         scroll.delaysContentTouches = false
@@ -147,9 +146,16 @@ final class SinglePhotoFactory {
 
     func makeImageView() -> UIImageView {
         let imageView = LoadingImageView()
-        imageView.layer.cornerRadius = Style.detailsCornerRadius
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
+    }
+
+    func makeCloseButton() -> CloseButton {
+        let button = CloseButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }
 }
 
