@@ -9,7 +9,7 @@ import UIKit
 
 final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     private let operation: UINavigationController.Operation
-    private var isPush: Bool { operation == .push } //push или pop
+    private var isPush: Bool { operation == .push } // push или pop
 
     init(_ operation: UINavigationController.Operation) {
         self.operation = operation
@@ -19,7 +19,7 @@ final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         0.4
     }
 
-    //анимация перехода: добавим сбоку from, также анимируем alpha
+    // анимация перехода: добавим сбоку from, также анимируем alpha
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let from = transitionContext.view(forKey: .from) else { return }
         guard let to = transitionContext.view(forKey: .to) else { return }

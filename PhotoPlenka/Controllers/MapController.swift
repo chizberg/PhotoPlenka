@@ -20,6 +20,8 @@ final class MapController: UIViewController {
         static let initialYearRange: ClosedRange<Int> = 1826...2000
         static let annotationAnimationDuration: TimeInterval = 0.2
         static let superSmallTransform = CGAffineTransform(scaleX: 0, y: 0)
+        static let selectedTransform = CGAffineTransform(scaleX: 2, y: 2)
+        static let biggestTransfrorm = CGAffineTransform(scaleX: 3, y: 3)
     }
 
     private let networkService: NetworkServiceProtocol = NetworkService()
@@ -62,8 +64,9 @@ final class MapController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        let bottomSheetVC = bottomNavigation
         bottomNavigation.isNavigationBarHidden = true
+        bottomNavigation.observer = self
+        let bottomSheetVC = bottomNavigation
         bottomSheetVC.modalPresentationStyle = .custom
         bottomSheetVC.transitioningDelegate = transitionDelegate
         present(bottomSheetVC, animated: false)
@@ -76,14 +79,6 @@ final class MapController: UIViewController {
     override func didReceiveMemoryWarning() {
         ImageFetcher.shared.clear()
     }
-
-    func showSinglePhotoDetails(photo: Photo) {
-        let singleController = SinglePhotoController(
-            cid: photo.cid,
-            detailsProvider: photoDetailsProvider
-        )
-        self.bottomNavigation.pushViewController(singleController, animated: true)
-    }
 }
 
 extension MapController: BottomSheetFactory {
@@ -91,11 +86,36 @@ extension MapController: BottomSheetFactory {
         presentedViewController: UIViewController,
         presenting: UIViewController?
     ) -> UIPresentationController {
-        BottomSheetPresentationController(
-            fractions: [0.20, 0.50, 0.60, 0.90],
+        let controller = BottomSheetPresentationController(
+            fractions: [0.15, 0.4, 0.7, 0.85],
             presentedViewController: presentedViewController,
             presenting: presenting
         )
+        controller.heightObserver = self
+        return controller
+    }
+}
+
+extension MapController: BottomSheetHeightObserver {
+    func heightDidChange(newHeight: CGFloat) {
+        let safeHeight = view.bounds.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom
+        let fraction = newHeight / safeHeight
+        map.updateVerticalOffset(fraction: fraction)
+
+        // отменяем запросы подгрузки новых изображений
+        // это нужно для того, чтобы список фотографий не перезагружался при его открытии
+        // а запросы отправляются потому что регион карты меняется
+        NSObject.cancelPreviousPerformRequests(
+            withTarget: self,
+            selector: #selector(loadNewAnnotations),
+            object: nil
+        )
+    }
+}
+
+extension MapController: NavigationControllerObserver {
+    func didLeaveSinglePhoto() {
+        map.selectedAnnotations.forEach { map.deselectAnnotation($0, animated: true) }
     }
 }
 
@@ -165,7 +185,13 @@ extension MapController: MKMapViewDelegate {
             mapView.setRegion(newRegion, animated: true)
         }
         if let photo = view.annotation as? Photo {
+            map.setAdjustedCenter(photo.coordinate, animated: true)
             showSinglePhotoDetails(photo: photo)
+            for selectedAnn in map.selectedAnnotations {
+                guard let selectedPhoto = selectedAnn as? Photo else { continue }
+                guard selectedPhoto.cid != photo.cid else { continue }
+                map.deselectAnnotation(selectedAnn, animated: true)
+            }
         }
     }
 
@@ -226,5 +252,34 @@ extension MapController {
                 view.transform = initialTransform
             })
         }
+    }
+
+    private func animateSelection(
+        _ view: MKAnnotationView,
+        isSelected: Bool,
+        animated: Bool = true
+    ) {
+        let transform = isSelected ? Constants.selectedTransform : Constants.biggestTransfrorm
+        guard animated else {
+            view.transform = transform
+            return
+        }
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: Constants.annotationAnimationDuration) {
+                view.transform = transform
+            }
+        }
+    }
+
+    func showSinglePhotoDetails(photo: Photo) {
+        let singleController = SinglePhotoController(
+            cid: photo.cid,
+            detailsProvider: photoDetailsProvider
+        )
+        if bottomNavigation.viewControllers.count > 1,
+           bottomNavigation.viewControllers.last as? SinglePhotoController != nil {
+            bottomNavigation.popToRootViewController(animated: true)
+        }
+        self.bottomNavigation.pushViewController(singleController, animated: true)
     }
 }

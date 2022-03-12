@@ -15,6 +15,9 @@ final class PhotoAnnotationView: MKAnnotationView {
             width: 13 * scaleValue,
             height: 13 * scaleValue
         )
+        static let selectedTransform: CGAffineTransform = .init(scaleX: 2, y: 2)
+        static let nonSelectedTransform: CGAffineTransform = .identity
+        static let selectionAnimationDuration: TimeInterval = 0.25
     }
 
     lazy var iconLayer = CAShapeLayer()
@@ -32,14 +35,10 @@ final class PhotoAnnotationView: MKAnnotationView {
 
     override func prepareForDisplay() {
         super.prepareForDisplay()
+        frame = CGRect(origin: .zero, size: Constants.size)
         guard let photo = annotation as? Photo else { return }
         setColor(.from(year: photo.year))
         iconLayer.path = iconPath(direction: photo.dir).cgPath
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        frame = CGRect(origin: .zero, size: Constants.size)
         iconLayer.frame = bounds
     }
 
@@ -47,6 +46,19 @@ final class PhotoAnnotationView: MKAnnotationView {
         willSet {
             clusteringIdentifier = Constants.clusteringIdentifier
             displayPriority = .required
+        }
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        let transform = selected ? Constants.selectedTransform : Constants.nonSelectedTransform
+        guard animated else {
+            self.transform = transform
+            return
+        }
+        UIView.animate(withDuration: Constants.selectionAnimationDuration) { [weak self] in
+            guard let self = self else { return }
+            self.transform = transform
         }
     }
 
