@@ -91,10 +91,15 @@ extension MapController: BottomSheetFactory {
         presentedViewController: UIViewController,
         presenting: UIViewController?
     ) -> UIPresentationController {
-        BottomSheetPresentationController(
-            fractions: [0.20, 0.50, 0.60, 0.90],
+        guard let navigationController = presentedViewController as? UINavigationController,
+              let topController = navigationController.topViewController else {
+                  fatalError("Incorrect view controllers")
+              }
+        return BottomSheetPresentationController(
+            fractions: [0.20, 0.50, 0.90],
             presentedViewController: presentedViewController,
-            presenting: presenting
+            presenting: presenting,
+            contentViewController: topController
         )
     }
 }

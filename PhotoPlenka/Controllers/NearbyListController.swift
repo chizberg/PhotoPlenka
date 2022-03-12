@@ -8,7 +8,15 @@
 import MapKit
 import UIKit
 
-final class NearbyListController: UIViewController {
+final class NearbyListController: UIViewController, ScrollableViewController {
+    var header: UIView {
+        yearSelect
+    }
+
+    var scrollView: UIScrollView {
+        nearbyList
+    }
+
     private enum Constants {
         static let sideInset: CGFloat = 16
         static let controllerCornerRadius: CGFloat = 29
