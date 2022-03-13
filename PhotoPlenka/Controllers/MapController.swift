@@ -32,6 +32,7 @@ final class MapController: UIViewController {
     private let map = MapWithObservers()
     private var zoom = Zoom(span: Constants.defaultRegion.span)
     private var yearRange = Constants.initialYearRange
+    private weak var bottomSheetDelegate: BottomSheetDelegate?
     private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
     private lazy var nearbyListController = NearbyListController(
         mapController: self,
@@ -90,13 +91,13 @@ extension MapController: BottomSheetFactory {
               let topController = navigationController.topViewController else {
                   fatalError("Incorrect view controllers")
               }
-
         let controller = BottomSheetPresentationController(
-            fractions: [0.15, 0.4, 0.7, 0.85],
+            fractions: [0.15, 0.5, 0.85],
             presentedViewController: presentedViewController,
             presenting: presenting,
             contentViewController: topController
         )
+        bottomSheetDelegate = controller
         controller.heightObserver = self
         return controller
     }
@@ -282,10 +283,11 @@ extension MapController {
             cid: photo.cid,
             detailsProvider: photoDetailsProvider
         )
-        if bottomNavigation.viewControllers.count > 1,
-           bottomNavigation.viewControllers.last as? SinglePhotoController != nil {
-            bottomNavigation.popToRootViewController(animated: true)
-        }
         self.bottomNavigation.pushViewController(singleController, animated: true)
+        let count = bottomNavigation.viewControllers.count
+        if count > 1,
+           bottomNavigation.viewControllers[count - 2] as? SinglePhotoController != nil {
+            bottomNavigation.viewControllers[count - 2].removeFromParent()
+        }
     }
 }

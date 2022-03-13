@@ -12,6 +12,10 @@ protocol BottomSheetHeightObserver: AnyObject {
     func heightDidChange(newHeight: CGFloat)
 }
 
+protocol BottomSheetDelegate: AnyObject {
+    func heightShouldBeAt(fraction: CGFloat, animated: Bool)
+}
+
 protocol ScrollableViewController {
     var scrollView: UIScrollView { get }
     var header: UIView { get }
@@ -77,6 +81,15 @@ final class BottomSheetPresentationController: UIPresentationController,
             presentedViewController: presentedViewController,
             presenting: presentingViewController
         )
+    }
+}
+
+extension BottomSheetPresentationController: BottomSheetDelegate {
+    func heightShouldBeAt(fraction: CGFloat, animated: Bool) {
+        let closestFraction = findClosestValue(fraction, from: fractions)
+        updateModeIfNeeded(currentFraction: closestFraction, fractions: fractions)
+        enableScrollIfNeeded(mode: mode)
+        animateView(toFraction: closestFraction, duration: animated ? 0.4 : 0.0)
     }
 }
 
@@ -199,12 +212,15 @@ extension BottomSheetPresentationController {
                                       fractions: fractions)
         updateModeIfNeeded(currentFraction: closestFraction, fractions: fractions)
         enableScrollIfNeeded(mode: mode)
+        animateView(toFraction: closestFraction, duration: 0.2)
+    }
 
+    private func animateView(toFraction value: CGFloat, duration: CGFloat) {
         let presentingBounds = presentingViewController.view.bounds
-        let targetY = calculateYAxis(fraction: closestFraction)
+        let targetY = calculateYAxis(fraction: value)
         let targetHeight = calculateHeightBy(yAxisValue: targetY)
 
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: duration, animations: {
             self.containerView?.frame = CGRect(
                 x: 0,
                 y: targetY,
