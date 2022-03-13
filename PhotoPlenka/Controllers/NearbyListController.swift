@@ -8,7 +8,15 @@
 import MapKit
 import UIKit
 
-final class NearbyListController: UIViewController {
+final class NearbyListController: UIViewController, ScrollableViewController {
+    var header: UIView {
+        yearSelect
+    }
+
+    var scrollView: UIScrollView {
+        nearbyList
+    }
+
     private enum Constants {
         static let sideInset: CGFloat = 16
         static let controllerCornerRadius: CGFloat = 29
@@ -52,7 +60,7 @@ final class NearbyListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(yearSelect)
-        nearbyList.delegate = self
+        nearbyList.multicastingDelegate.addDelegate(self)
         nearbyList.dataSource = self
         nearbyList.register(PreviewCell.self, forCellReuseIdentifier: Constants.cellID)
         view.addSubview(nearbyList)
