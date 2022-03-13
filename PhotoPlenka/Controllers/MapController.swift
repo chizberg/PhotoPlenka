@@ -86,10 +86,16 @@ extension MapController: BottomSheetFactory {
         presentedViewController: UIViewController,
         presenting: UIViewController?
     ) -> UIPresentationController {
+        guard let navigationController = presentedViewController as? UINavigationController,
+              let topController = navigationController.topViewController else {
+                  fatalError("Incorrect view controllers")
+              }
+
         let controller = BottomSheetPresentationController(
             fractions: [0.15, 0.4, 0.7, 0.85],
             presentedViewController: presentedViewController,
-            presenting: presenting
+            presenting: presenting,
+            contentViewController: topController
         )
         controller.heightObserver = self
         return controller
