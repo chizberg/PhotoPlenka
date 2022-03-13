@@ -60,7 +60,7 @@ final class NearbyListController: UIViewController, ScrollableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(yearSelect)
-        nearbyList.delegate = self
+        nearbyList.multicastingDelegate.addDelegate(self)
         nearbyList.dataSource = self
         nearbyList.register(PreviewCell.self, forCellReuseIdentifier: Constants.cellID)
         view.addSubview(nearbyList)

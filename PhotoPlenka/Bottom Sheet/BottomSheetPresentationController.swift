@@ -131,7 +131,7 @@ extension BottomSheetPresentationController {
         if let scrollable = contentViewController as? ScrollableViewController {
             scrollView = scrollable.scrollView
             headerView = scrollable.header
-            scrollView?.delegate = self
+            scrollView?.multicastingDelegate.addDelegate(self)
             scrollView?.isScrollEnabled = false
         }
         containerView?.frame = frameOfPresentedViewInContainerView
@@ -260,4 +260,22 @@ fileprivate func findClosestValue(_ value: Double, from values: [Double]) -> Dou
         }
     }
     return values[closestFractionIndex]
+}
+
+extension UIScrollView {
+    private static var transitionKey: UInt8 = 0
+
+    public var multicastingDelegate: UIControlMulticastDelegate {
+        if let object = objc_getAssociatedObject(self, &Self.transitionKey) as? UIControlMulticastDelegate {
+            return object
+        }
+
+        let object = UIControlMulticastDelegate(
+            target: self,
+            delegateGetter: #selector(getter: delegate),
+            delegateSetter: #selector(setter: delegate)
+        )
+        objc_setAssociatedObject(self, &Self.transitionKey, object, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return object
+    }
 }

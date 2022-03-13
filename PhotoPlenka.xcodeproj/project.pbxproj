@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */; };
 		C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */; };
+		C6813B6E27DE404B00E876A9 /* UIControlMulticastDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6813B6B27DE404B00E876A9 /* UIControlMulticastDelegate.m */; };
 		DF0B9D3927B1812D005836D8 /* MultiplePhotosAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0B9D3827B1812D005836D8 /* MultiplePhotosAnnotationView.swift */; };
 		DF0BDEF427AACE33002CCF07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */; };
 		DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */; };
@@ -57,6 +58,9 @@
 /* Begin PBXFileReference section */
 		C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTransitionDelegate.swift; sourceTree = "<group>"; };
 		C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresentationController.swift; sourceTree = "<group>"; };
+		C6813B6A27DE404B00E876A9 /* PhotoPlenka-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoPlenka-Bridging-Header.h"; sourceTree = "<group>"; };
+		C6813B6B27DE404B00E876A9 /* UIControlMulticastDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIControlMulticastDelegate.m; path = PhotoPlenka/MulticastDelegate/UIControlMulticastDelegate.m; sourceTree = SOURCE_ROOT; };
+		C6813B6D27DE404B00E876A9 /* UIControlMulticastDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIControlMulticastDelegate.h; path = PhotoPlenka/MulticastDelegate/UIControlMulticastDelegate.h; sourceTree = SOURCE_ROOT; };
 		DF0B9D3827B1812D005836D8 /* MultiplePhotosAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplePhotosAnnotationView.swift; sourceTree = "<group>"; };
 		DF0BDEF027AACE33002CCF07 /* PhotoPlenka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoPlenka.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +119,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C6813B6927DE403900E876A9 /* MulticastDelegates */ = {
+			isa = PBXGroup;
+			children = (
+				C6813B6D27DE404B00E876A9 /* UIControlMulticastDelegate.h */,
+				C6813B6B27DE404B00E876A9 /* UIControlMulticastDelegate.m */,
+				C6813B6A27DE404B00E876A9 /* PhotoPlenka-Bridging-Header.h */,
+			);
+			path = MulticastDelegates;
+			sourceTree = "<group>";
+		};
 		DF0BDEE727AACE32002CCF07 = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +148,7 @@
 		DF0BDEF227AACE33002CCF07 /* PhotoPlenka */ = {
 			isa = PBXGroup;
 			children = (
+				C6813B6927DE403900E876A9 /* MulticastDelegates */,
 				DF0BDEF327AACE33002CCF07 /* AppDelegate.swift */,
 				DF0BDEF527AACE33002CCF07 /* SceneDelegate.swift */,
 				DFC8B0B227D3916C0089E411 /* Bottom Sheet */,
@@ -305,6 +320,7 @@
 				TargetAttributes = {
 					DF0BDEEF27AACE33002CCF07 = {
 						CreatedOnToolsVersion = 13.1;
+						LastSwiftMigration = 1320;
 					};
 				};
 			};
@@ -402,6 +418,7 @@
 				DF2A41EB27AC7A9000E21BDC /* ClusterAnnotationView.swift in Sources */,
 				DF0BDEF627AACE33002CCF07 /* SceneDelegate.swift in Sources */,
 				DFD7A21F27B94E4C0064A0F4 /* ImageFetchingOperation.swift in Sources */,
+				C6813B6E27DE404B00E876A9 /* UIControlMulticastDelegate.m in Sources */,
 				C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */,
 				DF6A4F5F27C5979400BBFE69 /* SinglePhotoFactory.swift in Sources */,
 				DFD7A21D27B86ED30064A0F4 /* ImageQuality.swift in Sources */,
@@ -552,6 +569,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 8DB7C77NK9;
@@ -571,6 +589,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "PhotoPlenka/MulticastDelegates/PhotoPlenka-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -581,6 +601,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 8DB7C77NK9;
@@ -600,6 +621,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "PhotoPlenka/MulticastDelegates/PhotoPlenka-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
