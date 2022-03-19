@@ -126,7 +126,7 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
         guard let previewCell = cell as? PreviewCell else { return cell }
         let annotation = visibleAnnotations[indexPath.row]
         switch annotation {
-        case let location as MKUserLocation:
+        case is MKUserLocation:
             break
         case let photo as Photo:
             previewCell.fillIn(photo)

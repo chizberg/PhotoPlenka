@@ -37,8 +37,6 @@ final class MapController: UIViewController {
 
     //views
     private let map = MapWithObservers()
-    private var zoom = Zoom(span: Constants.defaultRegion.span)
-    private var yearRange = Constants.initialYearRange
     private weak var bottomSheetDelegate: BottomSheetDelegate?
     private let locationButton: RoundButton = {
         let button = RoundButton(type: .location)
@@ -59,6 +57,12 @@ final class MapController: UIViewController {
     //other
     private var zoom = Zoom(span: Constants.defaultRegion.span)
     private var yearRange = Constants.initialYearRange
+
+    //мы получаем геопозицию не сразу, а через LocationProviderDelegate
+    //но в delegate есть только locationDidChange, а нужно центрировать геопозицию только на запуске
+    //поэтому делаю флажок, который при инициализации = true, а при центрировании или ошибке получения локации становится false
+    //если от true - то при каждом изменении локации будет центрировать локацию
+    private var waitingForLocation = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,10 +86,8 @@ final class MapController: UIViewController {
             forAnnotationViewWithReuseIdentifier: Constants.multiPhotoReuseID
         )
         map.addObserver(nearbyListController)
-        locationProvider.start { [weak self] in
-            guard let self = self else { return }
-            self.centerUserLocation(animated: false)
-        }
+        locationProvider.start()
+        locationProvider.delegate = self
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -128,21 +130,15 @@ extension MapController {
         }
     }
 
-    func showSinglePhotoDetails(photo: Photo) {
-        let singleController = PhotoDetailsController(
-            cid: photo.cid,
-            detailsProvider: photoDetailsProvider
-        )
-        if bottomNavigation.viewControllers.count > 1,
-           bottomNavigation.viewControllers.last as? PhotoDetailsController != nil {
-            bottomNavigation.popToRootViewController(animated: true)
-        }
-        self.bottomNavigation.pushViewController(singleController, animated: true)
+    func centerUserLocation(animated: Bool){
+        guard let coordinate = map.userLocation.location?.coordinate else { return }
+        var region = map.region
+        region.center = coordinate
+        map.setRegion(region, animated: animated)
     }
 
-    @objc func centerUserLocation(animated: Bool = true){
-        guard let coordinate = map.userLocation.location?.coordinate else { return }
-        map.setAdjustedCenter(coordinate, animated: animated)
+    @objc func locationButtonTapped(){
+        centerUserLocation(animated: true)
     }
 }
 
@@ -155,7 +151,7 @@ extension MapController {
             locationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.sideInset),
             locationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.sideInset)
         ])
-        locationButton.addTarget(self, action: #selector(centerUserLocation), for: .touchUpInside)
+        locationButton.addTarget(self, action: #selector(locationButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -340,7 +336,7 @@ extension MapController {
             }
         }
     }
-    
+
     func showSinglePhotoDetails(photo: Photo) {
         let singleController = PhotoDetailsController(
             cid: photo.cid,
@@ -352,5 +348,18 @@ extension MapController {
            bottomNavigation.viewControllers[count - 2] as? PhotoDetailsController != nil {
             bottomNavigation.viewControllers[count - 2].removeFromParent()
         }
+    }
+}
+
+extension MapController: LocationObserverDelegate {
+    func didUpdateLocation(location: CLLocation) {
+        if waitingForLocation {
+            map.setAdjustedCenter(location.coordinate, animated: false)
+            waitingForLocation = false
+        }
+    }
+
+    func didFail() {
+        waitingForLocation = false
     }
 }
