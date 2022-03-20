@@ -134,7 +134,6 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
             previewCell.fillIn(photo)
         default:
             fatalError("invalid annotation type")
-            break
         }
         return cell
     }
@@ -161,9 +160,8 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
             photoData = photo
         default:
             fatalError("invalid annotation type")
-            break
         }
-        let singleController = SinglePhotoController(
+        let singleController = PhotoDetailsController(
             cid: photoData.cid,
             detailsProvider: detailsProvider
         )

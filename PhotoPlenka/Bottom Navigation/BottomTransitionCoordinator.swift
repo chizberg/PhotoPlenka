@@ -36,7 +36,7 @@ final class BottomTransitionCoordinator: NSObject, UINavigationControllerDelegat
         willShow _: UIViewController,
         animated _: Bool
     ) {
-        guard navigationController.viewControllers.last as? SinglePhotoController != nil else {
+        guard navigationController.viewControllers.last as? PhotoDetailsController != nil else {
             observer?.didLeaveSinglePhoto()
             return
         }

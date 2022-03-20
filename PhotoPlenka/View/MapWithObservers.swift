@@ -92,7 +92,7 @@ final class MapWithObservers: MKMapView, MapPublisher {
         self.setCenter(adjust(coordinate), animated: animated)
     }
 
-    //получаем центр, обновляем offset, обновляем центр с новым offset
+    // получаем центр, обновляем offset, обновляем центр с новым offset
     func updateVerticalOffset(fraction: CGFloat) {
         let oldCenter = deAdjust(centerCoordinate)
         verticalOffsetFraction = fraction

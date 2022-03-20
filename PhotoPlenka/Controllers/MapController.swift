@@ -89,8 +89,8 @@ extension MapController: BottomSheetFactory {
     ) -> UIPresentationController {
         guard let navigationController = presentedViewController as? UINavigationController,
               let topController = navigationController.topViewController else {
-                  fatalError("Incorrect view controllers")
-              }
+            fatalError("Incorrect view controllers")
+        }
         let controller = BottomSheetPresentationController(
             fractions: [0.15, 0.5, 0.85],
             presentedViewController: presentedViewController,
@@ -279,14 +279,14 @@ extension MapController {
     }
 
     func showSinglePhotoDetails(photo: Photo) {
-        let singleController = SinglePhotoController(
+        let singleController = PhotoDetailsController(
             cid: photo.cid,
             detailsProvider: photoDetailsProvider
         )
         self.bottomNavigation.pushViewController(singleController, animated: true)
         let count = bottomNavigation.viewControllers.count
         if count > 1,
-           bottomNavigation.viewControllers[count - 2] as? SinglePhotoController != nil {
+           bottomNavigation.viewControllers[count - 2] as? PhotoDetailsController != nil {
             bottomNavigation.viewControllers[count - 2].removeFromParent()
         }
     }
