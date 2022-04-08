@@ -50,7 +50,7 @@ final class MapWithObservers: MKMapView, MapPublisher {
     // почему-то анимация не воспроизводится, если её перенести в MapController
     override func removeAnnotations(_ annotations: [MKAnnotation]) {
         let group = DispatchGroup()
-        for annotation in visibleAnnotations {
+        for annotation in annotations {
             guard let annotationView = view(for: annotation) else { continue }
             group.enter()
             DispatchQueue.main.async(group: group) {

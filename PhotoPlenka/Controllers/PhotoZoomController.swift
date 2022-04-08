@@ -26,9 +26,9 @@ final class PhotoZoomController: UIViewController {
 
     private let closeButton = RoundButton(type: .close)
     private let shareButton = RoundButton(type: .share)
-    private let imageView: ZoomableImageView = .init()
+    private let imageView: ZoomableImageView = ZoomableImageView()
 
-    init(image: UIImage) {
+    init(image: UIImage){
         self.image = image
         super.init(nibName: nil, bundle: nil)
     }
@@ -62,47 +62,32 @@ final class PhotoZoomController: UIViewController {
     }
 
     override var prefersStatusBarHidden: Bool {
-        true
+        return true
     }
 
-    private func applyConstraints() {
+    private func applyConstraints(){
         NSLayoutConstraint.activate([
             closeButton.widthAnchor.constraint(equalToConstant: Style.buttonSize.width),
             closeButton.heightAnchor.constraint(equalToConstant: Style.buttonSize.height),
-            closeButton.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: Style.sideInset
-            ),
-            closeButton.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -Style.sideInset
-            ),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Style.sideInset),
+            closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Style.sideInset)
         ])
 
         NSLayoutConstraint.activate([
             shareButton.widthAnchor.constraint(equalToConstant: Style.buttonSize.width),
             shareButton.heightAnchor.constraint(equalToConstant: Style.buttonSize.height),
-            shareButton.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: Style.sideInset
-            ),
-            shareButton.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: Style.sideInset
-            ),
+            shareButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Style.sideInset),
+            shareButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Style.sideInset)
         ])
     }
 
-    @objc private func close() {
+    @objc private func close(){
         self.dismiss(animated: true, completion: nil)
     }
 
-    @objc private func share() {
+    @objc private func share(){
         let imagesToShare = [image]
-        let shareSheet = UIActivityViewController(
-            activityItems: imagesToShare,
-            applicationActivities: nil
-        )
+        let shareSheet = UIActivityViewController(activityItems: imagesToShare, applicationActivities: nil)
         shareSheet.popoverPresentationController?.sourceView = shareButton
         present(shareSheet, animated: true, completion: nil)
     }

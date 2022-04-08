@@ -104,13 +104,14 @@ final class NearbyListController: UIViewController, ScrollableViewController {
 
 extension NearbyListController: MapObserver {
     func annotationsDidChange(annotations _: [MKAnnotation], visible: [MKAnnotation]) {
-        nearbyList.isHidden = visible.isEmpty
-        guard visible.count > Constants.countLimit else {
-            visibleAnnotations = visible
+        let photoAnnotations = visible.filter {!($0 is MKUserLocation)}
+        nearbyList.isHidden = photoAnnotations.isEmpty
+        guard photoAnnotations.count > Constants.countLimit else {
+            visibleAnnotations = photoAnnotations
             nearbyList.reloadData()
             return
         }
-        visibleAnnotations = Array(visible[..<Constants.countLimit])
+        visibleAnnotations = Array(photoAnnotations[..<Constants.countLimit])
         nearbyList.reloadData()
     }
 }
@@ -125,6 +126,8 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
         guard let previewCell = cell as? PreviewCell else { return cell }
         let annotation = visibleAnnotations[indexPath.row]
         switch annotation {
+        case is MKUserLocation:
+            break
         case let photo as Photo:
             previewCell.fillIn(photo)
         case let cluster as Cluster:
