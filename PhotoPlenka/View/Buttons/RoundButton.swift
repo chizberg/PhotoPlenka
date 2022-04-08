@@ -7,13 +7,15 @@
 
 import UIKit
 
-final class RoundButton: SquishyButton {
-    enum RoundButtonType {
-        case close
-        case share
-        case location
-    }
+enum RoundButtonType {
+    case close
+    case share
+    case location
+    case back
+    case mode
+}
 
+final class RoundButton: SquishyButton {
     private enum Constants {
         static let tintColor: UIColor = .label
         static let blurStyle: UIBlurEffect.Style = .systemUltraThinMaterial
@@ -49,7 +51,7 @@ final class RoundButton: SquishyButton {
     }
 }
 
-extension RoundButton.RoundButtonType {
+extension RoundButtonType {
     var icon: UIImage {
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
         switch self {
@@ -59,6 +61,10 @@ extension RoundButton.RoundButtonType {
             return UIImage(systemName: "square.and.arrow.up", withConfiguration: config)!
         case .location:
             return UIImage(systemName: "location", withConfiguration: config)!
+        case .back:
+            return UIImage(systemName: "chevron.left", withConfiguration: config)!
+        case .mode:
+            return UIImage(systemName: "rectangle.grid.1x2", withConfiguration: config)!
         }
     }
 }
