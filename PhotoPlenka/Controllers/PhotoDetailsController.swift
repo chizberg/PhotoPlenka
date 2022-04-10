@@ -15,6 +15,7 @@ final class PhotoDetailsController: UIViewController {
         static let imageAnimationDuration: TimeInterval = 0.3
         static let loadingImageAspectRatio: CGFloat = 21 / 9
         static let closeButtonSize: CGSize = .init(width: 40, height: 40)
+        static let controllerCornerRadius: CGFloat = 29
     }
 
     private let factory = SinglePhotoFactory()
@@ -41,7 +42,6 @@ final class PhotoDetailsController: UIViewController {
 
     private lazy var bottomButtonStack = factory
         .stackFromButtons(buttons: [likeButton, downloadButton, sourceButton, compareButton])
-
     private lazy var closeButton = factory.makeCloseButton()
     private lazy var titleLabel = factory.makeLabel(fontType: .titleLabel)
     private lazy var yearLabel = factory.makeLabel(fontType: .yearLabel)
@@ -61,6 +61,7 @@ final class PhotoDetailsController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
 
     private lazy var imageAspectRatioConstraint = imageContainer.widthAnchor.constraint(
         equalTo: imageContainer.heightAnchor,
@@ -81,6 +82,9 @@ final class PhotoDetailsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = nil
+        view.clipsToBounds = true
+        view.layer.cornerRadius = Style.controllerCornerRadius
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         setLoading(true)
         addSubviews()
         activateConstraints()
@@ -99,6 +103,7 @@ final class PhotoDetailsController: UIViewController {
     override func viewDidLayoutSubviews() {
         loadingIndicator.center.x = view.bounds.width / 2
         loadingIndicator.center.y = view.bounds.height / 2
+        backgroundView.frame = view.bounds
     }
 
     private func addSubviews() {
@@ -118,6 +123,7 @@ final class PhotoDetailsController: UIViewController {
         view.addSubview(scrollView)
         view.addSubview(loadingIndicator)
         view.addSubview(closeButton)
+        view.insertSubview(backgroundView, at: 0)
     }
 
     private func activateConstraints() {

@@ -8,6 +8,12 @@
 import UIKit
 
 final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    private enum Style {
+        static let spacing: CGFloat = 100 //horizontal spacing between new and old screens
+        static let yOffset: CGFloat = 100 //'from' screen goes down by offset
+        static let fromTransform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+        static let duration: TimeInterval = 0.4
+    }
     private let operation: UINavigationController.Operation
     private var isPush: Bool { operation == .push } // push или pop
 
@@ -16,7 +22,7 @@ final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
     }
 
     func transitionDuration(using _: UIViewControllerContextTransitioning?) -> TimeInterval {
-        0.4
+        Style.duration
     }
 
     // анимация перехода: добавим сбоку from, также анимируем alpha
@@ -27,26 +33,25 @@ final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         let container = transitionContext.containerView
         container.addSubview(to)
         let visibleFrame = to.frame
-        let newToOriginX = isPush ? to.frame.width : -to.frame.width
-        let newFromOriginX = isPush ? -from.frame.width : from.frame.width
+        let newToOriginX = isPush ? to.frame.width + Style.spacing : -to.frame.width - Style.spacing
+        let newFromOriginX = isPush ? -from.frame.width - Style.spacing : from.frame.width + Style.spacing
         to.frame = CGRect(
-            origin: CGPoint(x: newToOriginX, y: to.frame.origin.y),
+            origin: CGPoint(x: newToOriginX, y: to.frame.origin.y + Style.yOffset),
             size: to.frame.size
         )
 
-        let animations = { [unowned self] in
+        let animations = {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                to.alpha = 1
-                if self.isPush { from.alpha = 0 }
+                to.transform = .identity
+                from.transform = Style.fromTransform
             }
 
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
                 to.frame = visibleFrame
                 from.frame = CGRect(
-                    origin: CGPoint(x: newFromOriginX, y: from.frame.origin.y),
+                    origin: CGPoint(x: newFromOriginX, y: from.frame.origin.y + Style.yOffset),
                     size: from.frame.size
                 )
-                if !self.isPush { from.alpha = 0 }
             }
         }
 

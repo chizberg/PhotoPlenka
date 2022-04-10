@@ -37,6 +37,7 @@ final class NearbyListController: UIViewController, ScrollableViewController {
         tableView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         return tableView
     }()
+    let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
 
     // data
     private var visibleAnnotations = [MKAnnotation]()
@@ -64,7 +65,15 @@ final class NearbyListController: UIViewController, ScrollableViewController {
         nearbyList.dataSource = self
         nearbyList.register(PreviewCell.self, forCellReuseIdentifier: Constants.cellID)
         view.addSubview(nearbyList)
+        view.insertSubview(backgroundView, at: 0)
+        view.clipsToBounds = true
+        view.layer.cornerRadius = Constants.controllerCornerRadius
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         applyConstraints()
+    }
+
+    override func viewDidLayoutSubviews() {
+        backgroundView.frame = view.bounds
     }
 
     private func applyConstraints() {
