@@ -93,10 +93,10 @@ final class MapWithObservers: MKMapView, MapPublisher {
     }
 
     // получаем центр, обновляем offset, обновляем центр с новым offset
-    func updateVerticalOffset(fraction: CGFloat) {
+    func updateVerticalOffset(fraction: CGFloat, animated: Bool = false) {
         let oldCenter = deAdjust(centerCoordinate)
         verticalOffsetFraction = fraction
-        setAdjustedCenter(oldCenter, animated: false)
+        setAdjustedCenter(oldCenter, animated: animated)
     }
 
     override func setRegion(_ region: MKCoordinateRegion, animated: Bool) {

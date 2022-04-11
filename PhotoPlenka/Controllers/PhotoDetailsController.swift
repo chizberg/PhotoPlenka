@@ -7,7 +7,15 @@
 
 import UIKit
 
-final class PhotoDetailsController: UIViewController {
+final class PhotoDetailsController: UIViewController, ScrollableViewController {
+    var header: UIView {
+        closeButton
+    }
+
+    var scrollView: UIScrollView {
+        scroll
+    }
+
     private enum Style {
         static let sideInset: CGFloat = 16
         static let bottomScrollPadding: CGFloat = 50
@@ -53,7 +61,7 @@ final class PhotoDetailsController: UIViewController {
     private lazy var properties = factory.makeHorizontalPropertiesStack()
     private lazy var details = factory.makeDetailsStack()
     private lazy var contentStack = factory.makeContentStack()
-    private lazy var scrollView = factory.makeScrollView()
+    private lazy var scroll = factory.makeScrollView()
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
     private lazy var imageView = factory.makeImageView()
     private let imageContainer: UIView = {
@@ -112,10 +120,10 @@ final class PhotoDetailsController: UIViewController {
         details.addArrangedSubview(properties)
         contentStack.addArrangedSubview(details)
         contentStack.addArrangedSubview(bottomButtonStack)
-        scrollView.addSubview(imageContainer)
-        scrollView.addSubview(imageView)
-        scrollView.addSubview(contentStack)
-        view.addSubview(scrollView)
+        scroll.addSubview(imageContainer)
+        scroll.addSubview(imageView)
+        scroll.addSubview(contentStack)
+        view.addSubview(scroll)
         view.addSubview(loadingIndicator)
         view.addSubview(closeButton)
     }
@@ -132,14 +140,14 @@ final class PhotoDetailsController: UIViewController {
         ])
 
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(
+            scroll.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor
             ),
-            scrollView.trailingAnchor.constraint(
+            scroll.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor
             ),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scroll.topAnchor.constraint(equalTo: view.topAnchor),
+            scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
         let topConstraint = imageView.topAnchor.constraint(equalTo: view.topAnchor)
@@ -160,19 +168,19 @@ final class PhotoDetailsController: UIViewController {
         ])
 
         NSLayoutConstraint.activate([
-            imageContainer.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            imageContainer.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            imageContainer.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            imageContainer.leadingAnchor.constraint(equalTo: scroll.leadingAnchor),
+            imageContainer.trailingAnchor.constraint(equalTo: scroll.trailingAnchor),
+            imageContainer.topAnchor.constraint(equalTo: scroll.topAnchor),
             imageContainer.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
 
         NSLayoutConstraint.activate([
             contentStack.leadingAnchor.constraint(
-                equalTo: scrollView.leadingAnchor,
+                equalTo: scroll.leadingAnchor,
                 constant: Style.sideInset
             ),
             contentStack.trailingAnchor.constraint(
-                equalTo: scrollView.trailingAnchor,
+                equalTo: scroll.trailingAnchor,
                 constant: -Style.sideInset
             ),
             contentStack.topAnchor.constraint(
@@ -180,7 +188,7 @@ final class PhotoDetailsController: UIViewController {
                 constant: Style.sideInset
             ),
             contentStack.bottomAnchor.constraint(
-                equalTo: scrollView.bottomAnchor,
+                equalTo: scroll.bottomAnchor,
                 constant: -Style.bottomScrollPadding
             ),
             contentStack.widthAnchor.constraint(
@@ -242,7 +250,7 @@ final class PhotoDetailsController: UIViewController {
     private func setLoading(_ isLoading: Bool) {
         isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
         UIView.animate(withDuration: Style.loadingAnimationDuration) { [unowned self] in
-            scrollView.isHidden = isLoading
+            scroll.isHidden = isLoading
             loadingIndicator.isHidden = !isLoading
         }
     }
