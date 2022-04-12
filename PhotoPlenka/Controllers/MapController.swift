@@ -45,6 +45,11 @@ final class MapController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    private let favouritesButton: RoundButton = {
+        let button = RoundButton(type: .favourites)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
 
     //bottom stuff
     private lazy var transitionDelegate = BottomSheetTransitionDelegate(bottomSheetFactory: self)
@@ -70,6 +75,7 @@ final class MapController: UIViewController {
         super.viewDidLoad()
         view.addSubview(map)
         view.addSubview(locationButton)
+        view.addSubview(favouritesButton)
         configureButtons()
         map.setRegion(Constants.defaultRegion, animated: false)
         map.delegate = self
@@ -138,15 +144,12 @@ extension MapController {
         region.center = coordinate
         map.setRegion(region, animated: animated)
     }
-
-    @objc func locationButtonTapped(){
-        centerUserLocation(animated: true)
-    }
 }
 
 //MARK: - view config funcs
 extension MapController {
     func configureButtons(){
+        //location button
         NSLayoutConstraint.activate([
             locationButton.heightAnchor.constraint(equalToConstant: Constants.buttonSize.height),
             locationButton.widthAnchor.constraint(equalToConstant: Constants.buttonSize.width),
@@ -154,8 +157,31 @@ extension MapController {
             locationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.sideInset)
         ])
         locationButton.addTarget(self, action: #selector(locationButtonTapped), for: .touchUpInside)
+
+        //favourites button
+        NSLayoutConstraint.activate([
+            favouritesButton.heightAnchor.constraint(equalToConstant: Constants.buttonSize.height),
+            favouritesButton.widthAnchor.constraint(equalToConstant: Constants.buttonSize.width),
+            favouritesButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.sideInset),
+            favouritesButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.sideInset)
+        ])
+        favouritesButton.addTarget(self, action: #selector(favsButtonTapped), for: .touchUpInside)
+    }
+
+    //MARK: button funcs
+    @objc func locationButtonTapped(){
+        centerUserLocation(animated: true)
+    }
+
+    @objc func favsButtonTapped(){
+        let favController = FavouritesListController()
+        favController.modalTransitionStyle = .coverVertical
+        favController.modalPresentationStyle = .pageSheet
+        bottomNavigation.present(favController, animated: true)
     }
 }
+
+
 
 //MARK: - BottomSheetFactory
 extension MapController: BottomSheetFactory {

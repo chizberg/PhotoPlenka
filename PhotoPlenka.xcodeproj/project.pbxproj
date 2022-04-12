@@ -68,6 +68,9 @@
 		DFE04623280019CE0005AB2D /* CompareContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE04622280019CE0005AB2D /* CompareContent.swift */; };
 		DFE0462528001A550005AB2D /* CameraControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE0462428001A550005AB2D /* CameraControls.swift */; };
 		DFE4A5A027DD602C007918F1 /* LocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE4A59F27DD602C007918F1 /* LocationProvider.swift */; };
+		DFED9876280566B90019235A /* PhotoPlenka.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DFED9874280566B90019235A /* PhotoPlenka.xcdatamodeld */; };
+		DFED9878280574410019235A /* FavouritesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFED9877280574410019235A /* FavouritesProvider.swift */; };
+		DFED987A28058BAC0019235A /* FavouritesListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFED987928058BAC0019235A /* FavouritesListController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,6 +139,9 @@
 		DFE04622280019CE0005AB2D /* CompareContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareContent.swift; sourceTree = "<group>"; };
 		DFE0462428001A550005AB2D /* CameraControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControls.swift; sourceTree = "<group>"; };
 		DFE4A59F27DD602C007918F1 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
+		DFED9875280566B90019235A /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
+		DFED9877280574410019235A /* FavouritesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesProvider.swift; sourceTree = "<group>"; };
+		DFED987928058BAC0019235A /* FavouritesListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesListController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +201,7 @@
 				DF0BDEFE27AACE38002CCF07 /* LaunchScreen.storyboard */,
 				DF0BDF0127AACE38002CCF07 /* Info.plist */,
 				DFE0461B2800166A0005AB2D /* Menlo.ttc */,
+				DFED9874280566B90019235A /* PhotoPlenka.xcdatamodeld */,
 			);
 			path = PhotoPlenka;
 			sourceTree = "<group>";
@@ -204,6 +211,7 @@
 			children = (
 				DF0BDEF727AACE33002CCF07 /* MapController.swift */,
 				DF37377F27BA82F000DAB3CC /* NearbyListController.swift */,
+				DFED987928058BAC0019235A /* FavouritesListController.swift */,
 				DF6A4F6027C597D400BBFE69 /* PhotoDetailsController.swift */,
 				DF7C3F4E27DBFEFD00345074 /* PhotoZoomController.swift */,
 				DFE046202800194F0005AB2D /* CompareCameraController.swift */,
@@ -227,6 +235,7 @@
 				DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */,
 				DF6A4F5627C52F1200BBFE69 /* PhotoDetailsProvider.swift */,
 				DFE4A59F27DD602C007918F1 /* LocationProvider.swift */,
+				DFED9877280574410019235A /* FavouritesProvider.swift */,
 			);
 			path = "Data Providers";
 			sourceTree = "<group>";
@@ -455,6 +464,7 @@
 				DF9AF53E27B092C80047149F /* YearSelector.swift in Sources */,
 				DF6A4F5727C52F1200BBFE69 /* PhotoDetailsProvider.swift in Sources */,
 				DFE04623280019CE0005AB2D /* CompareContent.swift in Sources */,
+				DFED9876280566B90019235A /* PhotoPlenka.xcdatamodeld in Sources */,
 				DF6A4F5B27C5972C00BBFE69 /* LikeButton.swift in Sources */,
 				DFCF0EF827AAE29D00A0D10B /* Direction.swift in Sources */,
 				DFCF0EF527AAE16600A0D10B /* Photo.swift in Sources */,
@@ -468,6 +478,7 @@
 				DFCF0EED27AAD5EA00A0D10B /* Request.swift in Sources */,
 				DF9AF54027B092E70047149F /* ThumbView.swift in Sources */,
 				DFE0461F280017DB0005AB2D /* CameraViewFactory.swift in Sources */,
+				DFED987A28058BAC0019235A /* FavouritesListController.swift in Sources */,
 				DF7C3F5327DC07A700345074 /* ZoomableImageView.swift in Sources */,
 				DFE04616280014540005AB2D /* CameraPreview.swift in Sources */,
 				DF37378327BA8AB800DAB3CC /* MapObserver.swift in Sources */,
@@ -491,6 +502,7 @@
 				DFD7A21D27B86ED30064A0F4 /* ImageQuality.swift in Sources */,
 				DF58EC9B27C6E5EC00793CAE /* BottomTransitionAnimator.swift in Sources */,
 				DFE0461A280015430005AB2D /* CameraTakeButton.swift in Sources */,
+				DFED9878280574410019235A /* FavouritesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,10 +651,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 8DB7C77NK9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoPlenka/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Фотоплёнка";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Создание совместной фотографии";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Так мы сможем показывать то, что рядом с вами";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -653,7 +668,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -671,10 +686,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 8DB7C77NK9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoPlenka/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Фотоплёнка";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Создание совместной фотографии";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Так мы сможем показывать то, что рядом с вами";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -685,7 +703,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -717,6 +735,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DFED9874280566B90019235A /* PhotoPlenka.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DFED9875280566B90019235A /* CoreDataModel.xcdatamodel */,
+			);
+			currentVersion = DFED9875280566B90019235A /* CoreDataModel.xcdatamodel */;
+			path = PhotoPlenka.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = DF0BDEE827AACE32002CCF07 /* Project object */;
 }

@@ -31,6 +31,7 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
     private var cid: Int
     private let detailsProvider: PhotoDetailsProviderProtocol
 
+    //MARK: buttons
     private let likeButton = LikeButton()
     private let shareButton = ActionButton(
         iconSystemName: "square.and.arrow.up",
@@ -67,8 +68,8 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
     private lazy var details = factory.makeDetailsStack()
     private lazy var contentStack = factory.makeContentStack()
     private lazy var scroll = factory.makeScrollView()
-    private let loadingIndicator = UIActivityIndicatorView(style: .large)
     private lazy var imageView = factory.makeImageView()
+    private let loadingIndicator = UIActivityIndicatorView(style: .large)
     private let imageContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -81,6 +82,7 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         multiplier: Style.loadingImageAspectRatio
     )
 
+    //MARK: init and ovverides
     init(cid: Int, detailsProvider: PhotoDetailsProviderProtocol) {
         self.cid = cid
         self.detailsProvider = detailsProvider
@@ -102,6 +104,7 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         addSubviews()
         activateConstraints()
         addButtonTargets()
+        likeButton.isLiked = FavouritesProvider.shared.isFav(cid: cid)
         detailsProvider.loadDetails(cid: cid) { result in
             switch result {
             case let .success(photo):
@@ -119,6 +122,7 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         backgroundView.frame = view.bounds
     }
 
+    //MARK: addSubviews()
     private func addSubviews() {
         details.addArrangedSubview(titleLabel)
         details.addArrangedSubview(yearLabel)
@@ -139,6 +143,7 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         view.insertSubview(backgroundView, at: 0)
     }
 
+    //MARK: activateConstraints()
     private func activateConstraints() {
         NSLayoutConstraint.activate([
             closeButton.widthAnchor.constraint(equalToConstant: Style.closeButtonSize.width),
@@ -211,6 +216,34 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         imageAspectRatioConstraint.isActive = true
     }
 
+    //MARK: setLoading()
+    private func setLoading(_ isLoading: Bool) {
+        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+        UIView.animate(withDuration: Style.loadingAnimationDuration) { [unowned self] in
+            scrollView.isHidden = isLoading
+            loadingIndicator.isHidden = !isLoading
+        }
+    }
+
+    //MARK: fillIn()
+    private func fillIn(photo: DetailedPhoto) {
+        self.photoData = photo
+        fillYear(year1: photo.year, year2: photo.year2)
+        titleLabel.text = photo.name
+        descriptionLabel.attributedText = photo.description
+        authorLabel.text = photo.author
+        uploadedByLabel.text = photo.username
+        loadImage(file: photo.file)
+    }
+
+    private func fillYear(year1: Int, year2: Int) {
+        if year1 == year2 {
+            yearLabel.text = "\(year1) г."
+        } else { yearLabel.text = "\(year1)-\(year2) гг." }
+        yearLabel.textColor = UIColor.from(year: year1)
+    }
+
+    //MARK: - image things
     private func loadImage(file: String) {
         ImageFetcher.shared
             .fetchHighestQuality(filePath: file, quality: .high) { [weak self] result in
@@ -253,6 +286,7 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         }
     }
 
+    //MARK: - button targets
     private func addButtonTargets() {
         closeButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         likeButton.addTarget(self, action: #selector(like), for: .touchUpInside)
@@ -262,37 +296,18 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         mapsButton.addTarget(self, action: #selector(openMap), for: .touchUpInside)
     }
 
-    private func setLoading(_ isLoading: Bool) {
-        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
-        UIView.animate(withDuration: Style.loadingAnimationDuration) { [unowned self] in
-            scroll.isHidden = isLoading
-            loadingIndicator.isHidden = !isLoading
-        }
-    }
-
-    private func fillIn(photo: DetailedPhoto) {
-        self.photoData = photo
-        fillYear(year1: photo.year, year2: photo.year2)
-        titleLabel.text = photo.name
-        descriptionLabel.attributedText = photo.description
-        authorLabel.text = photo.author
-        uploadedByLabel.text = photo.username
-        loadImage(file: photo.file)
-    }
-
-    private func fillYear(year1: Int, year2: Int) {
-        if year1 == year2 {
-            yearLabel.text = "\(year1) г."
-        } else { yearLabel.text = "\(year1)-\(year2) гг." }
-        yearLabel.textColor = UIColor.from(year: year1)
-    }
-
     @objc private func back() {
-        navigationController?.popViewController(animated: true)
+        guard let navController = navigationController else {
+            dismiss(animated: true)
+            return
+        }
+        navController.popViewController(animated: true)
     }
 
     @objc private func like() {
+        guard let data = photoData else { return }
         likeButton.isLiked = !likeButton.isLiked
+        FavouritesProvider.shared.set(photo: data.photo, isFav: likeButton.isLiked)
     }
 
     @objc private func share(){

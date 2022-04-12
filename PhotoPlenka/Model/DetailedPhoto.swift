@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CoreLocation
+import MapKit
 
 struct DetailedPhoto {
     let cid: Int
@@ -66,5 +66,16 @@ extension DetailedPhoto {
 
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: geo[0], longitude: geo[1])
+
+    var photo: Photo {
+        Photo(
+            coordinate: coordinate,
+            cid: cid,
+            name: name,
+            dir: dir,
+            year: year,
+            year2: year2,
+            file: file
+        )
     }
 }
