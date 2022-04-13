@@ -8,12 +8,7 @@
 import UIKit
 
 final class BottomNavigationController: UINavigationController {
-    private enum Constants {
-        static let cornerRadius: CGFloat = 29
-        static let maskedCorners: CACornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-    }
 
-    let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     let coordinatorHelper = BottomTransitionCoordinator()
 
     weak var observer: NavigationControllerObserver? {
@@ -24,15 +19,7 @@ final class BottomNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         isNavigationBarHidden = true
-        view.layer.cornerRadius = Constants.cornerRadius
-        view.layer.maskedCorners = Constants.maskedCorners
-        view.clipsToBounds = true
-        view.insertSubview(backgroundView, at: 0)
         setCustomTransitioning()
-    }
-
-    override func viewDidLayoutSubviews() {
-        backgroundView.frame = view.bounds
     }
 }
 
