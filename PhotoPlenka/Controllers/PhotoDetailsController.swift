@@ -17,7 +17,7 @@ final class PhotoDetailsController: UIViewController {
         static let closeButtonSize: CGSize = .init(width: 40, height: 40)
     }
 
-    private let factory = SinglePhotoFactory()
+    private let factory = PhotoDetailsFactory()
     private var photoData: DetailedPhoto?
     private var cid: Int
     private let detailsProvider: PhotoDetailsProviderProtocol
@@ -237,6 +237,7 @@ final class PhotoDetailsController: UIViewController {
     private func addButtonTargets() {
         closeButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         likeButton.addTarget(self, action: #selector(like), for: .touchUpInside)
+        compareButton.addTarget(self, action: #selector(compare), for: .touchUpInside)
     }
 
     private func setLoading(_ isLoading: Bool) {
@@ -270,5 +271,31 @@ final class PhotoDetailsController: UIViewController {
 
     @objc private func like() {
         likeButton.isLiked = !likeButton.isLiked
+    }
+
+    @objc private func compare() {
+        guard let photoData = photoData else { return }
+        ImageFetcher.shared.fetchHighestQuality(filePath: photoData.file, quality: .high, completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case let .success(image):
+                let compareController = CameraCompareController(
+                    oldImage: image,
+                    year1: photoData.year,
+                    year2: self.nowYear()
+                )
+                compareController.modalTransitionStyle = .coverVertical
+                compareController.modalPresentationStyle = .fullScreen
+                self.present(compareController, animated: true)
+            case let .failure(error):
+                print(error.localizedDescription)
+            }
+        })
+    }
+
+    private func nowYear() -> Int {
+        let now = Date()
+        let calendar = Calendar.current
+        return calendar.component(.year, from: now)
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SinglePhotoFactory {
+final class PhotoDetailsFactory {
     private enum Style {
         static let buttonVerticalSpacing: CGFloat = 10
         static let buttonHorizontalSpacing: CGFloat = buttonVerticalSpacing
@@ -159,7 +159,7 @@ final class SinglePhotoFactory {
     }
 }
 
-extension SinglePhotoFactory.FontType {
+extension PhotoDetailsFactory.FontType {
     var font: UIFont {
         switch self {
         case .titleLabel: return UIFont.systemFont(ofSize: 25, weight: .bold)
@@ -171,7 +171,7 @@ extension SinglePhotoFactory.FontType {
     }
 }
 
-extension SinglePhotoFactory.HorizontalPropertyType {
+extension PhotoDetailsFactory.HorizontalPropertyType {
     var labelText: String {
         switch self {
         case .author: return "Автор".uppercased()
