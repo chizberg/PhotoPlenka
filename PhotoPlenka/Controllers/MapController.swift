@@ -52,8 +52,10 @@ final class MapController: UIViewController {
         mapController: self,
         detailsProvider: photoDetailsProvider
     )
-    private lazy var bottomNavigation =
-        BottomNavigationController(rootViewController: nearbyListController)
+    private lazy var bottomNavigator = BottomNavigator(
+        initialViewController: nearbyListController,
+        presenting: self
+    )
 
 
     //other
@@ -90,16 +92,13 @@ final class MapController: UIViewController {
         map.addObserver(nearbyListController)
         locationProvider.start()
         locationProvider.delegate = self
+        bottomNavigator.navigationDelegate = self
+        bottomNavigator.heightObserver = self
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        bottomNavigation.isNavigationBarHidden = true
-        bottomNavigation.observer = self
-        let bottomSheetVC = bottomNavigation
-        bottomSheetVC.modalPresentationStyle = .custom
-        bottomSheetVC.transitioningDelegate = transitionDelegate
-        present(bottomSheetVC, animated: false)
+        present(bottomNavigator.first, animated: false)
     }
 
     override func viewDidLayoutSubviews() {
@@ -163,15 +162,12 @@ extension MapController: BottomSheetFactory {
         presentedViewController: UIViewController,
         presenting: UIViewController?
     ) -> UIPresentationController {
-        guard let navigationController = presentedViewController as? UINavigationController,
-              let topController = navigationController.topViewController else {
-            fatalError("Incorrect view controllers")
-        }
         let controller = BottomSheetPresentationController(
             fractions: [0.15, 0.65, 0.85],
             presentedViewController: presentedViewController,
             presenting: presenting,
-            contentViewController: topController
+            contentViewController: nearbyListController,
+            parentController: self
         )
         bottomSheetDelegate = controller
         controller.heightObserver = self
@@ -216,11 +212,11 @@ extension MapController: BottomSheetHeightObserver {
     }
 }
 
-//MARK: - Nav controller observer
-extension MapController: NavigationControllerObserver {
-    func didLeaveSinglePhoto() {
-        map.selectedAnnotations.forEach { map.deselectAnnotation($0, animated: true) }
-    }
+//MARK: - Bottom Navigator Delegate
+extension MapController: BottomNavigatorDelegate {
+    func didPush() {}
+
+    func didPop() {}
 }
 
 //MARK: MKMapView delegate
@@ -359,12 +355,7 @@ extension MapController {
             cid: photo.cid,
             detailsProvider: photoDetailsProvider
         )
-        self.bottomNavigation.pushViewController(singleController, animated: true)
-        let count = bottomNavigation.viewControllers.count
-        if count > 1,
-           bottomNavigation.viewControllers[count - 2] as? PhotoDetailsController != nil {
-            bottomNavigation.viewControllers[count - 2].removeFromParent()
-        }
+        bottomNavigator.present(singleController, animated: true)
     }
 }
 

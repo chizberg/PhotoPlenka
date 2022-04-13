@@ -41,6 +41,9 @@ final class BottomSheetPresentationController: UIPresentationController,
     private var scrollViewOffset: CGFloat = 0
     private unowned var contentViewController: UIViewController
 
+    //is used to check bounds of mapController, not presentingController
+    private unowned var fullScreenController: UIViewController
+
     func gestureRecognizer(
         _: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
@@ -53,14 +56,14 @@ final class BottomSheetPresentationController: UIPresentationController,
     }
 
     override var frameOfPresentedViewInContainerView: CGRect {
-        guard let containerViewBounds = presentingViewController.view?.bounds,
+        guard let containerViewBounds = fullScreenController.view?.bounds,
               let firstFraction = fractions.first else {
             assertionFailure("Presenting view must exist")
             return .zero
         }
 
-        let y = calculateYAxis(fraction: firstFraction)
-        let height = calculateHeightBy(yAxisValue: y)
+        let height = calculateHeightBy(fraction: firstFraction)
+        let y = calculateYAxis(height: height)
 
         return .init(
             x: 0,
@@ -74,13 +77,15 @@ final class BottomSheetPresentationController: UIPresentationController,
         fractions: [Double],
         presentedViewController: UIViewController,
         presenting presentingViewController: UIViewController?,
-        contentViewController: UIViewController
+        contentViewController: UIViewController,
+        parentController: UIViewController
     ) {
         guard !fractions.isEmpty else {
-            fatalError("Must have at leat one element")
+            fatalError("Must have at least one element")
         }
         self.fractions = fractions.sorted(by: <)
         self.contentViewController = contentViewController
+        self.fullScreenController = parentController
         super.init(
             presentedViewController: presentedViewController,
             presenting: presentingViewController
@@ -138,13 +143,15 @@ extension BottomSheetPresentationController {
 // MARK: - Helpers
 
 extension BottomSheetPresentationController {
-    private func calculateYAxis(fraction: Double) -> Double {
-        let presentingBounds = self.presentingViewController.view.bounds
-        return presentingBounds.height - presentingBounds.height * fraction
+    private func calculateYAxis(height: Double) -> Double {
+        let presentingBounds = presentingViewController.view.bounds
+        return presentingBounds.height - height
     }
 
-    private func calculateHeightBy(yAxisValue: Double) -> Double {
-        presentingViewController.view.bounds.height - yAxisValue
+    private func calculateHeightBy(fraction: Double) -> Double {
+        let fullScreen = fullScreenController.view.bounds
+        return fullScreen.height * fraction
+//        fullScreenController.view.bounds.height - yAxisValue
     }
 }
 
@@ -159,7 +166,7 @@ extension BottomSheetPresentationController {
             scrollView?.multicastingDelegate.addDelegate(self)
             scrollView?.isScrollEnabled = false
         }
-        containerView?.frame = frameOfPresentedViewInContainerView
+        animatePresent(toFraction: fractions[0], duration: 0.4)
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
@@ -170,6 +177,7 @@ extension BottomSheetPresentationController {
     // These methods are not used now, but will be used in the future
     override func dismissalTransitionWillBegin() {
         super.dismissalTransitionWillBegin()
+        animateDismiss(duration: 5)
     }
 
     override func dismissalTransitionDidEnd(_ completed: Bool) {
@@ -218,7 +226,7 @@ extension BottomSheetPresentationController {
     private func panEndedHandler(_ gesture: UIPanGestureRecognizer) {
         // Calculate how much spaces container view takes
         let progressValue = 1 -
-            (containerView!.frame.minY / presentingViewController.view.bounds.height)
+            (containerView!.frame.minY / fullScreenController.view.bounds.height)
         var closestFraction = findClosestValue(progressValue, from: fractions)
 
         updateClosestFractionIfNeeded(
@@ -232,9 +240,9 @@ extension BottomSheetPresentationController {
     }
 
     private func animateView(toFraction value: CGFloat, duration: CGFloat) {
-        let presentingBounds = presentingViewController.view.bounds
-        let targetY = calculateYAxis(fraction: value)
-        let targetHeight = calculateHeightBy(yAxisValue: targetY)
+        let presentingBounds = fullScreenController.view.bounds
+        let targetHeight = calculateHeightBy(fraction: value)
+        let targetY = calculateYAxis(height: targetHeight)
         heightObserver?.heightWillChange(newHeight: targetHeight, in: duration)
 
         UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut) {
@@ -247,6 +255,34 @@ extension BottomSheetPresentationController {
             self.containerView?.layoutIfNeeded()
         }
     }
+
+    private func animatePresent(toFraction value: CGFloat, duration: CGFloat) {
+        let presentingBounds = fullScreenController.view.bounds
+        let targetHeight = calculateHeightBy(fraction: value)
+        let targetY = calculateYAxis(height: targetHeight)
+
+        self.containerView?.frame = CGRect(
+            x: 0,
+            y: presentingBounds.height,
+            width: presentingBounds.width,
+            height: 0
+        )
+
+        UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut) {
+            self.containerView?.frame = CGRect(
+                x: 0,
+                y: targetY,
+                width: presentingBounds.width,
+                height: targetHeight
+            )
+            self.containerView?.layoutIfNeeded()
+        }
+    }
+
+    private func animateDismiss(duration: CGFloat) {
+        heightShouldBeAt(fraction: 0, animated: true)
+    }
+
 
     private func updateModeIfNeeded(currentFraction: CGFloat, fractions: [Double]) {
         mode = currentFraction == fractions.last! ? .opened : .collapsed

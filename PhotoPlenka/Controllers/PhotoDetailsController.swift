@@ -7,15 +7,7 @@
 
 import UIKit
 
-final class PhotoDetailsController: UIViewController, ScrollableViewController {
-    var header: UIView {
-        closeButton
-    }
-
-    var scrollView: UIScrollView {
-        scroll
-    }
-
+final class PhotoDetailsController: UIViewController, ScrollableViewController, BottomNavigatable {
     private enum Style {
         static let sideInset: CGFloat = 16
         static let bottomScrollPadding: CGFloat = 50
@@ -25,6 +17,18 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         static let closeButtonSize: CGSize = .init(width: 40, height: 40)
         static let controllerCornerRadius: CGFloat = 29
     }
+
+    //MARK: ScrollableViewController
+    var header: UIView {
+        closeButton
+    }
+
+    var scrollView: UIScrollView {
+        scroll
+    }
+
+    //MARK: BottomNavigatable
+    weak var navigator: BottomNavigatorProtocol?
 
     private let factory = PhotoDetailsFactory()
     private var photoData: DetailedPhoto?
@@ -280,7 +284,8 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
     }
 
     @objc private func back() {
-        navigationController?.popViewController(animated: true)
+//        navigationController?.popViewController(animated: true)
+        navigator?.dismiss(self, animated: true)
     }
 
     @objc private func like() {

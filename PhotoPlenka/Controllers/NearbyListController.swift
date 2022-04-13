@@ -8,15 +8,7 @@
 import MapKit
 import UIKit
 
-final class NearbyListController: UIViewController, ScrollableViewController {
-    var header: UIView {
-        yearSelect
-    }
-
-    var scrollView: UIScrollView {
-        nearbyList
-    }
-
+final class NearbyListController: UIViewController, ScrollableViewController, BottomNavigatable {
     private enum Constants {
         static let sideInset: CGFloat = 16
         static let controllerCornerRadius: CGFloat = 29
@@ -25,6 +17,18 @@ final class NearbyListController: UIViewController, ScrollableViewController {
         static let listTitle = "Интересное рядом"
         static let countLimit: Int = 10
     }
+
+    //MARK: scrollableViewController
+    var header: UIView {
+        yearSelect
+    }
+
+    var scrollView: UIScrollView {
+        nearbyList
+    }
+
+    //MARK: bottomNavigatable
+    weak var navigator: BottomNavigatorProtocol?
 
     // views
     private let yearSelect = YearSelector()
@@ -173,10 +177,11 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
         default:
             fatalError("invalid annotation type")
         }
-        let singleController = PhotoDetailsController(
+        let detailsController = PhotoDetailsController(
             cid: photoData.cid,
             detailsProvider: detailsProvider
         )
-        navigationController?.pushViewController(singleController, animated: true)
+        navigator?.present(detailsController, animated: true)
+//        navigationController?.pushViewController(singleController, animated: true)
     }
 }
