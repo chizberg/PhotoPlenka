@@ -10,6 +10,7 @@ import UIKit
 
 protocol BottomSheetHeightObserver: AnyObject {
     func heightDidChange(newHeight: CGFloat)
+    func heightWillChange(newHeight: CGFloat, in duration: Double)
 }
 
 protocol BottomSheetDelegate: AnyObject {
@@ -38,7 +39,7 @@ final class BottomSheetPresentationController: UIPresentationController,
     private var scrollPanGesture: UIPanGestureRecognizer!
     private var headerPanGesture: UIPanGestureRecognizer!
     private var scrollViewOffset: CGFloat = 0
-    private unowned let contentViewController: UIViewController
+    private unowned var contentViewController: UIViewController
 
     func gestureRecognizer(
         _: UIGestureRecognizer,
@@ -227,15 +228,16 @@ extension BottomSheetPresentationController {
         )
         updateModeIfNeeded(currentFraction: closestFraction, fractions: fractions)
         enableScrollIfNeeded(mode: mode)
-        animateView(toFraction: closestFraction, duration: 0.2)
+        animateView(toFraction: closestFraction, duration: 0.35)
     }
 
     private func animateView(toFraction value: CGFloat, duration: CGFloat) {
         let presentingBounds = presentingViewController.view.bounds
         let targetY = calculateYAxis(fraction: value)
         let targetHeight = calculateHeightBy(yAxisValue: targetY)
+        heightObserver?.heightWillChange(newHeight: targetHeight, in: duration)
 
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut) {
             self.containerView?.frame = CGRect(
                 x: 0,
                 y: targetY,
@@ -243,8 +245,7 @@ extension BottomSheetPresentationController {
                 height: targetHeight
             )
             self.containerView?.layoutIfNeeded()
-
-        })
+        }
     }
 
     private func updateModeIfNeeded(currentFraction: CGFloat, fractions: [Double]) {

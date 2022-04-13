@@ -25,6 +25,7 @@ final class MapController: UIViewController {
 
         static let sideInset: CGFloat = 16
         static let buttonSize: CGSize = .init(width: 40, height: 40)
+        static let mapDelay: Double = 0.15
     }
 
     //data
@@ -34,6 +35,7 @@ final class MapController: UIViewController {
     private lazy var annotationProvider: AnnotationProviderProtocol =
         AnnotationProvider(networkService: networkService)
     private let locationProvider = LocationProvider()
+    private var timer = Timer() // is used for request cancellation
 
     //views
     private let map = MapWithObservers()
@@ -166,7 +168,7 @@ extension MapController: BottomSheetFactory {
             fatalError("Incorrect view controllers")
         }
         let controller = BottomSheetPresentationController(
-            fractions: [0.15, 0.5, 0.85],
+            fractions: [0.15, 0.65, 0.85],
             presentedViewController: presentedViewController,
             presenting: presenting,
             contentViewController: topController
@@ -183,15 +185,34 @@ extension MapController: BottomSheetHeightObserver {
         let safeHeight = view.bounds.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom
         let fraction = newHeight / safeHeight
         map.updateVerticalOffset(fraction: fraction)
+        cancelAllUpdateRequests()
+    }
 
-        // отменяем запросы подгрузки новых изображений
-        // это нужно для того, чтобы список фотографий не перезагружался при его открытии
-        // а запросы отправляются потому что регион карты меняется
+    func heightWillChange(newHeight: CGFloat, in duration: Double) {
+        let safeHeight = view.bounds.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom
+        let fraction = newHeight / safeHeight
+        map.updateVerticalOffset(fraction: fraction, animated: true)
+        cancelAllUpdateRequests(for: duration)
+    }
+
+
+    // отменяем запросы подгрузки новых изображений
+    // это нужно для того, чтобы список фотографий не перезагружался при его открытии
+    // а запросы отправляются потому что регион карты меняется
+    private func cancelAllUpdateRequests(){
         NSObject.cancelPreviousPerformRequests(
             withTarget: self,
             selector: #selector(loadNewAnnotations),
             object: nil
         )
+    }
+
+    private func cancelAllUpdateRequests(for duration: TimeInterval){
+        let start = Date()
+        timer = Timer.scheduledTimer(withTimeInterval: Constants.mapDelay/2, repeats: true, block: { [weak self] _ in
+            self?.cancelAllUpdateRequests()
+            if start.distance(to: Date()) > duration { self?.timer.invalidate() }
+        })
     }
 }
 
@@ -230,11 +251,7 @@ extension MapController: MKMapViewDelegate {
     // trying to load it with delay, but it would be better done with operations, i guess
     // still better than nothing
     func mapViewDidChangeVisibleRegion(_: MKMapView) {
-        NSObject.cancelPreviousPerformRequests(
-            withTarget: self,
-            selector: #selector(loadNewAnnotations),
-            object: nil
-        )
+        cancelAllUpdateRequests()
         self.perform(#selector(loadNewAnnotations), with: nil, afterDelay: 0.15)
     }
 
@@ -295,7 +312,7 @@ extension MapController: YearSelectorDelegate {
             selector: #selector(clearAndLoadNewAnnotations),
             object: nil
         )
-        self.perform(#selector(clearAndLoadNewAnnotations), with: nil, afterDelay: 0.15)
+        self.perform(#selector(clearAndLoadNewAnnotations), with: nil, afterDelay: Constants.mapDelay)
     }
 }
 
