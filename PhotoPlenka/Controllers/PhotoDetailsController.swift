@@ -297,11 +297,14 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
     }
 
     @objc private func back() {
-        guard let navController = navigationController else {
-            dismiss(animated: true)
+        if let navController = navigationController {
+            navController.popViewController(animated: true)
             return
         }
-        navController.popViewController(animated: true)
+        if let favouritesList = presentingViewController as? FavouritesListController {
+            favouritesList.reloadData()
+        }
+        dismiss(animated: true)
     }
 
     @objc private func like() {

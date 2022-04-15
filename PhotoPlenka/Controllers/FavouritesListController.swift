@@ -29,12 +29,20 @@ final class FavouritesListController: UIViewController {
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.clipsToBounds = false
         return tableView
     }()
-    private let closeButton: RoundButton = {
-        let button = RoundButton(type: .close)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    // I don't like the way this bar looks
+    // I should probably make my own one
+    private lazy var navBar: UINavigationBar = {
+        let bar = UINavigationBar(frame: .zero)
+        bar.isTranslucent = true
+        bar.translatesAutoresizingMaskIntoConstraints = false
+        let topItem = UINavigationItem(title: Constants.listTitle)
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.closeButtonTapped))
+        topItem.rightBarButtonItem = cancelItem
+        bar.setItems([topItem], animated: true)
+        return bar
     }()
 
     init(){
@@ -55,29 +63,32 @@ final class FavouritesListController: UIViewController {
         view.clipsToBounds = true
         view.backgroundColor = nil
         view.addSubview(tableView)
-        view.addSubview(closeButton)
+        view.addSubview(navBar)
         view.insertSubview(backgroundView, at: 0)
         applyConstraints()
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
 
     override func viewDidLayoutSubviews() {
         backgroundView.frame = view.bounds
     }
 
+    func reloadData(){
+        favourites = FavouritesProvider.shared.favourites ?? []
+        tableView.reloadData()
+    }
+
     private func applyConstraints(){
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.sideInset),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.sideInset),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            navBar.topAnchor.constraint(equalTo: view.topAnchor),
+            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         NSLayoutConstraint.activate([
-            closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.sideInset),
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: Constants.sideInset),
-            closeButton.heightAnchor.constraint(equalToConstant: Constants.buttonSize.height),
-            closeButton.widthAnchor.constraint(equalToConstant: Constants.buttonSize.width)
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.sideInset),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.sideInset),
+            tableView.topAnchor.constraint(equalTo: navBar.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 

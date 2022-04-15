@@ -66,6 +66,7 @@ extension DetailedPhoto {
 
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: geo[0], longitude: geo[1])
+    }
 
     var photo: Photo {
         Photo(

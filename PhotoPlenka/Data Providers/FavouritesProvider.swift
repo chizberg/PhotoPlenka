@@ -50,7 +50,7 @@ final class FavouritesProvider: FavouritesProviderProtocol {
 
         //removing from favs
         let request = CDPhoto.fetchRequest()
-        let predicate = NSPredicate(format: "cid == %@", photo.cid)
+        let predicate = NSPredicate(format: "cid == %ld", Int32(photo.cid))
         request.predicate = predicate
         guard let results = try? context.fetch(request) else { return }
         for result in results {
