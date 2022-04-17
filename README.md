@@ -1,6 +1,7 @@
 # Camera Roll (Фотоплёнка)
-An iOS app that works with PastVU API
-Uses UIKit and MapKit
+An iOS app that works with PastVU API.
+
+It uses UIKit and MapKit
 
 ### Features
 - Favourites list
