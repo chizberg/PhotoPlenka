@@ -96,12 +96,13 @@ final class MapController: UIViewController {
         map.addObserver(nearbyListController)
         locationProvider.start()
         locationProvider.delegate = self
+
+        bottomNavigation.addObserver(self)
+        bottomNavigation.isNavigationBarHidden = true
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        bottomNavigation.isNavigationBarHidden = true
-        bottomNavigation.observer = self
         let bottomSheetVC = bottomNavigation
         bottomSheetVC.modalPresentationStyle = .custom
         bottomSheetVC.transitioningDelegate = transitionDelegate
@@ -199,6 +200,7 @@ extension MapController: BottomSheetFactory {
             presenting: presenting,
             contentViewController: topController
         )
+        bottomNavigation.addObserver(controller)
         bottomSheetDelegate = controller
         controller.heightObserver = self
         return controller
@@ -244,8 +246,16 @@ extension MapController: BottomSheetHeightObserver {
 
 //MARK: - Nav controller observer
 extension MapController: NavigationControllerObserver {
-    func didLeaveSinglePhoto() {
-        map.selectedAnnotations.forEach { map.deselectAnnotation($0, animated: true) }
+//    func didLeaveSinglePhoto() {
+//        map.selectedAnnotations.forEach { map.deselectAnnotation($0, animated: true) }
+//    }
+    func didPush(vc: UIViewController) {}
+    func didPop(newLast: UIViewController) {}
+    func willPop(vc: UIViewController) {
+        guard vc is PhotoDetailsController else { return }
+        map.selectedAnnotations.forEach {
+            map.deselectAnnotation($0, animated: true)
+        }
     }
 }
 

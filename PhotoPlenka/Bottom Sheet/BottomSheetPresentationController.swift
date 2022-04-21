@@ -20,6 +20,10 @@ protocol BottomSheetDelegate: AnyObject {
 protocol ScrollableViewController {
     var scrollView: UIScrollView { get }
     var header: UIView { get }
+
+    //storing gesture recognizers
+    var scrollPan: UIGestureRecognizer? { get set }
+    var headerPan: UIGestureRecognizer? { get set }
 }
 
 final class BottomSheetPresentationController: UIPresentationController,
@@ -36,8 +40,20 @@ final class BottomSheetPresentationController: UIPresentationController,
     private weak var scrollView: UIScrollView?
     private weak var headerView: UIView?
     private var mode: Mode = .collapsed
-    private var scrollPanGesture: UIPanGestureRecognizer!
-    private var headerPanGesture: UIPanGestureRecognizer!
+    private var scrollPanGesture: UIPanGestureRecognizer {
+        let pan = UIPanGestureRecognizer(
+            target: self,
+            action: #selector(scrollGestureHandler(_:))
+        )
+        pan.delegate = self
+        return pan
+    }
+    private var headerPanGesture: UIPanGestureRecognizer {
+        UIPanGestureRecognizer(
+            target: self,
+            action: #selector(headerGestureHandler)
+        )
+    }
     private var scrollViewOffset: CGFloat = 0
     private unowned var contentViewController: UIViewController
 
@@ -101,15 +117,6 @@ extension BottomSheetPresentationController: BottomSheetDelegate {
 
 extension BottomSheetPresentationController {
     private func configurePanGesture() {
-        scrollPanGesture = UIPanGestureRecognizer(
-            target: self,
-            action: #selector(scrollGestureHandler(_:))
-        )
-        scrollPanGesture.delegate = self
-        headerPanGesture = UIPanGestureRecognizer(
-            target: self,
-            action: #selector(headerGestureHandler)
-        )
         headerView?.addGestureRecognizer(headerPanGesture)
         scrollView?.addGestureRecognizer(scrollPanGesture)
     }
@@ -282,6 +289,28 @@ extension BottomSheetPresentationController {
     }
 
     static let verticalVelocityThreashold: CGFloat = 1000
+}
+
+extension BottomSheetPresentationController: NavigationControllerObserver {
+    func didPush(vc: UIViewController) {
+        guard var vc = vc as? ScrollableViewController else {return}
+        vc.scrollPan = scrollPanGesture
+        vc.headerPan = headerPanGesture
+        scrollView = vc.scrollView
+        headerView = vc.header
+
+//        if vc is PhotoDetailsController, !fractions.isEmpty {
+//            animateView(toFraction: fractions.last!, duration: 0.4)
+//        }
+    }
+
+    func willPop(vc: UIViewController) {}
+
+    func didPop(newLast: UIViewController) {
+        guard let vc = newLast as? ScrollableViewController else { return }
+        scrollView = vc.scrollView
+        headerView = vc.header
+    }
 }
 
 fileprivate func findClosestValue(_ value: Double, from values: [Double]) -> Double {

@@ -7,13 +7,8 @@
 
 import UIKit
 
-protocol NavigationControllerObserver: AnyObject {
-    func didLeaveSinglePhoto()
-}
-
 final class BottomTransitionCoordinator: NSObject, UINavigationControllerDelegate {
-    var interactionController: UIPercentDrivenInteractiveTransition? // меняем его в BottomNavigationController
-    weak var observer: NavigationControllerObserver?
+    var interactionController: UIPercentDrivenInteractiveTransition?
 
     func navigationController(
         _: UINavigationController,
@@ -29,16 +24,5 @@ final class BottomTransitionCoordinator: NSObject, UINavigationControllerDelegat
         interactionControllerFor _: UIViewControllerAnimatedTransitioning
     ) -> UIViewControllerInteractiveTransitioning? {
         interactionController
-    }
-
-    func navigationController(
-        _ navigationController: UINavigationController,
-        willShow _: UIViewController,
-        animated _: Bool
-    ) {
-        guard navigationController.viewControllers.last is PhotoDetailsController else {
-            observer?.didLeaveSinglePhoto()
-            return
-        }
     }
 }

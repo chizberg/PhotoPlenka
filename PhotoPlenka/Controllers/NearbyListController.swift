@@ -17,6 +17,21 @@ final class NearbyListController: UIViewController, ScrollableViewController {
         nearbyList
     }
 
+    var headerPan: UIGestureRecognizer? {
+        didSet {
+            guard let headerPan = headerPan else { return }
+            header.addGestureRecognizer(headerPan)
+        }
+    }
+
+    var scrollPan: UIGestureRecognizer? {
+        didSet {
+            guard let scrollPan = scrollPan else { return }
+            scrollView.addGestureRecognizer(scrollPan)
+        }
+    }
+
+
     private enum Constants {
         static let sideInset: CGFloat = 16
         static let controllerCornerRadius: CGFloat = 29

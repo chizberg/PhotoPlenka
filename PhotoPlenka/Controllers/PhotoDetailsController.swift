@@ -16,6 +16,20 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         scroll
     }
 
+    var headerPan: UIGestureRecognizer? {
+        didSet {
+            guard let headerPan = headerPan else { return }
+            header.addGestureRecognizer(headerPan)
+        }
+    }
+
+    var scrollPan: UIGestureRecognizer? {
+        didSet {
+            guard let scrollPan = scrollPan else { return }
+            scrollView.addGestureRecognizer(scrollPan)
+        }
+    }
+
     private enum Style {
         static let sideInset: CGFloat = 16
         static let bottomScrollPadding: CGFloat = 50
