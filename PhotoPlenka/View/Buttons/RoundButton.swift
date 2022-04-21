@@ -14,6 +14,7 @@ enum RoundButtonType {
     case back
     case mode
     case download
+    case favourites
 }
 
 final class RoundButton: SquishyButton {
@@ -68,6 +69,8 @@ extension RoundButtonType {
             return UIImage(systemName: "rectangle.grid.1x2", withConfiguration: config)!
         case .download:
             return UIImage(systemName: "arrow.down.to.line", withConfiguration: config)!
+        case .favourites:
+            return UIImage(systemName: "heart", withConfiguration: config)!
         }
     }
 }
