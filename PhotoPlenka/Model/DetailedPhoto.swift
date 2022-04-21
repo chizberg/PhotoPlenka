@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct DetailedPhoto {
     let cid: Int
@@ -45,5 +46,25 @@ struct DetailedPhoto {
         } else {
             self.dir = nil
         }
+    }
+}
+
+
+extension DetailedPhoto {
+    var shareDescription: String {
+        let years = year == year2 ? "\(year)" : "\(year)-\(year2)"
+        return "\(name), \(years)"
+    }
+
+    var url: URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "pastvu.com"
+        components.path = "/\(cid)"
+        return components.url
+    }
+
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: geo[0], longitude: geo[1])
     }
 }

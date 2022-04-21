@@ -32,14 +32,14 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
     private let detailsProvider: PhotoDetailsProviderProtocol
 
     private let likeButton = LikeButton()
-    private let downloadButton = ActionButton(
-        iconSystemName: "arrow.down.to.line",
-        title: "Загрузить",
+    private let shareButton = ActionButton(
+        iconSystemName: "square.and.arrow.up",
+        title: "Поделиться",
         color: nil
     )
-    private let sourceButton = ActionButton(
+    private let webButton = ActionButton(
         iconSystemName: "globe.europe.africa.fill",
-        title: "Источник",
+        title: "На сайте",
         color: nil
     )
     private let compareButton = ActionButton(
@@ -47,9 +47,14 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         title: "Сравнить",
         color: .systemPurple
     )
+    private let mapsButton = ActionButton(
+        iconSystemName: "map",
+        title: "Маршрут",
+        color: .systemGreen
+    )
 
     private lazy var bottomButtonStack = factory
-        .stackFromButtons(buttons: [likeButton, downloadButton, sourceButton, compareButton])
+        .stackFromButtons(buttons: [likeButton, shareButton, webButton, compareButton, mapsButton])
     private lazy var closeButton = factory.makeCloseButton()
     private lazy var titleLabel = factory.makeLabel(fontType: .titleLabel)
     private lazy var yearLabel = factory.makeLabel(fontType: .yearLabel)
@@ -252,6 +257,9 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         closeButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         likeButton.addTarget(self, action: #selector(like), for: .touchUpInside)
         compareButton.addTarget(self, action: #selector(compare), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(share), for: .touchUpInside)
+        webButton.addTarget(self, action: #selector(openWeb), for: .touchUpInside)
+        mapsButton.addTarget(self, action: #selector(openMap), for: .touchUpInside)
     }
 
     private func setLoading(_ isLoading: Bool) {
@@ -287,6 +295,19 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         likeButton.isLiked = !likeButton.isLiked
     }
 
+    @objc private func share(){
+        guard let image = imageView.image, let photoData = photoData else { return }
+        let imagesToShare: [Any] = [image, photoData.shareDescription]
+        let shareSheet = UIActivityViewController(activityItems: imagesToShare, applicationActivities: nil)
+        shareSheet.popoverPresentationController?.sourceView = shareButton
+        present(shareSheet, animated: true, completion: nil)
+    }
+
+    @objc private func openWeb(){
+        guard let photoData = photoData, let url = photoData.url else { return }
+        UIApplication.shared.open(url)
+    }
+
     @objc private func compare() {
         guard let photoData = photoData else { return }
         ImageFetcher.shared.fetchHighestQuality(filePath: photoData.file, quality: .high, completion: { [weak self] result in
@@ -305,6 +326,30 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
                 print(error.localizedDescription)
             }
         })
+    }
+
+    @objc private func openMap(){
+        guard let point = photoData?.coordinate else { return }
+        let mapSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let yandexMaps = UIAlertAction(title: "Яндекс Карты", style: .default) { _ in
+            MapApps.yandex.open(point: point)
+        }
+        let googleMaps = UIAlertAction(title: "Google Карты", style: .default) { _ in
+            MapApps.google.open(point: point)
+        }
+        let doubleGis = UIAlertAction(title: "2ГИС", style: .default) { _ in
+            MapApps.doubleGis.open(point: point)
+        }
+        let appleMaps = UIAlertAction(title: "Apple Карты", style: .default) { _ in
+            MapApps.apple.open(point: point)
+        }
+        let cancel = UIAlertAction(title: "Отмена", style: .cancel)
+        mapSheet.addAction(yandexMaps)
+        mapSheet.addAction(googleMaps)
+        mapSheet.addAction(doubleGis)
+        mapSheet.addAction(appleMaps)
+        mapSheet.addAction(cancel)
+        present(mapSheet, animated: true)
     }
 
     private func nowYear() -> Int {

@@ -24,6 +24,7 @@
 		DF37378027BA82F000DAB3CC /* NearbyListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37377F27BA82F000DAB3CC /* NearbyListController.swift */; };
 		DF37378327BA8AB800DAB3CC /* MapObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37378227BA8AB800DAB3CC /* MapObserver.swift */; };
 		DF37378527BA8FBE00DAB3CC /* MapWithObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */; };
+		DF38B2E9280B8AFD00C963BD /* MapLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF38B2E8280B8AFD00C963BD /* MapLinks.swift */; };
 		DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */; };
 		DF58EC9827C6DEC600793CAE /* BottomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58EC9727C6DEC600793CAE /* BottomNavigationController.swift */; };
 		DF58EC9B27C6E5EC00793CAE /* BottomTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58EC9A27C6E5EC00793CAE /* BottomTransitionAnimator.swift */; };
@@ -91,6 +92,7 @@
 		DF37377F27BA82F000DAB3CC /* NearbyListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyListController.swift; sourceTree = "<group>"; };
 		DF37378227BA8AB800DAB3CC /* MapObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapObserver.swift; sourceTree = "<group>"; };
 		DF37378427BA8FBE00DAB3CC /* MapWithObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapWithObservers.swift; sourceTree = "<group>"; };
+		DF38B2E8280B8AFD00C963BD /* MapLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLinks.swift; sourceTree = "<group>"; };
 		DF571C8D27AEC1650070C624 /* AnnotationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationProvider.swift; sourceTree = "<group>"; };
 		DF58EC9727C6DEC600793CAE /* BottomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavigationController.swift; sourceTree = "<group>"; };
 		DF58EC9A27C6E5EC00793CAE /* BottomTransitionAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTransitionAnimator.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				DFCF0EFC27AAE81C00A0D10B /* Cluster.swift */,
 				DF94BCC327ADC697008D3D5C /* Zoom.swift */,
 				DF37378227BA8AB800DAB3CC /* MapObserver.swift */,
+				DF38B2E8280B8AFD00C963BD /* MapLinks.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 				DFCF0EF827AAE29D00A0D10B /* Direction.swift in Sources */,
 				DFCF0EF527AAE16600A0D10B /* Photo.swift in Sources */,
 				DFCF0EFB27AAE59100A0D10B /* Colors and gradients.swift in Sources */,
+				DF38B2E9280B8AFD00C963BD /* MapLinks.swift in Sources */,
 				DFD7A21A27B86AE80064A0F4 /* ImageFetcher.swift in Sources */,
 				DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */,
 				DFCF0EF327AAD7CD00A0D10B /* NetworkCluster.swift in Sources */,
