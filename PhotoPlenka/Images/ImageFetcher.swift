@@ -88,6 +88,9 @@ final class ImageFetcher: ImageFetcherProtocol {
                     }
                 }
                 group.wait()
+                if case let .success(photo) = result {
+                    self.cachedImages.setObject(photo, forKey: url)
+                }
                 self.pendingRequests[url] = nil
             }
         )
