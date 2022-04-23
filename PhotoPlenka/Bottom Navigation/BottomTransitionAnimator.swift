@@ -12,7 +12,7 @@ final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         static let yFirstStep: CGFloat = 0.2
         static let behindScale: CGFloat = 0.8
         static let behindTransform = CGAffineTransform(scaleX: behindScale, y: behindScale)
-        static let duration: TimeInterval = 0.5
+        static let duration: TimeInterval = 0.6
     }
     private let operation: UINavigationController.Operation
     private var isPush: Bool { operation == .push } // push или pop

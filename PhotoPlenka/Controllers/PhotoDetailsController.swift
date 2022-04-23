@@ -314,8 +314,9 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         guard let navController = navigationController else { return }
         let viewControllers = navController.viewControllers
         if viewControllers.count > 2,
-           let favList = viewControllers[viewControllers.count - 2] as? FavouritesListController {
-            favList.reloadData()
+           let list = viewControllers[viewControllers.count - 2] as? PhotoListController,
+           list.type == .favourites {
+            list.reloadData()
         }
         navController.popViewController(animated: true)
     }

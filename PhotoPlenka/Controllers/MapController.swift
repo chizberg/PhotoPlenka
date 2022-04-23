@@ -175,11 +175,8 @@ extension MapController {
     }
 
     @objc func favsButtonTapped(){
-        let favController = FavouritesListController()
+        let favController = PhotoListController()
         bottomNavigation.pushViewController(favController, animated: true)
-//        favController.modalTransitionStyle = .coverVertical
-//        favController.modalPresentationStyle = .pageSheet
-//        bottomNavigation.present(favController, animated: true)
     }
 }
 
@@ -247,9 +244,6 @@ extension MapController: BottomSheetHeightObserver {
 
 //MARK: - Nav controller observer
 extension MapController: NavigationControllerObserver {
-//    func didLeaveSinglePhoto() {
-//        map.selectedAnnotations.forEach { map.deselectAnnotation($0, animated: true) }
-//    }
     func didPush(vc: UIViewController) {}
     func didPop(newLast: UIViewController) {}
     func willPop(vc: UIViewController) {
@@ -301,6 +295,7 @@ extension MapController: MKMapViewDelegate {
             guard let coordinate = cluster.coordinate else { return }
             let newRegion = MKCoordinateRegion(center: coordinate, span: zoom.span)
             mapView.setRegion(newRegion, animated: true)
+            return
         }
         if let photo = view.annotation as? Photo {
             map.setAdjustedCenter(photo.coordinate, animated: true)
@@ -310,6 +305,15 @@ extension MapController: MKMapViewDelegate {
                 guard selectedPhoto.cid != photo.cid else { continue }
                 map.deselectAnnotation(selectedAnn, animated: true)
             }
+            return
+        }
+        if let localCluster = view as? MultiplePhotosAnnotationView {
+            guard let annotation = localCluster.annotation as? MKClusterAnnotation else { return }
+            map.setAdjustedCenter(annotation.coordinate, animated: true)
+            let photos = annotation.memberAnnotations.compactMap { $0 as? Photo }
+            guard !photos.isEmpty else {return}
+            showMultiplePhotosList(photos: photos)
+            map.deselectAnnotation(annotation, animated: true)
         }
     }
 
@@ -400,6 +404,17 @@ extension MapController {
         let count = bottomNavigation.viewControllers.count
         if count > 1,
            bottomNavigation.viewControllers[count - 2] as? PhotoDetailsController != nil {
+            bottomNavigation.viewControllers[count - 2].removeFromParent()
+        }
+    }
+
+    func showMultiplePhotosList(photos: [Photo]) {
+        let list = PhotoListController(photos: photos)
+        self.bottomNavigation.pushViewController(list, animated: true)
+        let count = bottomNavigation.viewControllers.count
+        if count > 1,
+           let prevList = bottomNavigation.viewControllers[count - 2] as? PhotoListController,
+           prevList.type == .localCluster {
             bottomNavigation.viewControllers[count - 2].removeFromParent()
         }
     }
