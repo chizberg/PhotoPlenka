@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FavouritesListController: UIViewController {
+final class FavouritesListController: UIViewController, ScrollableViewController {
     private enum Constants {
         static let sideInset: CGFloat = 16
         static let buttonSize: CGSize = .init(width: 40, height: 40)
@@ -16,6 +16,26 @@ final class FavouritesListController: UIViewController {
         static let cellID = String(describing: PreviewCell.self)
         static let listTitle = "Избранное"
         static let countLimit: Int = 10
+    }
+
+    //scrollableController
+    var scrollView: UIScrollView {
+        tableView
+    }
+    var header: UIView {
+        navBar
+    }
+    var scrollPan: UIGestureRecognizer? {
+        didSet {
+            guard let scrollPan = scrollPan else { return }
+            scrollView.addGestureRecognizer(scrollPan)
+        }
+    }
+    var headerPan: UIGestureRecognizer? {
+        didSet {
+            guard let headerPan = headerPan else { return }
+            header.addGestureRecognizer(headerPan)
+        }
     }
 
     //data
@@ -93,7 +113,7 @@ final class FavouritesListController: UIViewController {
     }
 
     @objc func closeButtonTapped(){
-        self.dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -113,6 +133,6 @@ extension FavouritesListController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let photo = favourites[indexPath.row]
         let detailsController = PhotoDetailsController(cid: photo.cid, detailsProvider: PhotoDetailsProvider.init(networkService: NetworkService()))
-        present(detailsController, animated: true)
+        navigationController?.pushViewController(detailsController, animated: true)
     }
 }

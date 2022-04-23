@@ -176,9 +176,10 @@ extension MapController {
 
     @objc func favsButtonTapped(){
         let favController = FavouritesListController()
-        favController.modalTransitionStyle = .coverVertical
-        favController.modalPresentationStyle = .pageSheet
-        bottomNavigation.present(favController, animated: true)
+        bottomNavigation.pushViewController(favController, animated: true)
+//        favController.modalTransitionStyle = .coverVertical
+//        favController.modalPresentationStyle = .pageSheet
+//        bottomNavigation.present(favController, animated: true)
     }
 }
 

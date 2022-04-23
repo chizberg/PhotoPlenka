@@ -8,6 +8,16 @@
 import UIKit
 
 final class PhotoDetailsController: UIViewController, ScrollableViewController {
+    private enum Style {
+        static let sideInset: CGFloat = 16
+        static let bottomScrollPadding: CGFloat = 50
+        static let loadingAnimationDuration: TimeInterval = 0.5
+        static let imageAnimationDuration: TimeInterval = 0.3
+        static let loadingImageAspectRatio: CGFloat = 21 / 9
+        static let closeButtonSize: CGSize = .init(width: 40, height: 40)
+        static let controllerCornerRadius: CGFloat = 29
+    }
+
     var header: UIView {
         closeButton
     }
@@ -28,16 +38,6 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
             guard let scrollPan = scrollPan else { return }
             scrollView.addGestureRecognizer(scrollPan)
         }
-    }
-
-    private enum Style {
-        static let sideInset: CGFloat = 16
-        static let bottomScrollPadding: CGFloat = 50
-        static let loadingAnimationDuration: TimeInterval = 0.5
-        static let imageAnimationDuration: TimeInterval = 0.3
-        static let loadingImageAspectRatio: CGFloat = 21 / 9
-        static let closeButtonSize: CGSize = .init(width: 40, height: 40)
-        static let controllerCornerRadius: CGFloat = 29
     }
 
     private let factory = PhotoDetailsFactory()
@@ -311,14 +311,13 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
     }
 
     @objc private func back() {
-        if let navController = navigationController {
-            navController.popViewController(animated: true)
-            return
+        guard let navController = navigationController else { return }
+        let viewControllers = navController.viewControllers
+        if viewControllers.count > 2,
+           let favList = viewControllers[viewControllers.count - 2] as? FavouritesListController {
+            favList.reloadData()
         }
-        if let favouritesList = presentingViewController as? FavouritesListController {
-            favouritesList.reloadData()
-        }
-        dismiss(animated: true)
+        navController.popViewController(animated: true)
     }
 
     @objc private func like() {

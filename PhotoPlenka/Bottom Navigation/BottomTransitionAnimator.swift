@@ -9,10 +9,10 @@ import UIKit
 
 final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     private enum Style {
-        static let spacing: CGFloat = 100 //horizontal spacing between new and old screens
-        static let yOffset: CGFloat = 100 //'from' screen goes down by offset
-        static let fromTransform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-        static let duration: TimeInterval = 0.4
+        static let yFirstStep: CGFloat = 0.2
+        static let behindScale: CGFloat = 0.8
+        static let behindTransform = CGAffineTransform(scaleX: behindScale, y: behindScale)
+        static let duration: TimeInterval = 0.5
     }
     private let operation: UINavigationController.Operation
     private var isPush: Bool { operation == .push } // push или pop
@@ -31,34 +31,66 @@ final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         guard let to = transitionContext.view(forKey: .to) else { return }
         let duration = transitionDuration(using: transitionContext)
         let container = transitionContext.containerView
-        container.addSubview(to)
-        let visibleFrame = to.frame
-        let newToOriginX = isPush ? to.frame.width + Style.spacing : -to.frame.width - Style.spacing
-        let newFromOriginX = isPush ? -from.frame.width - Style.spacing : from.frame.width + Style.spacing
-        to.frame = CGRect(
-            origin: CGPoint(x: newToOriginX, y: to.frame.origin.y + Style.yOffset),
-            size: to.frame.size
+        isPush ? container.addSubview(to) : container.insertSubview(to, at: 0)
+        let presentationFrame = from.frame // frame where main presented content should be
+        let hiddenFrame = CGRect( // a frame where previous screen goes
+            x: 0,
+            y: container.bounds.height,
+            width: presentationFrame.width,
+            height: presentationFrame.height
         )
-
-        let animations = {
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                to.transform = .identity
-                from.transform = Style.fromTransform
+        let middleFrame = CGRect( // a middle frame so animation looks more natural
+            x: 0,
+            y: 0 + presentationFrame.height * Style.yFirstStep, // is has a little y offset
+            width: presentationFrame.width,
+            height: presentationFrame.height
+        )
+        to.frame = hiddenFrame
+        let animations: () -> ()
+        switch isPush {
+        case true: animations = {
+            // push: an old screen should go behind (with a transform) and a new screen shold be shown over it
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.8){
+                to.frame = middleFrame // it goes to a middle frame at first
             }
-
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-                to.frame = visibleFrame
-                from.frame = CGRect(
-                    origin: CGPoint(x: newFromOriginX, y: from.frame.origin.y + Style.yOffset),
-                    size: from.frame.size
-                )
+            UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.2){
+                to.frame = presentationFrame // and then smoothly goes to presentation frame
             }
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5){
+                from.frame = middleFrame // while the old screen smoothly goes back
+                from.transform = Style.behindTransform // with a transform
+                container.setNeedsLayout()
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5){
+                from.transform = .identity // and when it's behind a new screen, it rapidly hides away
+                from.frame = hiddenFrame
+                container.setNeedsLayout()
+            }
+        }
+        case false: animations = {
+            // pop: an new screen comes from behind while an old screen goes down
+            // new = to, old = from, not to confuse
+            let presentationCenter = from.center // we will need it later
+            to.transform = Style.behindTransform // new screen has a transform
+            container.setNeedsLayout()
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.7){
+                // it moves to a place where content should be
+                to.center.y = presentationCenter.y + presentationFrame.height * Style.yFirstStep
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.7, relativeDuration: 0.3){
+                to.transform = .identity // then scales up
+                to.frame = presentationFrame // and goes to a presentation frame
+                container.setNeedsLayout()
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1){
+                from.frame = hiddenFrame // while the old screen slowly goes down
+            }
+        }
         }
 
         UIView.animateKeyframes(
             withDuration: duration,
             delay: 0,
-            options: .calculationModeCubicPaced,
             animations: animations,
             completion: { _ in
                 container.addSubview(to)

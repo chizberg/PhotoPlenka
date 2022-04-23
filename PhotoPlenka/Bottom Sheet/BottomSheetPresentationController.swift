@@ -298,10 +298,6 @@ extension BottomSheetPresentationController: NavigationControllerObserver {
         vc.headerPan = headerPanGesture
         scrollView = vc.scrollView
         headerView = vc.header
-
-//        if vc is PhotoDetailsController, !fractions.isEmpty {
-//            animateView(toFraction: fractions.last!, duration: 0.4)
-//        }
     }
 
     func willPop(vc: UIViewController) {}
