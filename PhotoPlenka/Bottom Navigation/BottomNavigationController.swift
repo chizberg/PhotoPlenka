@@ -7,14 +7,19 @@
 
 import UIKit
 
+//TODO: Proper default implementations
+@objc protocol NavigationControllerObserver: AnyObject {
+    func didPush(vc: UIViewController)
+    func willPop(vc: UIViewController)
+    func didPop(newLast: UIViewController)
+}
+
 final class BottomNavigationController: UINavigationController {
 
     let coordinatorHelper = BottomTransitionCoordinator()
 
-    weak var observer: NavigationControllerObserver? {
-        get { coordinatorHelper.observer }
-        set { coordinatorHelper.observer = newValue }
-    }
+    // храним множество слабых ссылок
+    private(set) var observers = NSHashTable<NavigationControllerObserver>.weakObjects()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,5 +63,49 @@ extension BottomNavigationController {
             coordinatorHelper.interactionController = nil
         default: break
         }
+    }
+}
+
+extension BottomNavigationController {
+    func addObserver(_ obs: NavigationControllerObserver){
+        observers.add(obs)
+    }
+
+    private func notifyAllObservers(_ notification: @escaping (NavigationControllerObserver) -> Void) {
+        let enumerator = observers.objectEnumerator()
+        while let observer = enumerator.nextObject() as? NavigationControllerObserver {
+            notification(observer)
+        }
+    }
+
+    private func didPush(_ vc: UIViewController){
+        notifyAllObservers { obs in
+            obs.didPush(vc: vc)
+        }
+    }
+
+    private func didPop(_ newLast: UIViewController) {
+        notifyAllObservers { obs in
+            obs.didPop(newLast: newLast)
+        }
+    }
+
+    private func willPop(_ vc: UIViewController) {
+        notifyAllObservers { obs in
+            obs.willPop(vc: vc)
+        }
+    }
+
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        super.pushViewController(viewController, animated: animated)
+        didPush(viewController)
+    }
+
+    @discardableResult
+    override func popViewController(animated: Bool) -> UIViewController? {
+        if let last = viewControllers.last { willPop(last) }
+        let popped = super.popViewController(animated: animated)
+        if let last = viewControllers.last { didPop(last) }
+        return popped
     }
 }

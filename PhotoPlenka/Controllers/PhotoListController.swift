@@ -7,46 +7,77 @@
 
 import UIKit
 
-final class FavouritesListController: UIViewController {
+enum PhotoListType {
+    case favourites
+    case localCluster
+}
+
+final class PhotoListController: UIViewController, ScrollableViewController {
     private enum Constants {
         static let sideInset: CGFloat = 16
         static let buttonSize: CGSize = .init(width: 40, height: 40)
         static let controllerCornerRadius: CGFloat = 29
         static let maskedCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         static let cellID = String(describing: PreviewCell.self)
-        static let listTitle = "Избранное"
-        static let countLimit: Int = 10
+        static let favouritesTitle = "Избранное"
+        static func clusterTitle(_ num: Int) -> String {
+            switch num % 10 {
+            case 1: return "\(num) фотография"
+            case 2...4: return "\(num) фотографии"
+            default: return "\(num) фотографий"
+            }
+        }
+    }
+
+    //scrollableController
+    var scrollView: UIScrollView {
+        tableView
+    }
+    var header: UIView {
+        navBar
+    }
+    var scrollPan: UIGestureRecognizer? {
+        didSet {
+            guard let scrollPan = scrollPan else { return }
+            scrollView.addGestureRecognizer(scrollPan)
+        }
+    }
+    var headerPan: UIGestureRecognizer? {
+        didSet {
+            guard let headerPan = headerPan else { return }
+            header.addGestureRecognizer(headerPan)
+        }
     }
 
     //data
-    private var favourites: [Photo]
+    private var photos: [Photo]
+    let type: PhotoListType
 
     //views
-    private let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.backgroundColor = nil
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.clipsToBounds = false
-        return tableView
-    }()
-    // I don't like the way this bar looks
-    // I should probably make my own one
-    private lazy var navBar: UINavigationBar = {
-        let bar = UINavigationBar(frame: .zero)
-        bar.isTranslucent = true
-        bar.translatesAutoresizingMaskIntoConstraints = false
-        let topItem = UINavigationItem(title: Constants.listTitle)
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.closeButtonTapped))
-        topItem.rightBarButtonItem = cancelItem
-        bar.setItems([topItem], animated: true)
-        return bar
-    }()
+    private let factory = PhotoListFactory()
+    private lazy var backgroundView = factory.makeBackground()
+    private lazy var tableView = factory.makeTableView()
+    private lazy var navBar: UINavigationBar = factory.makeNavBar(
+        rightItem: UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.closeButtonTapped)),
+        title: navTitle
+    )
+    private var navTitle: String {
+        switch type {
+        case .favourites: return Constants.favouritesTitle
+        case .localCluster: return Constants.clusterTitle( photos.count )
+        }
+    }
 
-    init(){
-        self.favourites = FavouritesProvider.shared.favourites ?? []
+    init(
+        photos: [Photo]? = nil
+    ){
+        if let photos = photos {
+            self.photos = photos
+            self.type = .localCluster
+        } else {
+            self.photos = FavouritesProvider.shared.favourites ?? []
+            self.type = .favourites
+        }
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -72,8 +103,15 @@ final class FavouritesListController: UIViewController {
         backgroundView.frame = view.bounds
     }
 
-    func reloadData(){
-        favourites = FavouritesProvider.shared.favourites ?? []
+    func reloadData(
+        photos: [Photo]? = nil
+    ){
+        guard type == .favourites else {
+            if let photos = photos { self.photos = photos }
+            tableView.reloadData()
+            return
+        }
+        self.photos = FavouritesProvider.shared.favourites ?? []
         tableView.reloadData()
     }
 
@@ -93,26 +131,26 @@ final class FavouritesListController: UIViewController {
     }
 
     @objc func closeButtonTapped(){
-        self.dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
 }
 
-extension FavouritesListController: UITableViewDataSource, UITableViewDelegate {
+extension PhotoListController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        favourites.count
+        photos.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellID, for: indexPath)
         guard let previewCell = cell as? PreviewCell else { return cell }
-        previewCell.fillIn(favourites[indexPath.row])
+        previewCell.fillIn(photos[indexPath.row])
         return previewCell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let photo = favourites[indexPath.row]
+        let photo = photos[indexPath.row]
         let detailsController = PhotoDetailsController(cid: photo.cid, detailsProvider: PhotoDetailsProvider.init(networkService: NetworkService()))
-        present(detailsController, animated: true)
+        navigationController?.pushViewController(detailsController, animated: true)
     }
 }

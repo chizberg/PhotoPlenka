@@ -8,14 +8,6 @@
 import UIKit
 
 final class PhotoDetailsController: UIViewController, ScrollableViewController {
-    var header: UIView {
-        closeButton
-    }
-
-    var scrollView: UIScrollView {
-        scroll
-    }
-
     private enum Style {
         static let sideInset: CGFloat = 16
         static let bottomScrollPadding: CGFloat = 50
@@ -24,6 +16,28 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
         static let loadingImageAspectRatio: CGFloat = 21 / 9
         static let closeButtonSize: CGSize = .init(width: 40, height: 40)
         static let controllerCornerRadius: CGFloat = 29
+    }
+
+    var header: UIView {
+        closeButton
+    }
+
+    var scrollView: UIScrollView {
+        scroll
+    }
+
+    var headerPan: UIGestureRecognizer? {
+        didSet {
+            guard let headerPan = headerPan else { return }
+            header.addGestureRecognizer(headerPan)
+        }
+    }
+
+    var scrollPan: UIGestureRecognizer? {
+        didSet {
+            guard let scrollPan = scrollPan else { return }
+            scrollView.addGestureRecognizer(scrollPan)
+        }
     }
 
     private let factory = PhotoDetailsFactory()
@@ -297,14 +311,14 @@ final class PhotoDetailsController: UIViewController, ScrollableViewController {
     }
 
     @objc private func back() {
-        if let navController = navigationController {
-            navController.popViewController(animated: true)
-            return
+        guard let navController = navigationController else { return }
+        let viewControllers = navController.viewControllers
+        if viewControllers.count > 2,
+           let list = viewControllers[viewControllers.count - 2] as? PhotoListController,
+           list.type == .favourites {
+            list.reloadData()
         }
-        if let favouritesList = presentingViewController as? FavouritesListController {
-            favouritesList.reloadData()
-        }
-        dismiss(animated: true)
+        navController.popViewController(animated: true)
     }
 
     @objc private func like() {

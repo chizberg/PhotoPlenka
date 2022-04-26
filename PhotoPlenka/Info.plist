@@ -2,21 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Menlo.ttc</string>
-	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Создание совместной фотографии</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Так мы сможем показывать то, что рядом с вами</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Сохранение фотографии в галерею</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>comgooglemaps</string>
 		<string>dgis</string>
 		<string>yandexmaps</string>
+	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Menlo.ttc</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
