@@ -44,6 +44,7 @@
 		DF9AF54027B092E70047149F /* ThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9AF53F27B092E70047149F /* ThumbView.swift */; };
 		DFA21CE127C854C800BA14E8 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA21CE027C854C700BA14E8 /* ActionButton.swift */; };
 		DFA21CE427C8631B00BA14E8 /* LoadingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA21CE327C8631B00BA14E8 /* LoadingImageView.swift */; };
+		DFAAD5322818B0D3007D3EFD /* NavigationAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAAD5312818B0D3007D3EFD /* NavigationAnimation.swift */; };
 		DFB4CD9B2814B4100016EB80 /* ClusterListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB4CD9A2814B4100016EB80 /* ClusterListController.swift */; };
 		DFB4CD9D2814B4D20016EB80 /* PhotoListFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB4CD9C2814B4D20016EB80 /* PhotoListFactory.swift */; };
 		DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCF0EEA27AAD5CF00A0D10B /* NetworkPhoto.swift */; };
@@ -117,6 +118,7 @@
 		DF9AF53F27B092E70047149F /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
 		DFA21CE027C854C700BA14E8 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		DFA21CE327C8631B00BA14E8 /* LoadingImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingImageView.swift; sourceTree = "<group>"; };
+		DFAAD5312818B0D3007D3EFD /* NavigationAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationAnimation.swift; sourceTree = "<group>"; };
 		DFB4CD9A2814B4100016EB80 /* ClusterListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterListController.swift; sourceTree = "<group>"; };
 		DFB4CD9C2814B4D20016EB80 /* PhotoListFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListFactory.swift; sourceTree = "<group>"; };
 		DFCF0EEA27AAD5CF00A0D10B /* NetworkPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPhoto.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				DF58EC9727C6DEC600793CAE /* BottomNavigationController.swift */,
 				DF58EC9A27C6E5EC00793CAE /* BottomTransitionAnimator.swift */,
 				DF58EC9D27C767FB00793CAE /* BottomTransitionCoordinator.swift */,
+				DFAAD5312818B0D3007D3EFD /* NavigationAnimation.swift */,
 			);
 			path = "Bottom Navigation";
 			sourceTree = "<group>";
@@ -462,6 +465,7 @@
 				DFCF0EFD27AAE81C00A0D10B /* Cluster.swift in Sources */,
 				DF58EC9E27C767FB00793CAE /* BottomTransitionCoordinator.swift in Sources */,
 				DFCF0EEB27AAD5CF00A0D10B /* NetworkPhoto.swift in Sources */,
+				DFAAD5322818B0D3007D3EFD /* NavigationAnimation.swift in Sources */,
 				DFE04614280013D40005AB2D /* CompareState.swift in Sources */,
 				DF7C3F4F27DBFEFD00345074 /* PhotoZoomController.swift in Sources */,
 				DF37378027BA82F000DAB3CC /* NearbyListController.swift in Sources */,
