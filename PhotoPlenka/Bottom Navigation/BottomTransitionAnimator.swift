@@ -31,7 +31,7 @@ final class BottomTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         guard let to = transitionContext.view(forKey: .to) else { return }
         let duration = transitionDuration(using: transitionContext)
         let container = transitionContext.containerView
-        let animation: NavigationAnimation = .overlay
+        let animation: NavigationAnimation = .sideToSide
         let keyframes = animation.keyframes(isPush: isPush, from: from, to: to, container: container)
 
         UIView.animateKeyframes(
