@@ -73,7 +73,7 @@ extension NavigationAnimation {
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
                     to.frame = presentationFrame
-                    from.frame = leftHiddenFrame
+                    from.center = leftHiddenFrame.center
                 }
             }
         }
@@ -116,7 +116,7 @@ extension NavigationAnimation {
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
                     to.frame = presentationFrame
-                    from.frame = rightHiddenFrame
+                    from.center = rightHiddenFrame.center
                 }
             }
         }
@@ -162,5 +162,14 @@ extension NavigationAnimation {
             height: presentationFrame.height
         )
         return (presentationFrame, leftHiddenFrame, rightHiddenFrame)
+    }
+}
+
+extension CGRect {
+    var center: CGPoint {
+        CGPoint(
+            x: origin.x + width / 2,
+            y: origin.y + height / 2
+        )
     }
 }
