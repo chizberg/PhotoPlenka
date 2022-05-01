@@ -153,6 +153,11 @@ extension BottomSheetPresentationController {
     private func calculateHeightBy(yAxisValue: Double) -> Double {
         presentingViewController.view.bounds.height - yAxisValue
     }
+
+    private func fraction(from height: Double) -> Double {
+        let presentingBounds = self.presentingViewController.view.bounds
+        return height / presentingBounds.height
+    }
 }
 
 // MARK: - Presentation Controller methods
@@ -219,7 +224,7 @@ extension BottomSheetPresentationController {
             width: initialFrame.width,
             height: initialFrame.height - offset
         )
-        self.heightObserver?.heightDidChange(newHeight: self.containerView?.frame.height ?? 0)
+        heightDidChange(newHeight: self.containerView?.frame.height ?? 0)
     }
 
     private func panEndedHandler(_ gesture: UIPanGestureRecognizer) {
@@ -242,7 +247,7 @@ extension BottomSheetPresentationController {
         let presentingBounds = presentingViewController.view.bounds
         let targetY = calculateYAxis(fraction: value)
         let targetHeight = calculateHeightBy(yAxisValue: targetY)
-        heightObserver?.heightWillChange(newHeight: targetHeight, in: duration)
+        heightWillChange(newHeight: targetHeight, in: duration)
 
         UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut) {
             self.containerView?.frame = CGRect(
@@ -344,5 +349,49 @@ extension UIScrollView {
             .OBJC_ASSOCIATION_RETAIN_NONATOMIC
         )
         return object
+    }
+}
+
+extension BottomSheetPresentationController {
+    private func heightDidChange(newHeight: CGFloat) {
+        heightObserver?.heightDidChange(newHeight: newHeight)
+        popDetailsIfNeeded(newHeight: newHeight)
+    }
+    private func heightWillChange(newHeight: CGFloat, in duration: Double) {
+        heightObserver?.heightWillChange(newHeight: newHeight, in: duration)
+        popDetailsIfNeeded(newHeight: newHeight)
+    }
+
+    // the fraction when photo details automatically pop
+    var minimizedFraction: Double {
+        let index = 0
+        guard fractions.count > index else {
+            fatalError("no such fraction")
+        }
+        return fractions[index]
+    }
+
+    // the fraction the photo details push with
+    var minDetailsFraction: Double {
+        let index = 1
+        guard fractions.count > index else {
+            fatalError("no such fraction")
+        }
+        return fractions[index]
+    }
+
+    // pop photo details automatically when minimized
+    // works only with navigation controller
+    func popDetailsIfNeeded(newHeight: CGFloat){
+        guard let navigationController = presentedViewController as? UINavigationController else {
+            return
+        }
+        guard !fractions.isEmpty else {
+            fatalError("the fractions are empty")
+        }
+        guard fraction(from: newHeight) <= minimizedFraction else { return }
+        while navigationController.viewControllers.last is PhotoDetailsController {
+            navigationController.popViewController(animated: true)
+        }
     }
 }

@@ -21,6 +21,7 @@ final class PhotoZoomController: UIViewController {
     private let closeButton = RoundButton(type: .close)
     private let saveButton = RoundButton(type: .download)
     private let imageView: ZoomableImageView = ZoomableImageView()
+    private var panDown = UISwipeGestureRecognizer()
 
     init(image: UIImage){
         self.image = image
@@ -46,8 +47,12 @@ final class PhotoZoomController: UIViewController {
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(changeControls))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(updateControls))
         imageView.addGestureRecognizer(tap)
+
+        panDown = UISwipeGestureRecognizer(target: self, action: #selector(pannedDown(_:)))
+        panDown.direction = .down
+        view.addGestureRecognizer(panDown)
     }
 
     override func viewDidLayoutSubviews() {
@@ -88,10 +93,15 @@ final class PhotoZoomController: UIViewController {
         generator.notificationOccurred(.success)
     }
 
-
-    @objc private func changeControls() {
+    @objc private func updateControls() {
         let isHidden = saveButton.isHidden
         setControlState(isHidden: !isHidden, animated: true)
+    }
+
+    @objc private func pannedDown(_ sender: UISwipeGestureRecognizer){
+        guard imageView.zoomScale <= 1 else { return }
+        guard sender.direction == .down else { return }
+        self.dismiss(animated: true)
     }
 
     func setControlState(isHidden: Bool, animated: Bool) {
