@@ -72,8 +72,8 @@ extension CLLocationCoordinate2D {
         // поэтому широта не должна быть больше 90
         let adjustedLatitude: Double
         switch latitude {
-        case 90...: adjustedLatitude = 90
         case ...(-90): adjustedLatitude = -90
+        case 90...: adjustedLatitude = 90
         default: adjustedLatitude = latitude
         }
         return [self.longitude, adjustedLatitude]
@@ -105,7 +105,7 @@ extension MKCoordinateRegion {
             CLLocationCoordinate2D(
                 latitude: center.latitude - halfLatitudeDelta,
                 longitude: center.longitude - halfLongitudeDelta
-            ),
+            )
         ]
     }
 
