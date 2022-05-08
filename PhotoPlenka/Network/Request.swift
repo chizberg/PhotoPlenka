@@ -67,16 +67,26 @@ extension Request {
 
 extension CLLocationCoordinate2D {
     var doubleValue: [Double] {
+        return [longitude, latitude]
+    }
+
+    func adjusted() -> CLLocationCoordinate2D {
         // нужно корректировать широту, потому что по каким-то причинам MKMapView.region может выдавать значения больше 90 по модулю
         // API при такой странной широте ничего не возвращает и всё падает
-        // поэтому широта не должна быть больше 90
+        // поэтому широта не должна быть больше 90 по модулю, а долгота не больше 180 по модулю
         let adjustedLatitude: Double
+        let adjustedLongitude: Double
         switch latitude {
-        case ...(-90): adjustedLatitude = -90
-        case 90...: adjustedLatitude = 90
+        case ...(-90): adjustedLatitude = latitude - 180
+        case 90...: adjustedLatitude = latitude - 180
         default: adjustedLatitude = latitude
         }
-        return [self.longitude, adjustedLatitude]
+        switch longitude {
+        case ...(-180): adjustedLongitude = longitude + 360
+        case 180...: adjustedLongitude = longitude - 360
+        default: adjustedLongitude = longitude
+        }
+        return CLLocationCoordinate2D(latitude: adjustedLatitude, longitude: adjustedLongitude)
     }
 }
 
@@ -89,23 +99,23 @@ extension MKCoordinateRegion {
             CLLocationCoordinate2D(
                 latitude: center.latitude - halfLatitudeDelta,
                 longitude: center.longitude - halfLongitudeDelta
-            ),
+            ).adjusted(),
             CLLocationCoordinate2D(
                 latitude: center.latitude - halfLatitudeDelta,
                 longitude: center.longitude + halfLongitudeDelta
-            ),
+            ).adjusted(),
             CLLocationCoordinate2D(
                 latitude: center.latitude + halfLatitudeDelta,
                 longitude: center.longitude + halfLongitudeDelta
-            ),
+            ).adjusted(),
             CLLocationCoordinate2D(
                 latitude: center.latitude + halfLatitudeDelta,
                 longitude: center.longitude - halfLongitudeDelta
-            ),
+            ).adjusted(),
             CLLocationCoordinate2D(
                 latitude: center.latitude - halfLatitudeDelta,
                 longitude: center.longitude - halfLongitudeDelta
-            )
+            ).adjusted()
         ]
     }
 
