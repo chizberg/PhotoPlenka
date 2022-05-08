@@ -8,10 +8,10 @@
 import MapKit
 
 struct Zoom {
-    private var zoom: Int = 0 {
+    private var zoomValue: Int = 0 {
         didSet {
             // на зуме больше 19 или меньше 3 API перестаёт что-то скидывать
-            if zoom > 19 { zoom = 19 }; if zoom < 3 { zoom = 3 }
+            if zoomValue > 19 { zoomValue = 19 }; if zoomValue < 3 { zoomValue = 3 }
         }
     }
 
@@ -19,11 +19,11 @@ struct Zoom {
 
     var z: Int {
         get {
-            zoom
+            zoomValue
         }
         set {
-            zoom = newValue
-            delta = deltaFromZoom(zoom: zoom)
+            zoomValue = newValue
+            delta = deltaFromZoom(zoom: zoomValue)
         }
     }
 
@@ -33,13 +33,13 @@ struct Zoom {
         }
         set {
             delta = min(newValue.latitudeDelta, newValue.longitudeDelta)
-            zoom = zoomFromDelta(delta: delta)
+            zoomValue = zoomFromDelta(delta: delta)
         }
     }
 
     init(span: MKCoordinateSpan) {
         delta = min(span.latitudeDelta, span.longitudeDelta)
-        zoom = zoomFromDelta(delta: delta)
+        zoomValue = zoomFromDelta(delta: delta)
     }
 }
 
