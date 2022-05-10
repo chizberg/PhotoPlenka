@@ -48,6 +48,10 @@ final class PhotoZoomController: UIViewController {
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(changeControls))
         imageView.addGestureRecognizer(tap)
+
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(slideToDismiss(_:)))
+        swipe.direction = .down
+        view.addGestureRecognizer(swipe)
     }
 
     override func viewDidLayoutSubviews() {
@@ -88,10 +92,14 @@ final class PhotoZoomController: UIViewController {
         generator.notificationOccurred(.success)
     }
 
-
     @objc private func changeControls() {
         let isHidden = saveButton.isHidden
         setControlState(isHidden: !isHidden, animated: true)
+    }
+
+    @objc private func slideToDismiss(_ sender: UISwipeGestureRecognizer) {
+        guard sender.direction == .down && imageView.zoomScale <= 1 else { return }
+        self.dismiss(animated: true)
     }
 
     func setControlState(isHidden: Bool, animated: Bool) {
