@@ -37,7 +37,11 @@ final class BottomSheetPresentationController: UIPresentationController,
     private var initialFrame: CGRect = .zero
     private let fractions: [Double]
     weak var heightObserver: BottomSheetHeightObserver?
-    private weak var scrollView: UIScrollView?
+    private weak var scrollView: UIScrollView? {
+        didSet {
+            updateScrollViewInsets()
+        }
+    }
     private weak var headerView: UIView?
     private var mode: Mode = .collapsed
     private var scrollPanGesture: UIPanGestureRecognizer {
@@ -76,13 +80,12 @@ final class BottomSheetPresentationController: UIPresentationController,
         }
 
         let y = calculateYAxis(fraction: firstFraction)
-        let height = calculateHeightBy(yAxisValue: y)
 
         return .init(
             x: 0,
             y: y,
             width: containerViewBounds.width,
-            height: height
+            height: containerViewBounds.height
         )
     }
 
@@ -150,8 +153,21 @@ extension BottomSheetPresentationController {
         return presentingBounds.height - presentingBounds.height * fraction
     }
 
-    private func calculateHeightBy(yAxisValue: Double) -> Double {
+    private func calculateVisibleHeightBy(yAxisValue: Double) -> Double {
         presentingViewController.view.bounds.height - yAxisValue
+    }
+
+    private func fraction(from height: Double) -> Double {
+        let presentingBounds = self.presentingViewController.view.bounds
+        return height / presentingBounds.height
+    }
+
+    private var currentFraction: Double {
+        1.0 - (containerView!.frame.minY / presentingViewController.view.bounds.height)
+    }
+
+    private var visibleHeight: Double {
+        presentingViewController.view.bounds.height - containerView!.frame.minY
     }
 }
 
@@ -213,20 +229,19 @@ extension BottomSheetPresentationController {
     }
 
     private func panChangedHandler(offset: CGFloat, view: UIView, initialFrame: CGRect) {
+        let newHeight = max(initialFrame.height, initialFrame.height - offset)
         view.frame = .init(
             x: 0,
             y: initialFrame.minY + offset,
             width: initialFrame.width,
-            height: initialFrame.height - offset
+            height: newHeight
         )
-        self.heightObserver?.heightDidChange(newHeight: self.containerView?.frame.height ?? 0)
+        heightDidChange(newHeight: visibleHeight)
     }
 
     private func panEndedHandler(_ gesture: UIPanGestureRecognizer) {
         // Calculate how much spaces container view takes
-        let progressValue = 1 -
-            (containerView!.frame.minY / presentingViewController.view.bounds.height)
-        var closestFraction = findClosestValue(progressValue, from: fractions)
+        var closestFraction = findClosestValue(currentFraction, from: fractions)
 
         updateClosestFractionIfNeeded(
             velocityByY: gesture.velocity(in: presentedView).y,
@@ -241,15 +256,15 @@ extension BottomSheetPresentationController {
     private func animateView(toFraction value: CGFloat, duration: CGFloat) {
         let presentingBounds = presentingViewController.view.bounds
         let targetY = calculateYAxis(fraction: value)
-        let targetHeight = calculateHeightBy(yAxisValue: targetY)
-        heightObserver?.heightWillChange(newHeight: targetHeight, in: duration)
+        let targetHeight = calculateVisibleHeightBy(yAxisValue: targetY)
+        heightWillChange(newHeight: targetHeight, in: duration)
 
         UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut) {
             self.containerView?.frame = CGRect(
                 x: 0,
                 y: targetY,
                 width: presentingBounds.width,
-                height: targetHeight
+                height: max(presentingBounds.height, targetHeight)
             )
             self.containerView?.layoutIfNeeded()
         }
@@ -289,6 +304,23 @@ extension BottomSheetPresentationController {
     }
 
     static let verticalVelocityThreashold: CGFloat = 1000
+
+    private func updateScrollViewInsets(newHeight: Double? = nil){
+        let height = newHeight ?? visibleHeight
+        let inset = presentingViewController.view.bounds.height - height
+        scrollView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: inset, right: 0)
+    }
+}
+
+extension BottomSheetPresentationController {
+    func heightDidChange(newHeight: CGFloat) {
+        heightObserver?.heightDidChange(newHeight: newHeight)
+    }
+    func heightWillChange(newHeight: CGFloat, in duration: Double) {
+        heightObserver?.heightWillChange(newHeight: newHeight, in: duration)
+        updateScrollViewInsets(newHeight: newHeight)
+        popDetailsIfNeeded(newHeight: newHeight)
+    }
 }
 
 extension BottomSheetPresentationController: NavigationControllerObserver {
@@ -298,6 +330,7 @@ extension BottomSheetPresentationController: NavigationControllerObserver {
         vc.headerPan = headerPanGesture
         scrollView = vc.scrollView
         headerView = vc.header
+        expandIfNeeded(animated: true)
     }
 
     func willPop(vc: UIViewController) {}
@@ -306,6 +339,33 @@ extension BottomSheetPresentationController: NavigationControllerObserver {
         guard let vc = newLast as? ScrollableViewController else { return }
         scrollView = vc.scrollView
         headerView = vc.header
+    }
+}
+
+// MARK: - expansion and popping
+extension BottomSheetPresentationController {
+    // A minimal fraction that pushed viewController (i.e. PhotoDetailsController) should be presented with
+    // If the fraction is smaller, the screen gets dismissed
+    private var minPresentingFraction: Double {
+        guard fractions.count > 1 else {fatalError("fractions are empty")}
+        return fractions[1]
+    }
+    
+    // Is used when new screen is pushed in navigation controller
+    // Automatically expands to a minPresentingFraction
+    private func expandIfNeeded(animated: Bool){
+        if currentFraction < minPresentingFraction {
+            heightShouldBeAt(fraction: minPresentingFraction, animated: animated)
+        }
+    }
+
+    // Photo Details should pop when minimized
+    private func popDetailsIfNeeded(newHeight: Double){ // works only with UINavigationController in bottom sheet
+        guard let navigation = presentedViewController as? BottomNavigationController else { return }
+        guard fraction(from: newHeight) < minPresentingFraction else { return }
+        if navigation.viewControllers.last is PhotoDetailsController {
+            navigation.popViewController(animated: true)
+        }
     }
 }
 
