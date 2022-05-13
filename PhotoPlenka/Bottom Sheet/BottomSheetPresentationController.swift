@@ -350,7 +350,7 @@ extension BottomSheetPresentationController {
         guard fractions.count > 1 else {fatalError("fractions are empty")}
         return fractions[1]
     }
-    
+
     // Is used when new screen is pushed in navigation controller
     // Automatically expands to a minPresentingFraction
     private func expandIfNeeded(animated: Bool){
