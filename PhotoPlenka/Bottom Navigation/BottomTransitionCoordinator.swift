@@ -8,21 +8,21 @@
 import UIKit
 
 final class BottomTransitionCoordinator: NSObject, UINavigationControllerDelegate {
-    var interactionController: UIPercentDrivenInteractiveTransition?
+  var interactionController: UIPercentDrivenInteractiveTransition?
 
-    func navigationController(
-        _: UINavigationController,
-        animationControllerFor operation: UINavigationController.Operation,
-        from _: UIViewController,
-        to _: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-        BottomTransitionAnimator(operation)
-    }
+  func navigationController(
+    _: UINavigationController,
+    animationControllerFor operation: UINavigationController.Operation,
+    from _: UIViewController,
+    to _: UIViewController
+  ) -> UIViewControllerAnimatedTransitioning? {
+    BottomTransitionAnimator(operation)
+  }
 
-    func navigationController(
-        _: UINavigationController,
-        interactionControllerFor _: UIViewControllerAnimatedTransitioning
-    ) -> UIViewControllerInteractiveTransitioning? {
-        interactionController
-    }
+  func navigationController(
+    _: UINavigationController,
+    interactionControllerFor _: UIViewControllerAnimatedTransitioning
+  ) -> UIViewControllerInteractiveTransitioning? {
+    interactionController
+  }
 }

@@ -9,27 +9,27 @@ import Foundation
 import UIKit
 
 protocol BottomSheetFactory {
-    func makePresentationController(
-        presentedViewController: UIViewController,
-        presenting: UIViewController?
-    ) -> UIPresentationController
+  func makePresentationController(
+    presentedViewController: UIViewController,
+    presenting: UIViewController?
+  ) -> UIPresentationController
 }
 
 final class BottomSheetTransitionDelegate: NSObject, UIViewControllerTransitioningDelegate {
-    private let bottomSheetFactory: BottomSheetFactory
+  private let bottomSheetFactory: BottomSheetFactory
 
-    init(bottomSheetFactory: BottomSheetFactory) {
-        self.bottomSheetFactory = bottomSheetFactory
-    }
+  init(bottomSheetFactory: BottomSheetFactory) {
+    self.bottomSheetFactory = bottomSheetFactory
+  }
 
-    func presentationController(
-        forPresented presented: UIViewController,
-        presenting: UIViewController?,
-        source: UIViewController
-    ) -> UIPresentationController? {
-        bottomSheetFactory.makePresentationController(
-            presentedViewController: presented,
-            presenting: presenting ?? source
-        )
-    }
+  func presentationController(
+    forPresented presented: UIViewController,
+    presenting: UIViewController?,
+    source: UIViewController
+  ) -> UIPresentationController? {
+    bottomSheetFactory.makePresentationController(
+      presentedViewController: presented,
+      presenting: presenting ?? source
+    )
+  }
 }
