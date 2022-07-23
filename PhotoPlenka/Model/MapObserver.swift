@@ -8,9 +8,9 @@
 import MapKit
 
 @objc protocol MapObserver: AnyObject {
-    func annotationsDidChange(annotations: [MKAnnotation], visible: [MKAnnotation])
+  func annotationsDidChange(annotations: [MKAnnotation], visible: [MKAnnotation])
 }
 
 protocol MapPublisher {
-    func addObserver(_ observer: MapObserver)
+  func addObserver(_ observer: MapObserver)
 }
