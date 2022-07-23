@@ -8,6 +8,6 @@
 import Foundation
 
 enum NetworkError: Error {
-    case connectionFailure
-    case parsingError
+  case connectionFailure
+  case parsingError
 }
