@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22865135288CAF4C00BD474A /* PhotoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22865134288CAF4C00BD474A /* PhotoGroup.swift */; };
+		22865139288CB00C00BD474A /* GroupMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22865138288CB00C00BD474A /* GroupMaker.swift */; };
 		C60B4D2627AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */; };
 		C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */; };
 		C6813B6E27DE404B00E876A9 /* UIControlMulticastDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6813B6B27DE404B00E876A9 /* UIControlMulticastDelegate.m */; };
@@ -77,6 +79,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22865134288CAF4C00BD474A /* PhotoGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGroup.swift; sourceTree = "<group>"; };
+		22865138288CB00C00BD474A /* GroupMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMaker.swift; sourceTree = "<group>"; };
 		C60B4D2527AEAAC300F2C117 /* BottomSheetTransitionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTransitionDelegate.swift; sourceTree = "<group>"; };
 		C60B4D2727AEAB3200F2C117 /* BottomSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetPresentationController.swift; sourceTree = "<group>"; };
 		C6813B6A27DE404B00E876A9 /* PhotoPlenka-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoPlenka-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -161,6 +165,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22865137288CAFF400BD474A /* Photo Groups */ = {
+			isa = PBXGroup;
+			children = (
+				22865134288CAF4C00BD474A /* PhotoGroup.swift */,
+				22865138288CB00C00BD474A /* GroupMaker.swift */,
+			);
+			path = "Photo Groups";
+			sourceTree = "<group>";
+		};
 		C6813B6927DE403900E876A9 /* MulticastDelegates */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,6 +317,7 @@
 		DFCF0EF627AAE16A00A0D10B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				22865137288CAFF400BD474A /* Photo Groups */,
 				DFCF0EF427AAE16600A0D10B /* Photo.swift */,
 				DF6A4F4F27C3FBC700BBFE69 /* DetailedPhoto.swift */,
 				DF6A4F5127C4469600BBFE69 /* PhotoSource.swift */,
@@ -482,6 +496,7 @@
 				DF38B2E9280B8AFD00C963BD /* MapLinks.swift in Sources */,
 				DFD7A21A27B86AE80064A0F4 /* ImageFetcher.swift in Sources */,
 				DF571C8E27AEC1650070C624 /* AnnotationProvider.swift in Sources */,
+				22865139288CB00C00BD474A /* GroupMaker.swift in Sources */,
 				DFCF0EF327AAD7CD00A0D10B /* NetworkCluster.swift in Sources */,
 				DF6A4F5227C4469600BBFE69 /* PhotoSource.swift in Sources */,
 				DF37377E27BA826000DAB3CC /* PreviewCell.swift in Sources */,
@@ -508,6 +523,7 @@
 				DFD7A21F27B94E4C0064A0F4 /* ImageFetchingOperation.swift in Sources */,
 				C6813B6E27DE404B00E876A9 /* UIControlMulticastDelegate.m in Sources */,
 				DFE04618280014900005AB2D /* RotatingContainer.swift in Sources */,
+				22865135288CAF4C00BD474A /* PhotoGroup.swift in Sources */,
 				C60B4D2827AEAB3200F2C117 /* BottomSheetPresentationController.swift in Sources */,
 				DF6A4F5F27C5979400BBFE69 /* PhotoDetailsFactory.swift in Sources */,
 				DFE046212800194F0005AB2D /* CompareCameraController.swift in Sources */,
@@ -663,7 +679,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 8DB7C77NK9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoPlenka/Info.plist;
@@ -681,7 +697,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.8;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -699,7 +715,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 8DB7C77NK9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoPlenka/Info.plist;
@@ -717,7 +733,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.8;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pastvu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

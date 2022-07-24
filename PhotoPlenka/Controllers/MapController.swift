@@ -328,17 +328,17 @@ extension MapController: MKMapViewDelegate {
       return
     }
     if let localCluster = view as? MultiplePhotosAnnotationView {
-      guard let annotation = localCluster.annotation as? MKClusterAnnotation else { return }
-      map.setAdjustedCenter(annotation.coordinate, animated: true)
-      let photos = annotation.memberAnnotations.compactMap { $0 as? Photo }
+      guard let group = localCluster.annotation as? PhotoGroup else { return }
+      map.setAdjustedCenter(group.coordinate, animated: true)
+      let photos = group.photos
       guard !photos.isEmpty else { return }
       showMultiplePhotosList(photos: photos)
-      map.deselectAnnotation(annotation, animated: true)
+      map.deselectAnnotation(group, animated: true)
     }
   }
 
   func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-    if let photoCluster = annotation as? MKClusterAnnotation {
+    if let photoCluster = annotation as? PhotoGroup {
       return mapView.dequeueReusableAnnotationView(
         withIdentifier: Constants.multiPhotoReuseID,
         for: photoCluster

@@ -10,7 +10,7 @@ import MapKit
 final class PhotoAnnotationView: MKAnnotationView {
   private enum Constants {
     static let scaleValue: CGFloat = 2
-    static let clusteringIdentifier: String = "photoClusteringID"
+//    static let clusteringIdentifier: String = "photoClusteringID"
     static let size = CGSize( // 13 - исходная высота svg иконки
       width: 13 * scaleValue,
       height: 13 * scaleValue
@@ -44,7 +44,7 @@ final class PhotoAnnotationView: MKAnnotationView {
 
   override var annotation: MKAnnotation? {
     willSet {
-      clusteringIdentifier = Constants.clusteringIdentifier
+//      clusteringIdentifier = Constants.clusteringIdentifier
       displayPriority = .required
     }
   }

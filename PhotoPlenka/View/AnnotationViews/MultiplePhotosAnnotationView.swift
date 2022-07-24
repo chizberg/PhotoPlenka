@@ -49,10 +49,9 @@ final class MultiplePhotosAnnotationView: MKAnnotationView {
 
   override func prepareForDisplay() {
     super.prepareForDisplay()
-    guard let cluster = annotation as? MKClusterAnnotation else { return }
-    guard let photos = cluster.memberAnnotations as? [Photo], photos.count > 0 else { return }
-    label.text = "\(photos.count)"
-    backgroundColor = .from(year: photos[0].year)
+    guard let group = annotation as? PhotoGroup else { return }
+    label.text = "\(group.photos.count)"
+    backgroundColor = .from(year: group.photos[0].year)
     setNeedsLayout()
   }
 }

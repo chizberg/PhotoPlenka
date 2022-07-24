@@ -90,3 +90,9 @@ extension Photo {
     )
   }
 }
+
+extension Photo {
+  func distanceTo(_ location: CLLocationCoordinate2D) -> Double {
+    coordinate.distanceTo(location)
+  }
+}
