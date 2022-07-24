@@ -23,6 +23,7 @@ final class AnnotationProvider: AnnotationProviderProtocol {
   // images and clusters that are the same as on the map
   private var photos: Set<Photo>
   private var clusters: Set<Cluster>
+  private var groupMaker: GroupMaker
 
   private let networkService: NetworkServiceProtocol
 
@@ -32,6 +33,7 @@ final class AnnotationProvider: AnnotationProviderProtocol {
     self.networkService = networkService
     self.photos = Set<Photo>()
     self.clusters = Set<Cluster>()
+    self.groupMaker = GroupMaker()
   }
 
   func loadNewAnnotations(
@@ -52,7 +54,12 @@ final class AnnotationProvider: AnnotationProviderProtocol {
           // new images that will be added to mapView
           let photoDiff = photoAnnotations.subtracting(self.photos)
           let clusterDiff = clusterAnnotations.subtracting(self.clusters)
-          completion(.success(self.annotationsFromSets(photoDiff, clusterDiff)))
+          let (photos, groups) = self.updateGroups(
+            delta: min(region.span.latitudeDelta, region.span.longitudeDelta),
+            photoDiff: Array(photoDiff)
+          )
+          let combined = self.combineAnnotations(photos, groups, Array(clusterDiff))
+          completion(.success(combined))
 
           self.photos = self.photos.union(photoAnnotations)
           self.clusters = self.clusters.union(clusterAnnotations)
@@ -62,18 +69,27 @@ final class AnnotationProvider: AnnotationProviderProtocol {
       }
   }
 
-  private func annotationsFromSets(
-    _ photoSet: Set<Photo>,
-    _ clusterSet: Set<Cluster>
+  private func updateGroups(
+    delta: Double,
+    photoDiff: [Photo]
+  ) -> (photos: [Photo], groups: [PhotoGroup]) {
+    groupMaker.addData(newGroupDiameter: delta / 7, photos: photoDiff)
+  }
+
+  private func combineAnnotations(
+    _ photos: [Photo],
+    _ groups: [PhotoGroup],
+    _ clusters: [Cluster]
   ) -> [MKAnnotation] {
-    let photoArray = Array(photoSet) as [MKAnnotation]
-    let clusterArray = Array(clusterSet) as [MKAnnotation]
-    return photoArray + clusterArray
+    (photos as [MKAnnotation]) +
+      (groups as [MKAnnotation]) +
+      (clusters as [MKAnnotation])
   }
 
   // should be used when z is changed on the map
   func clear() {
     photos = Set<Photo>()
     clusters = Set<Cluster>()
+    groupMaker.clear()
   }
 }

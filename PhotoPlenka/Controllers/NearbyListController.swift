@@ -156,8 +156,8 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
       previewCell.fillIn(photo)
     case let cluster as Cluster:
       previewCell.fillIn(cluster.photo)
-    case let localCluster as MKClusterAnnotation:
-      guard let photo = localCluster.memberAnnotations.first as? Photo else { fallthrough }
+    case let group as PhotoGroup:
+      guard let photo = group.photos.first else { break }
       previewCell.fillIn(photo)
     default:
       fatalError("invalid annotation type")
@@ -182,8 +182,8 @@ extension NearbyListController: UITableViewDataSource, UITableViewDelegate {
       photoData = photo
     case let cluster as Cluster:
       photoData = cluster.photo
-    case let localCluster as MKClusterAnnotation:
-      guard let photo = localCluster.memberAnnotations.first as? Photo else { fallthrough }
+    case let group as PhotoGroup:
+      guard let photo = group.photos.first else { fallthrough }
       photoData = photo
     default:
       fatalError("invalid annotation type")
